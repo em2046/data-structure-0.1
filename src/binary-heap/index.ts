@@ -37,13 +37,14 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
       let current = elements[index];
       let parent = elements[parentIndex];
 
-      if (lessThan(current, parent)) {
-        [elements[index], elements[parentIndex]] = [
-          elements[parentIndex],
-          elements[index],
-        ];
+      if (!lessThan(current, parent)) {
+        break;
       }
 
+      [elements[index], elements[parentIndex]] = [
+        elements[parentIndex],
+        elements[index],
+      ];
       index = parentIndex;
     }
   }
@@ -58,6 +59,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
       if (hasLeftChild(len, index)) {
         let leftChildIndex = getLeftChildIndex(index);
         let leftChild = elements[leftChildIndex];
+
         if (lessThan(leftChild, min)) {
           min = leftChild;
           minIndex = leftChildIndex;
@@ -66,21 +68,21 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
       if (hasRightChild(len, index)) {
         let rightChildIndex = getRightChildIndex(index);
         let rightChild = elements[rightChildIndex];
+
         if (lessThan(rightChild, min)) {
           min = rightChild;
           minIndex = rightChildIndex;
         }
       }
 
-      if (minIndex != index) {
-        [elements[index], elements[minIndex]] = [
-          elements[minIndex],
-          elements[index],
-        ];
-      } else {
+      if (minIndex == index) {
         break;
       }
 
+      [elements[index], elements[minIndex]] = [
+        elements[minIndex],
+        elements[index],
+      ];
       index = minIndex;
     }
   }
