@@ -1,0 +1,11 @@
+{
+  "name": "nova",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/jiangshengdev/nova.git",
+  "author": "jiangshengdev <jiangshengdev@outlook.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "prettier": "^2.3.1"
+  }
+}
