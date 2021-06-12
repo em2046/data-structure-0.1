@@ -26,9 +26,34 @@ function getRightChildIndex(index: number) {
 }
 
 export class BinaryHeap<T> implements PriorityQueue<T> {
-  elements: T[] = [];
+  private elements: T[] = [];
 
-  percolateUp(index: number) {
+  clear(): void {
+    this.elements = [];
+  }
+
+  peek(): T {
+    return this.elements[0];
+  }
+
+  pop(): T {
+    let elements = this.elements;
+    let first = elements[0];
+
+    elements[0] = elements.pop();
+    this.percolateDown(elements.length, 0);
+
+    return first;
+  }
+
+  push(value: T): void {
+    let elements = this.elements;
+
+    elements.push(value);
+    this.percolateUp(elements.length - 1);
+  }
+
+  private percolateUp(index: number) {
     let elements = this.elements;
 
     while (hasParent(index)) {
@@ -49,7 +74,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     }
   }
 
-  percolateDown(len: number, index: number) {
+  private percolateDown(len: number, index: number) {
     let elements = this.elements;
 
     while (true) {
@@ -85,30 +110,5 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
       ];
       index = minIndex;
     }
-  }
-
-  clear(): void {
-    this.elements = [];
-  }
-
-  peek(): T {
-    return this.elements[0];
-  }
-
-  pop(): T {
-    let elements = this.elements;
-    let first = elements[0];
-
-    elements[0] = elements.pop();
-    this.percolateDown(elements.length, 0);
-
-    return first;
-  }
-
-  push(value: T): void {
-    let elements = this.elements;
-
-    elements.push(value);
-    this.percolateUp(elements.length - 1);
   }
 }
