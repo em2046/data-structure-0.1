@@ -9,6 +9,7 @@ import {
   isBlack,
   isLeftChild,
   isRed,
+  isRightChild,
   isRoot,
   NodeColor,
   TreeNode,
@@ -24,7 +25,7 @@ export class RedBlackTree<T> {
   add(value: T): TreeNode<T> {
     let oldNode = this.get(value);
 
-    if (oldNode !== null) {
+    if (oldNode) {
       return oldNode;
     }
 
@@ -32,7 +33,7 @@ export class RedBlackTree<T> {
       return this.insertAsRoot(value);
     }
 
-    let hot = this.hot;
+    let hot = this.hot!;
     let node = new TreeNode(value, hot, null, null, -1);
 
     if (this.direction === Direction.LEFT) {
@@ -50,7 +51,7 @@ export class RedBlackTree<T> {
   delete(value: T): boolean {
     let oldNode = this.get(value);
 
-    if (oldNode === null) {
+    if (!oldNode) {
       return false;
     }
 
@@ -64,8 +65,9 @@ export class RedBlackTree<T> {
     let hot = this.hot;
 
     if (hot === null) {
-      this.root.color = NodeColor.BLACK;
-      this.updateHeight(this.root);
+      let root = this.root!;
+      root.color = NodeColor.BLACK;
+      this.updateHeight(root);
       return true;
     }
 
@@ -74,8 +76,8 @@ export class RedBlackTree<T> {
     }
 
     if (isRed(node)) {
-      node.color = NodeColor.BLACK;
-      node.height += 1;
+      node!.color = NodeColor.BLACK;
+      node!.height += 1;
       return true;
     }
 
@@ -84,17 +86,22 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  get(value: T): TreeNode<T> {
+  get(value: T): TreeNode<T> | undefined {
     let root = this.root;
 
     if (root === null || value === root.data) {
       this.hot = null;
       this.direction = Direction.ROOT;
+
+      if (root === null) {
+        return undefined;
+      }
+
       return root;
     }
 
     this.hot = root;
-    let current = root;
+    let current: TreeNode<T> | null = root;
 
     while (true) {
       if (lessThan(value, current.data)) {
@@ -105,7 +112,11 @@ export class RedBlackTree<T> {
         current = current.rightChild;
       }
 
-      if (current === null || value === current.data) {
+      if (current === null) {
+        return undefined;
+      }
+
+      if (value === current.data) {
         return current;
       }
 
@@ -113,7 +124,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  traverseLevel(visit: (value: T) => void) {
+  traverseLevel(visit: (value: T) => void): void {
     let root = this.root;
 
     if (root !== null) {
@@ -121,7 +132,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  traverseIn(visit: (value: T) => void) {
+  traverseIn(visit: (value: T) => void): void {
     let root = this.root;
 
     if (root !== null) {
@@ -129,12 +140,12 @@ export class RedBlackTree<T> {
     }
   }
 
-  len() {
+  len(): number {
     return this.size;
   }
 
-  private solveDoubleBlack(node: TreeNode<T>) {
-    let parent: TreeNode<T>;
+  private solveDoubleBlack(node: TreeNode<T> | null): void {
+    let parent: TreeNode<T> | null;
 
     if (node !== null) {
       parent = node.parent;
@@ -149,13 +160,13 @@ export class RedBlackTree<T> {
     let sibling: TreeNode<T>;
 
     if (node === parent.leftChild) {
-      sibling = parent.rightChild;
+      sibling = parent.rightChild!;
     } else {
-      sibling = parent.leftChild;
+      sibling = parent.leftChild!;
     }
 
     if (isBlack(sibling)) {
-      let siblingChild: TreeNode<T> = null;
+      let siblingChild: TreeNode<T> | null = null;
 
       if (isRed(sibling.rightChild)) {
         siblingChild = sibling.rightChild;
@@ -175,7 +186,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  private bb1(parent: TreeNode<T>, siblingChild: TreeNode<T>) {
+  private bb1(parent: TreeNode<T>, siblingChild: TreeNode<T>): void {
     let oldColor = parent.color;
     let parentDirection = getDirection(parent);
     let grandparent = parent.parent;
@@ -186,28 +197,30 @@ export class RedBlackTree<T> {
         this.root = node;
         break;
       case Direction.LEFT:
-        grandparent.leftChild = node;
+        grandparent!.leftChild = node;
         break;
       case Direction.RIGHT:
-        grandparent.rightChild = node;
+        grandparent!.rightChild = node;
         break;
     }
 
     if (hasLeftChild(node)) {
-      node.leftChild.color = NodeColor.BLACK;
-      this.updateHeight(node.leftChild);
+      let leftNode = node.leftChild!;
+      leftNode.color = NodeColor.BLACK;
+      this.updateHeight(leftNode);
     }
 
     if (hasRightChild(node)) {
-      node.rightChild.color = NodeColor.BLACK;
-      this.updateHeight(node.rightChild);
+      let rightNode = node.rightChild!;
+      rightNode.color = NodeColor.BLACK;
+      this.updateHeight(rightNode);
     }
 
     node.color = oldColor;
     this.updateHeight(node);
   }
 
-  private bb2(parent: TreeNode<T>, sibling: TreeNode<T>) {
+  private bb2(parent: TreeNode<T>, sibling: TreeNode<T>): void {
     sibling.color = NodeColor.RED;
     sibling.height -= 1;
 
@@ -219,15 +232,21 @@ export class RedBlackTree<T> {
     }
   }
 
-  private bb3(node: TreeNode<T>, parent: TreeNode<T>, sibling: TreeNode<T>) {
+  private bb3(
+    node: TreeNode<T> | null,
+    parent: TreeNode<T>,
+    sibling: TreeNode<T>
+  ): void {
     sibling.color = NodeColor.BLACK;
     parent.color = NodeColor.RED;
     let siblingChild: TreeNode<T>;
 
     if (isLeftChild(sibling)) {
-      siblingChild = sibling.leftChild;
+      siblingChild = sibling.leftChild!;
+    } else if (isRightChild(sibling)) {
+      siblingChild = sibling.rightChild!;
     } else {
-      siblingChild = sibling.rightChild;
+      throw new Error("The sibling node can not be a root");
     }
 
     this.hot = parent;
@@ -241,58 +260,59 @@ export class RedBlackTree<T> {
         this.root = newNode;
         break;
       case Direction.LEFT:
-        grandparent.leftChild = newNode;
+        grandparent!.leftChild = newNode;
         break;
       case Direction.RIGHT:
-        grandparent.rightChild = newNode;
+        grandparent!.rightChild = newNode;
         break;
     }
 
     this.solveDoubleBlack(node);
   }
 
-  private deleteImpl(node: TreeNode<T>): TreeNode<T> {
+  private deleteImpl(node: TreeNode<T>): TreeNode<T> | null {
     let cache = node;
-    let next: TreeNode<T>;
+    let current: TreeNode<T> | null = node;
+    let next: TreeNode<T> | null;
 
-    if (!hasLeftChild(node)) {
-      node = node.rightChild;
-
-      switch (this.direction) {
-        case Direction.ROOT:
-          this.root = node;
-          break;
-        case Direction.LEFT:
-          this.hot.leftChild = node;
-          break;
-        case Direction.RIGHT:
-          this.hot.rightChild = node;
-      }
-
-      next = node;
-    } else if (!hasRightChild(node)) {
-      node = node.leftChild;
+    if (!hasLeftChild(current)) {
+      current = current.rightChild;
 
       switch (this.direction) {
         case Direction.ROOT:
-          this.root = node;
+          this.root = current;
           break;
         case Direction.LEFT:
-          this.hot.leftChild = node;
+          this.hot!.leftChild = current;
           break;
         case Direction.RIGHT:
-          this.hot.rightChild = node;
+          this.hot!.rightChild = current;
+      }
+
+      next = current;
+    } else if (!hasRightChild(current)) {
+      current = current.leftChild;
+
+      switch (this.direction) {
+        case Direction.ROOT:
+          this.root = current;
+          break;
+        case Direction.LEFT:
+          this.hot!.leftChild = current;
+          break;
+        case Direction.RIGHT:
+          this.hot!.rightChild = current;
           break;
       }
 
-      next = node;
+      next = current;
     } else {
       cache = cache.getNext();
-      [node.data, cache.data] = [cache.data, node.data];
-      let parent = cache.parent;
+      [current.data, cache.data] = [cache.data, current.data];
+      let parent = cache.parent!;
       next = cache.rightChild;
 
-      if (parent === node) {
+      if (parent === current) {
         parent.rightChild = next;
       } else {
         parent.leftChild = next;
@@ -321,18 +341,11 @@ export class RedBlackTree<T> {
     return this.root;
   }
 
-  private isRightChild(node: TreeNode<T>): boolean {
+  private solveDoubleRed(node: TreeNode<T>): void {
     if (isRoot(node)) {
-      return false;
-    }
-
-    return node === node.parent.rightChild;
-  }
-
-  private solveDoubleRed(node: TreeNode<T>) {
-    if (isRoot(node)) {
-      this.root.color = NodeColor.BLACK;
-      this.root.height += 1;
+      let root = this.root!;
+      root.color = NodeColor.BLACK;
+      root.height += 1;
 
       return;
     }
@@ -343,12 +356,14 @@ export class RedBlackTree<T> {
       return;
     }
 
-    let grandparent = parent.parent;
+    let redParent = parent as TreeNode<T>;
+
+    let grandparent = redParent.parent!;
     let uncle = getUncle(node);
 
     if (isBlack(uncle)) {
-      if (isLeftChild(node) === isLeftChild(parent)) {
-        parent.color = NodeColor.BLACK;
+      if (isLeftChild(node) === isLeftChild(redParent)) {
+        redParent.color = NodeColor.BLACK;
       } else {
         node.color = NodeColor.BLACK;
       }
@@ -363,17 +378,17 @@ export class RedBlackTree<T> {
           this.root = newNode;
           break;
         case Direction.LEFT:
-          grandGrandparent.leftChild = newNode;
+          grandGrandparent!.leftChild = newNode;
           break;
         case Direction.RIGHT:
-          grandGrandparent.rightChild = newNode;
+          grandGrandparent!.rightChild = newNode;
           break;
       }
 
       newNode.parent = grandGrandparent;
     } else {
-      parent.color = NodeColor.BLACK;
-      parent.height += 1;
+      redParent.color = NodeColor.BLACK;
+      redParent.height += 1;
       uncle.color = NodeColor.BLACK;
       uncle.height += 1;
 
@@ -385,9 +400,9 @@ export class RedBlackTree<T> {
     }
   }
 
-  private rotate(node: TreeNode<T>) {
-    let parent = node.parent;
-    let grandparent = parent.parent;
+  private rotate(node: TreeNode<T>): TreeNode<T> {
+    let parent = node.parent!;
+    let grandparent = parent.parent!;
 
     if (isLeftChild(parent)) {
       if (isLeftChild(node)) {
@@ -416,7 +431,7 @@ export class RedBlackTree<T> {
         );
       }
     } else {
-      if (this.isRightChild(node)) {
+      if (isRightChild(node)) {
         parent.parent = grandparent.parent;
 
         return this.refactor(
@@ -448,11 +463,11 @@ export class RedBlackTree<T> {
     left: TreeNode<T>,
     center: TreeNode<T>,
     right: TreeNode<T>,
-    leftOuter: TreeNode<T>,
-    leftInner: TreeNode<T>,
-    rightInner: TreeNode<T>,
-    rightOuter: TreeNode<T>
-  ) {
+    leftOuter: TreeNode<T> | null,
+    leftInner: TreeNode<T> | null,
+    rightInner: TreeNode<T> | null,
+    rightOuter: TreeNode<T> | null
+  ): TreeNode<T> {
     left.leftChild = leftOuter;
 
     if (leftOuter !== null) {
@@ -490,7 +505,7 @@ export class RedBlackTree<T> {
     return center;
   }
 
-  private updateHeight(node: TreeNode<T>) {
+  private updateHeight(node: TreeNode<T>): number {
     let leftHeight = getHeight(node.leftChild);
     let rightHeight = getHeight(node.rightChild);
     node.height = Math.max(leftHeight, rightHeight);

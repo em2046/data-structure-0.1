@@ -26,7 +26,7 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent.leftChild;
+  return node === node.parent!.leftChild;
 }
 
 export function isRightChild<T>(node: TreeNode<T>): boolean {
@@ -34,10 +34,10 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent.rightChild;
+  return node === node.parent!.rightChild;
 }
 
-export function isBlack<T>(node: TreeNode<T>): boolean {
+export function isBlack<T>(node: TreeNode<T> | null): boolean {
   if (node === null) {
     return true;
   }
@@ -45,11 +45,11 @@ export function isBlack<T>(node: TreeNode<T>): boolean {
   return node.color === NodeColor.BLACK;
 }
 
-export function isRed<T>(node: TreeNode<T>): boolean {
+export function isRed<T>(node: TreeNode<T> | null): boolean {
   return !isBlack(node);
 }
 
-export function getHeight<T>(node: TreeNode<T>): number {
+export function getHeight<T>(node: TreeNode<T> | null): number {
   if (node !== null) {
     return node.height;
   }
@@ -59,12 +59,21 @@ export function getHeight<T>(node: TreeNode<T>): number {
 
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> {
   let parent = node.parent;
-  let grandparent = parent.parent;
+
+  if (!parent) {
+    throw new Error("The parent node must exist");
+  }
+
+  let grandparent = parent.parent!;
+
+  if (!grandparent) {
+    throw new Error("The grandparent node must exist");
+  }
 
   if (isLeftChild(parent)) {
-    return grandparent.rightChild;
+    return grandparent.rightChild!;
   } else {
-    return grandparent.leftChild;
+    return grandparent.leftChild!;
   }
 }
 
@@ -90,7 +99,10 @@ export function balanced<T>(node: TreeNode<T>): boolean {
   );
 }
 
-function saveLeftBranch<T>(node: TreeNode<T>, stack: Array<TreeNode<T>>) {
+function saveLeftBranch<T>(
+  node: TreeNode<T> | null,
+  stack: Array<TreeNode<T>>
+): void {
   while (node != null) {
     stack.push(node);
     node = node.leftChild;
@@ -121,36 +133,40 @@ export class TreeNode<T> {
     this.color = color;
   }
 
-  traverseLevel(visit: (value: T) => void) {
+  traverseLevel(visit: (value: T) => void): void {
     let queue: Array<TreeNode<T>> = [];
     queue.push(this);
 
     while (queue.length) {
-      let node = queue.shift();
+      let node = queue.shift()!;
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        queue.push(node.leftChild);
+        queue.push(node.leftChild!);
       }
 
       if (hasRightChild(node)) {
-        queue.push(node.rightChild);
+        queue.push(node.rightChild!);
       }
     }
   }
 
-  getNext() {
+  getNext(): TreeNode<T> {
     let node: TreeNode<T> = this;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        node = node.leftChild;
+        node = node.leftChild!;
       }
     } else {
       while (isRightChild(node)) {
-        node = node.parent;
+        node = node.parent!;
+      }
+
+      if (!node.parent) {
+        throw new Error("The next node must exist");
       }
 
       node = node.parent;
@@ -159,8 +175,8 @@ export class TreeNode<T> {
     return node;
   }
 
-  traverseIn(visit: (value: T) => void) {
-    let node: TreeNode<T> = this;
+  traverseIn(visit: (value: T) => void): void {
+    let node: TreeNode<T> | null = this;
     let stack: Array<TreeNode<T>> = [];
 
     while (true) {
@@ -170,7 +186,7 @@ export class TreeNode<T> {
         break;
       }
 
-      node = stack.pop();
+      node = stack.pop()!;
       visit(node.data);
       node = node.rightChild;
     }

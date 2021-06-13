@@ -1,27 +1,27 @@
 import { PriorityQueue } from "../abstract/priority-queue";
 import { lessThan } from "../abstract/comparable";
 
-function hasParent(index: number) {
+function hasParent(index: number): boolean {
   return index > 0;
 }
 
-function hasLeftChild(len: number, index: number) {
+function hasLeftChild(len: number, index: number): boolean {
   return getLeftChildIndex(index) < len;
 }
 
-function hasRightChild(len: number, index: number) {
+function hasRightChild(len: number, index: number): boolean {
   return getRightChildIndex(index) < len;
 }
 
-function getParentIndex(index: number) {
+function getParentIndex(index: number): number {
   return Math.floor((index - 1) / 2);
 }
 
-function getLeftChildIndex(index: number) {
+function getLeftChildIndex(index: number): number {
   return index * 2 + 1;
 }
 
-function getRightChildIndex(index: number) {
+function getRightChildIndex(index: number): number {
   return (index + 1) * 2;
 }
 
@@ -32,15 +32,19 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     this.elements = [];
   }
 
-  peek(): T {
+  peek(): T | undefined {
     return this.elements[0];
   }
 
-  pop(): T {
+  pop(): T | undefined {
     let elements = this.elements;
     let first = elements[0];
 
-    elements[0] = elements.pop();
+    if (!elements.length) {
+      return undefined;
+    }
+
+    elements[0] = elements.pop()!;
     this.percolateDown(elements.length, 0);
 
     return first;
@@ -53,7 +57,11 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     this.percolateUp(elements.length - 1);
   }
 
-  private percolateUp(index: number) {
+  len(): number {
+    return this.elements.length;
+  }
+
+  private percolateUp(index: number): void {
     let elements = this.elements;
 
     while (hasParent(index)) {
@@ -74,7 +82,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     }
   }
 
-  private percolateDown(len: number, index: number) {
+  private percolateDown(len: number, index: number): void {
     let elements = this.elements;
 
     while (true) {
