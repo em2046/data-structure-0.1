@@ -8,7 +8,7 @@ describe("red-black-tree", () => {
     let redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     origin.forEach((value) => {
-      redBlackTree.insert(value);
+      redBlackTree.add(value);
     });
 
     let len = origin.length;
@@ -21,7 +21,7 @@ describe("red-black-tree", () => {
     expect(result).toEqual(origin);
 
     for (let i = 0; i < len; i++) {
-      redBlackTree.remove(origin[i]);
+      redBlackTree.delete(origin[i]);
     }
 
     expect(redBlackTree.len()).toEqual(0);
@@ -32,13 +32,13 @@ describe("red-black-tree", () => {
 
     let len = 1000;
     for (let i = 0; i < len; i++) {
-      redBlackTree.insert(i);
+      redBlackTree.add(i);
     }
 
     expect(redBlackTree.len()).toEqual(len);
 
     for (let i = 0; i < len; i++) {
-      redBlackTree.remove(i);
+      redBlackTree.delete(i);
     }
 
     expect(redBlackTree.len()).toEqual(0);
@@ -56,13 +56,13 @@ describe("red-black-tree", () => {
 
     let len = origin.length;
     for (let i = 0; i < len; i++) {
-      redBlackTree.insert(origin[i]);
+      redBlackTree.add(origin[i]);
     }
 
     expect(redBlackTree.len()).toEqual(len);
 
     for (let i = 0; i < len; i++) {
-      redBlackTree.remove(origin[i]);
+      redBlackTree.delete(origin[i]);
     }
 
     expect(redBlackTree.len()).toEqual(0);
@@ -75,13 +75,13 @@ describe("red-black-tree", () => {
     let redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     for (let i = 0; i < len; i++) {
-      redBlackTree.insert(origin[i]);
+      redBlackTree.add(origin[i]);
     }
 
     expect(redBlackTree.len()).toEqual(len);
 
     for (let i = 0; i < len; i++) {
-      redBlackTree.remove(origin[i]);
+      redBlackTree.delete(origin[i]);
     }
 
     expect(redBlackTree.len()).toEqual(0);

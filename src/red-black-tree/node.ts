@@ -9,11 +9,11 @@ export enum Direction {
   RIGHT = "right",
 }
 
-export function hasLeftChild<T>(node: TreeNode<T>) {
+export function hasLeftChild<T>(node: TreeNode<T>): boolean {
   return node.leftChild !== null;
 }
 
-export function hasRightChild<T>(node: TreeNode<T>) {
+export function hasRightChild<T>(node: TreeNode<T>): boolean {
   return node.rightChild !== null;
 }
 
@@ -49,7 +49,7 @@ export function isRed<T>(node: TreeNode<T>): boolean {
   return !isBlack(node);
 }
 
-export function stature<T>(node: TreeNode<T>): number {
+export function getHeight<T>(node: TreeNode<T>): number {
   if (node !== null) {
     return node.height;
   }
@@ -57,16 +57,18 @@ export function stature<T>(node: TreeNode<T>): number {
   return -1;
 }
 
-export function findUncle<T>(node: TreeNode<T>): TreeNode<T> {
+export function getUncle<T>(node: TreeNode<T>): TreeNode<T> {
   let parent = node.parent;
+  let grandparent = parent.parent;
+
   if (isLeftChild(parent)) {
-    return parent.parent.rightChild;
+    return grandparent.rightChild;
   } else {
-    return parent.parent.leftChild;
+    return grandparent.leftChild;
   }
 }
 
-export function fromParentTo<T>(node: TreeNode<T>): Direction {
+export function getDirection<T>(node: TreeNode<T>): Direction {
   if (isRoot(node)) {
     return Direction.ROOT;
   }
@@ -78,15 +80,17 @@ export function fromParentTo<T>(node: TreeNode<T>): Direction {
   }
 }
 
-export function blackHeightUpdated<T>(node: TreeNode<T>): boolean {
+export function balanced<T>(node: TreeNode<T>): boolean {
+  let leftHeight = getHeight(node.leftChild);
+  let rightHeight = getHeight(node.rightChild);
+
   return (
-    stature(node.leftChild) == stature(node.rightChild) &&
-    node.height ===
-      (isRed(node) ? stature(node.leftChild) : stature(node.leftChild) + 1)
+    leftHeight === rightHeight &&
+    node.height === (isRed(node) ? leftHeight : leftHeight + 1)
   );
 }
 
-function goAlongVine<T>(node: TreeNode<T>, stack: Array<TreeNode<T>>) {
+function saveLeftBranch<T>(node: TreeNode<T>, stack: Array<TreeNode<T>>) {
   while (node != null) {
     stack.push(node);
     node = node.leftChild;
@@ -120,19 +124,22 @@ export class TreeNode<T> {
   traverseLevel(visit: (value: T) => void) {
     let queue: Array<TreeNode<T>> = [];
     queue.push(this);
+
     while (queue.length) {
       let node = queue.shift();
       visit(node.data);
+
       if (hasLeftChild(node)) {
         queue.push(node.leftChild);
       }
+
       if (hasRightChild(node)) {
         queue.push(node.rightChild);
       }
     }
   }
 
-  succ() {
+  getNext() {
     let node: TreeNode<T> = this;
 
     if (this.rightChild !== null) {
@@ -154,11 +161,10 @@ export class TreeNode<T> {
 
   traverseIn(visit: (value: T) => void) {
     let node: TreeNode<T> = this;
-
     let stack: Array<TreeNode<T>> = [];
 
     while (true) {
-      goAlongVine(node, stack);
+      saveLeftBranch(node, stack);
 
       if (stack.length === 0) {
         break;
