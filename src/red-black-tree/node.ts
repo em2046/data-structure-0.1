@@ -58,13 +58,13 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
 }
 
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> {
-  let parent = node.parent;
+  const parent = node.parent;
 
   if (!parent) {
     throw new Error("The parent node must exist");
   }
 
-  let grandparent = parent.parent!;
+  const grandparent = parent.parent!;
 
   if (!grandparent) {
     throw new Error("The grandparent node must exist");
@@ -90,8 +90,8 @@ export function getDirection<T>(node: TreeNode<T>): Direction {
 }
 
 export function balanced<T>(node: TreeNode<T>): boolean {
-  let leftHeight = getHeight(node.leftChild);
-  let rightHeight = getHeight(node.rightChild);
+  const leftHeight = getHeight(node.leftChild);
+  const rightHeight = getHeight(node.rightChild);
 
   return (
     leftHeight === rightHeight &&
@@ -114,7 +114,7 @@ export class TreeNode<T> {
   parent: TreeNode<T> | null = null;
   leftChild: TreeNode<T> | null = null;
   rightChild: TreeNode<T> | null = null;
-  height: number = 0;
+  height = 0;
   color: NodeColor = NodeColor.RED;
 
   constructor(
@@ -134,11 +134,11 @@ export class TreeNode<T> {
   }
 
   traverseLevel(visit: (value: T) => void): void {
-    let queue: Array<TreeNode<T>> = [];
+    const queue: Array<TreeNode<T>> = [];
     queue.push(this);
 
     while (queue.length) {
-      let node = queue.shift()!;
+      const node = queue.shift()!;
       visit(node.data);
 
       if (hasLeftChild(node)) {
@@ -177,7 +177,7 @@ export class TreeNode<T> {
 
   traverseIn(visit: (value: T) => void): void {
     let node: TreeNode<T> | null = this;
-    let stack: Array<TreeNode<T>> = [];
+    const stack: Array<TreeNode<T>> = [];
 
     while (true) {
       saveLeftBranch(node, stack);

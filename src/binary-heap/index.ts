@@ -37,8 +37,8 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
   }
 
   pop(): T | undefined {
-    let elements = this.elements;
-    let first = elements[0];
+    const elements = this.elements;
+    const first = elements[0];
 
     if (!elements.length) {
       return undefined;
@@ -51,7 +51,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
   }
 
   push(value: T): void {
-    let elements = this.elements;
+    const elements = this.elements;
 
     elements.push(value);
     this.percolateUp(elements.length - 1);
@@ -62,13 +62,13 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
   }
 
   private percolateUp(index: number): void {
-    let elements = this.elements;
+    const elements = this.elements;
 
     while (hasParent(index)) {
-      let parentIndex = getParentIndex(index);
+      const parentIndex = getParentIndex(index);
 
-      let current = elements[index];
-      let parent = elements[parentIndex];
+      const current = elements[index];
+      const parent = elements[parentIndex];
 
       if (!lessThan(current, parent)) {
         break;
@@ -83,15 +83,15 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
   }
 
   private percolateDown(len: number, index: number): void {
-    let elements = this.elements;
+    const elements = this.elements;
 
     while (true) {
       let min = elements[index];
       let minIndex = index;
 
       if (hasLeftChild(len, index)) {
-        let leftChildIndex = getLeftChildIndex(index);
-        let leftChild = elements[leftChildIndex];
+        const leftChildIndex = getLeftChildIndex(index);
+        const leftChild = elements[leftChildIndex];
 
         if (lessThan(leftChild, min)) {
           min = leftChild;
@@ -99,8 +99,8 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
         }
       }
       if (hasRightChild(len, index)) {
-        let rightChildIndex = getRightChildIndex(index);
-        let rightChild = elements[rightChildIndex];
+        const rightChildIndex = getRightChildIndex(index);
+        const rightChild = elements[rightChildIndex];
 
         if (lessThan(rightChild, min)) {
           min = rightChild;
