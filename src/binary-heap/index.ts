@@ -1,5 +1,6 @@
 import { PriorityQueue } from "../abstract/priority-queue";
 import { lessThan } from "../abstract/comparable";
+import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../constants";
 
 function hasParent(index: number): boolean {
   return index > 0;
@@ -44,7 +45,13 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
       return undefined;
     }
 
-    elements[0] = elements.pop()!;
+    const temp = elements.pop();
+
+    if (temp === undefined) {
+      throw new Error("Unknown error");
+    }
+
+    elements[0] = temp;
     this.percolateDown(elements.length, 0);
 
     return first;
@@ -85,7 +92,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
   private percolateDown(len: number, index: number): void {
     const elements = this.elements;
 
-    while (true) {
+    for (let i = 0; i < MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT; i++) {
       let min = elements[index];
       let minIndex = index;
 

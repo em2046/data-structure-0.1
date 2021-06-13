@@ -15,6 +15,7 @@ import {
   TreeNode,
 } from "./node";
 import { lessThan } from "../abstract/comparable";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
 
 export class RedBlackTree<T> {
   private root: TreeNode<T> | null = null;
@@ -33,12 +34,20 @@ export class RedBlackTree<T> {
       return this.insertAsRoot(value);
     }
 
-    const hot = this.hot!;
+    const hot = this.hot;
     const node = new TreeNode(value, hot, null, null, -1);
 
     if (this.direction === Direction.LEFT) {
+      if (!hot) {
+        throw new Error("Unknown error");
+      }
+
       hot.leftChild = node;
     } else if (this.direction === Direction.RIGHT) {
+      if (!hot) {
+        throw new Error("Unknown error");
+      }
+
       hot.rightChild = node;
     }
 
@@ -65,7 +74,12 @@ export class RedBlackTree<T> {
     const hot = this.hot;
 
     if (hot === null) {
-      const root = this.root!;
+      const root = this.root;
+
+      if (!root) {
+        throw new Error("Unknown error");
+      }
+
       root.color = NodeColor.BLACK;
       this.updateHeight(root);
       return true;
@@ -76,8 +90,12 @@ export class RedBlackTree<T> {
     }
 
     if (isRed(node)) {
-      node!.color = NodeColor.BLACK;
-      node!.height += 1;
+      if (!node) {
+        throw new Error("Unknown error");
+      }
+
+      node.color = NodeColor.BLACK;
+      node.height += 1;
       return true;
     }
 
@@ -103,7 +121,7 @@ export class RedBlackTree<T> {
     this.hot = root;
     let current: TreeNode<T> | null = root;
 
-    while (true) {
+    for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
       if (lessThan(value, current.data)) {
         this.direction = Direction.LEFT;
         current = current.leftChild;
@@ -160,9 +178,17 @@ export class RedBlackTree<T> {
     let sibling: TreeNode<T>;
 
     if (node === parent.leftChild) {
-      sibling = parent.rightChild!;
+      if (!parent.rightChild) {
+        throw new Error("Unknown error");
+      }
+
+      sibling = parent.rightChild;
     } else {
-      sibling = parent.leftChild!;
+      if (!parent.leftChild) {
+        throw new Error("Unknown error");
+      }
+
+      sibling = parent.leftChild;
     }
 
     if (isBlack(sibling)) {
@@ -197,21 +223,39 @@ export class RedBlackTree<T> {
         this.root = node;
         break;
       case Direction.LEFT:
-        grandparent!.leftChild = node;
+        if (!grandparent) {
+          throw new Error("Unknown error");
+        }
+
+        grandparent.leftChild = node;
         break;
       case Direction.RIGHT:
-        grandparent!.rightChild = node;
+        if (!grandparent) {
+          throw new Error("Unknown error");
+        }
+
+        grandparent.rightChild = node;
         break;
     }
 
     if (hasLeftChild(node)) {
-      const leftNode = node.leftChild!;
+      const leftNode = node.leftChild;
+
+      if (!leftNode) {
+        throw new Error("Unknown error");
+      }
+
       leftNode.color = NodeColor.BLACK;
       this.updateHeight(leftNode);
     }
 
     if (hasRightChild(node)) {
-      const rightNode = node.rightChild!;
+      const rightNode = node.rightChild;
+
+      if (!rightNode) {
+        throw new Error("Unknown error");
+      }
+
       rightNode.color = NodeColor.BLACK;
       this.updateHeight(rightNode);
     }
@@ -242,9 +286,17 @@ export class RedBlackTree<T> {
     let siblingChild: TreeNode<T>;
 
     if (isLeftChild(sibling)) {
-      siblingChild = sibling.leftChild!;
+      if (!sibling.leftChild) {
+        throw new Error("Unknown error");
+      }
+
+      siblingChild = sibling.leftChild;
     } else if (isRightChild(sibling)) {
-      siblingChild = sibling.rightChild!;
+      if (!sibling.rightChild) {
+        throw new Error("Unknown error");
+      }
+
+      siblingChild = sibling.rightChild;
     } else {
       throw new Error("The sibling node can't be a root");
     }
@@ -260,10 +312,18 @@ export class RedBlackTree<T> {
         this.root = newNode;
         break;
       case Direction.LEFT:
-        grandparent!.leftChild = newNode;
+        if (!grandparent) {
+          throw new Error("Unknown error");
+        }
+
+        grandparent.leftChild = newNode;
         break;
       case Direction.RIGHT:
-        grandparent!.rightChild = newNode;
+        if (!grandparent) {
+          throw new Error("Unknown error");
+        }
+
+        grandparent.rightChild = newNode;
         break;
     }
 
@@ -283,10 +343,18 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          this.hot!.leftChild = current;
+          if (!this.hot) {
+            throw new Error("Unknown error");
+          }
+
+          this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          this.hot!.rightChild = current;
+          if (!this.hot) {
+            throw new Error("Unknown error");
+          }
+
+          this.hot.rightChild = current;
       }
 
       next = current;
@@ -298,10 +366,18 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          this.hot!.leftChild = current;
+          if (!this.hot) {
+            throw new Error("Unknown error");
+          }
+
+          this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          this.hot!.rightChild = current;
+          if (!this.hot) {
+            throw new Error("Unknown error");
+          }
+
+          this.hot.rightChild = current;
           break;
       }
 
@@ -309,8 +385,12 @@ export class RedBlackTree<T> {
     } else {
       cache = cache.getNext();
       [current.data, cache.data] = [cache.data, current.data];
-      const parent = cache.parent!;
+      const parent = cache.parent;
       next = cache.rightChild;
+
+      if (!parent) {
+        throw new Error("Unknown error");
+      }
 
       if (parent === current) {
         parent.rightChild = next;
@@ -343,7 +423,12 @@ export class RedBlackTree<T> {
 
   private solveDoubleRed(node: TreeNode<T>): void {
     if (isRoot(node)) {
-      const root = this.root!;
+      const root = this.root;
+
+      if (!root) {
+        throw new Error("Unknown error");
+      }
+
       root.color = NodeColor.BLACK;
       root.height += 1;
 
@@ -358,7 +443,11 @@ export class RedBlackTree<T> {
 
     const redParent = parent as TreeNode<T>;
 
-    const grandparent = redParent.parent!;
+    if (!redParent.parent) {
+      throw new Error("Unknown error");
+    }
+
+    const grandparent = redParent.parent;
     const uncle = getUncle(node);
 
     if (isBlack(uncle)) {
@@ -378,10 +467,18 @@ export class RedBlackTree<T> {
           this.root = newNode;
           break;
         case Direction.LEFT:
-          grandGrandparent!.leftChild = newNode;
+          if (!grandGrandparent) {
+            throw new Error("Unknown error");
+          }
+
+          grandGrandparent.leftChild = newNode;
           break;
         case Direction.RIGHT:
-          grandGrandparent!.rightChild = newNode;
+          if (!grandGrandparent) {
+            throw new Error("Unknown error");
+          }
+
+          grandGrandparent.rightChild = newNode;
           break;
       }
 
@@ -401,8 +498,17 @@ export class RedBlackTree<T> {
   }
 
   private rotate(node: TreeNode<T>): TreeNode<T> {
-    const parent = node.parent!;
-    const grandparent = parent.parent!;
+    const parent = node.parent;
+
+    if (!parent) {
+      throw new Error("Unknown error");
+    }
+
+    const grandparent = parent.parent;
+
+    if (!grandparent) {
+      throw new Error("Unknown error");
+    }
 
     if (isLeftChild(parent)) {
       if (isLeftChild(node)) {
