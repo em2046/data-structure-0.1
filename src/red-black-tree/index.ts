@@ -104,16 +104,12 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  get(value: T): TreeNode<T> | undefined {
+  get(value: T): TreeNode<T> | null {
     const root = this.root;
 
     if (root === null || value === root.data) {
       this.hot = null;
       this.direction = Direction.ROOT;
-
-      if (root === null) {
-        return undefined;
-      }
 
       return root;
     }
@@ -131,7 +127,7 @@ export class RedBlackTree<T> {
       }
 
       if (current === null) {
-        return undefined;
+        return null;
       }
 
       if (value === current.data) {
@@ -140,6 +136,8 @@ export class RedBlackTree<T> {
 
       this.hot = current;
     }
+
+    throw new Error("Unknown error");
   }
 
   traverseLevel(visit: (value: T) => void): void {
