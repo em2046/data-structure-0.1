@@ -1,3 +1,5 @@
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+
 export enum NodeColor {
   RED = "red",
   BLACK = "black",
@@ -26,7 +28,13 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent!.leftChild;
+  const parent = node.parent;
+
+  if (!parent) {
+    throw new Error("Unknown error");
+  }
+
+  return node === parent.leftChild;
 }
 
 export function isRightChild<T>(node: TreeNode<T>): boolean {
@@ -34,7 +42,13 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent!.rightChild;
+  const parent = node.parent;
+
+  if (!parent) {
+    throw new Error("Unknown error");
+  }
+
+  return node === parent.rightChild;
 }
 
 export function isBlack<T>(node: TreeNode<T> | null): boolean {
@@ -57,23 +71,23 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
   return -1;
 }
 
-export function getUncle<T>(node: TreeNode<T>): TreeNode<T> {
+export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
   if (!parent) {
     throw new Error("The parent node must exist");
   }
 
-  const grandparent = parent.parent!;
+  const grandparent = parent.parent;
 
   if (!grandparent) {
     throw new Error("The grandparent node must exist");
   }
 
   if (isLeftChild(parent)) {
-    return grandparent.rightChild!;
+    return grandparent.rightChild;
   } else {
-    return grandparent.leftChild!;
+    return grandparent.leftChild;
   }
 }
 
@@ -138,31 +152,54 @@ export class TreeNode<T> {
     queue.push(this);
 
     while (queue.length) {
-      const node = queue.shift()!;
+      const node = queue.shift();
+
+      if (!node) {
+        throw new Error("Unknown error");
+      }
+
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        queue.push(node.leftChild!);
+        if (!node.leftChild) {
+          throw new Error("Unknown error");
+        }
+
+        queue.push(node.leftChild);
       }
 
       if (hasRightChild(node)) {
-        queue.push(node.rightChild!);
+        if (!node.rightChild) {
+          throw new Error("Unknown error");
+        }
+
+        queue.push(node.rightChild);
       }
     }
   }
 
   getNext(): TreeNode<T> {
-    let node: TreeNode<T> = this;
+    let node: TreeNode<T>;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        node = node.leftChild!;
+        if (!node.leftChild) {
+          throw new Error("Unknown error");
+        }
+
+        node = node.leftChild;
       }
     } else {
+      node = this;
+
       while (isRightChild(node)) {
-        node = node.parent!;
+        if (!node.parent) {
+          throw new Error("Unknown error");
+        }
+
+        node = node.parent;
       }
 
       if (!node.parent) {
@@ -176,17 +213,25 @@ export class TreeNode<T> {
   }
 
   traverseIn(visit: (value: T) => void): void {
-    let node: TreeNode<T> | null = this;
+    let node: TreeNode<T> | null;
     const stack: Array<TreeNode<T>> = [];
 
-    while (true) {
+    node = this;
+
+    for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
       saveLeftBranch(node, stack);
 
       if (stack.length === 0) {
         break;
       }
 
-      node = stack.pop()!;
+      const cache = stack.pop();
+
+      if (!cache) {
+        throw new Error("");
+      }
+
+      node = cache;
       visit(node.data);
       node = node.rightChild;
     }

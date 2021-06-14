@@ -484,6 +484,10 @@ export class RedBlackTree<T> {
 
       newNode.parent = grandGrandparent;
     } else {
+      if (!uncle) {
+        throw new Error("Unknown error");
+      }
+
       redParent.color = NodeColor.BLACK;
       redParent.height += 1;
       uncle.color = NodeColor.BLACK;
