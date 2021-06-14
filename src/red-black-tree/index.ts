@@ -38,14 +38,14 @@ export class RedBlackTree<T> {
     const node = new TreeNode(value, hot, null, null, -1);
 
     if (this.direction === Direction.LEFT) {
-      if (!hot) {
-        throw new Error("Unknown error");
+      if (hot === null) {
+        throw new Error("The left child must exist");
       }
 
       hot.leftChild = node;
     } else if (this.direction === Direction.RIGHT) {
-      if (!hot) {
-        throw new Error("Unknown error");
+      if (hot === null) {
+        throw new Error("The right child must exist");
       }
 
       hot.rightChild = node;
@@ -60,7 +60,7 @@ export class RedBlackTree<T> {
   delete(value: T): boolean {
     const oldNode = this.get(value);
 
-    if (!oldNode) {
+    if (oldNode === null) {
       return false;
     }
 
@@ -76,8 +76,8 @@ export class RedBlackTree<T> {
     if (hot === null) {
       const root = this.root;
 
-      if (!root) {
-        throw new Error("Unknown error");
+      if (root === null) {
+        throw new Error("The root must exist");
       }
 
       root.color = NodeColor.BLACK;
@@ -90,8 +90,8 @@ export class RedBlackTree<T> {
     }
 
     if (isRed(node)) {
-      if (!node) {
-        throw new Error("Unknown error");
+      if (node === null) {
+        throw new Error("The node must exist");
       }
 
       node.color = NodeColor.BLACK;
@@ -104,16 +104,12 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  get(value: T): TreeNode<T> | undefined {
+  get(value: T): TreeNode<T> | null {
     const root = this.root;
 
     if (root === null || value === root.data) {
       this.hot = null;
       this.direction = Direction.ROOT;
-
-      if (root === null) {
-        return undefined;
-      }
 
       return root;
     }
@@ -131,7 +127,7 @@ export class RedBlackTree<T> {
       }
 
       if (current === null) {
-        return undefined;
+        return null;
       }
 
       if (value === current.data) {
@@ -140,6 +136,8 @@ export class RedBlackTree<T> {
 
       this.hot = current;
     }
+
+    throw new Error("Tree size overflow");
   }
 
   traverseLevel(visit: (value: T) => void): void {
@@ -178,14 +176,14 @@ export class RedBlackTree<T> {
     let sibling: TreeNode<T>;
 
     if (node === parent.leftChild) {
-      if (!parent.rightChild) {
-        throw new Error("Unknown error");
+      if (parent.rightChild === null) {
+        throw new Error("The parent's right child must exist");
       }
 
       sibling = parent.rightChild;
     } else {
-      if (!parent.leftChild) {
-        throw new Error("Unknown error");
+      if (parent.leftChild === null) {
+        throw new Error("The parent's left child must exist");
       }
 
       sibling = parent.leftChild;
@@ -223,15 +221,15 @@ export class RedBlackTree<T> {
         this.root = node;
         break;
       case Direction.LEFT:
-        if (!grandparent) {
-          throw new Error("Unknown error");
+        if (grandparent === null) {
+          throw new Error("The grandparent must exist");
         }
 
         grandparent.leftChild = node;
         break;
       case Direction.RIGHT:
-        if (!grandparent) {
-          throw new Error("Unknown error");
+        if (grandparent === null) {
+          throw new Error("The grandparent must exist");
         }
 
         grandparent.rightChild = node;
@@ -241,8 +239,8 @@ export class RedBlackTree<T> {
     if (hasLeftChild(node)) {
       const leftNode = node.leftChild;
 
-      if (!leftNode) {
-        throw new Error("Unknown error");
+      if (leftNode === null) {
+        throw new Error("The left child must exist");
       }
 
       leftNode.color = NodeColor.BLACK;
@@ -252,8 +250,8 @@ export class RedBlackTree<T> {
     if (hasRightChild(node)) {
       const rightNode = node.rightChild;
 
-      if (!rightNode) {
-        throw new Error("Unknown error");
+      if (rightNode === null) {
+        throw new Error("The right child must exist");
       }
 
       rightNode.color = NodeColor.BLACK;
@@ -286,19 +284,19 @@ export class RedBlackTree<T> {
     let siblingChild: TreeNode<T>;
 
     if (isLeftChild(sibling)) {
-      if (!sibling.leftChild) {
-        throw new Error("Unknown error");
+      if (sibling.leftChild === null) {
+        throw new Error("The sibling's left child must exist");
       }
 
       siblingChild = sibling.leftChild;
     } else if (isRightChild(sibling)) {
-      if (!sibling.rightChild) {
-        throw new Error("Unknown error");
+      if (sibling.rightChild === null) {
+        throw new Error("The sibling's right child must exist");
       }
 
       siblingChild = sibling.rightChild;
     } else {
-      throw new Error("The sibling node can't be a root");
+      throw new Error("The sibling can't be a root");
     }
 
     this.hot = parent;
@@ -312,15 +310,15 @@ export class RedBlackTree<T> {
         this.root = newNode;
         break;
       case Direction.LEFT:
-        if (!grandparent) {
-          throw new Error("Unknown error");
+        if (grandparent === null) {
+          throw new Error("The grandparent must exist");
         }
 
         grandparent.leftChild = newNode;
         break;
       case Direction.RIGHT:
-        if (!grandparent) {
-          throw new Error("Unknown error");
+        if (grandparent === null) {
+          throw new Error("The grandparent must exist");
         }
 
         grandparent.rightChild = newNode;
@@ -331,7 +329,7 @@ export class RedBlackTree<T> {
   }
 
   private deleteImpl(node: TreeNode<T>): TreeNode<T> | null {
-    let cache = node;
+    let element = node;
     let current: TreeNode<T> | null = node;
     let next: TreeNode<T> | null;
 
@@ -343,15 +341,15 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          if (!this.hot) {
-            throw new Error("Unknown error");
+          if (this.hot === null) {
+            throw new Error("The hot must exist");
           }
 
           this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          if (!this.hot) {
-            throw new Error("Unknown error");
+          if (this.hot === null) {
+            throw new Error("The hot must exist");
           }
 
           this.hot.rightChild = current;
@@ -366,15 +364,15 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          if (!this.hot) {
-            throw new Error("Unknown error");
+          if (this.hot === null) {
+            throw new Error("The hot must exist");
           }
 
           this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          if (!this.hot) {
-            throw new Error("Unknown error");
+          if (this.hot === null) {
+            throw new Error("The hot must exist");
           }
 
           this.hot.rightChild = current;
@@ -383,13 +381,13 @@ export class RedBlackTree<T> {
 
       next = current;
     } else {
-      cache = cache.getNext();
-      [current.data, cache.data] = [cache.data, current.data];
-      const parent = cache.parent;
-      next = cache.rightChild;
+      element = element.getNext();
+      [current.data, element.data] = [element.data, current.data];
+      const parent = element.parent;
+      next = element.rightChild;
 
-      if (!parent) {
-        throw new Error("Unknown error");
+      if (parent === null) {
+        throw new Error("The parent must exist");
       }
 
       if (parent === current) {
@@ -399,9 +397,9 @@ export class RedBlackTree<T> {
       }
     }
 
-    this.hot = cache.parent;
+    this.hot = element.parent;
 
-    if (isLeftChild(cache)) {
+    if (isLeftChild(element)) {
       this.direction = Direction.LEFT;
     } else {
       this.direction = Direction.RIGHT;
@@ -425,8 +423,8 @@ export class RedBlackTree<T> {
     if (isRoot(node)) {
       const root = this.root;
 
-      if (!root) {
-        throw new Error("Unknown error");
+      if (root === null) {
+        throw new Error("The root must exist");
       }
 
       root.color = NodeColor.BLACK;
@@ -437,55 +435,61 @@ export class RedBlackTree<T> {
 
     const parent = node.parent;
 
+    if (parent === null) {
+      throw new Error("The parent must exist");
+    }
+
     if (isBlack(parent)) {
       return;
     }
 
-    const redParent = parent as TreeNode<T>;
-
-    if (!redParent.parent) {
-      throw new Error("Unknown error");
-    }
-
-    const grandparent = redParent.parent;
+    const grandparent = parent.parent;
     const uncle = getUncle(node);
 
+    if (grandparent === null) {
+      throw new Error("The grandparent must exist");
+    }
+
     if (isBlack(uncle)) {
-      if (isLeftChild(node) === isLeftChild(redParent)) {
-        redParent.color = NodeColor.BLACK;
+      if (isLeftChild(node) === isLeftChild(parent)) {
+        parent.color = NodeColor.BLACK;
       } else {
         node.color = NodeColor.BLACK;
       }
 
       grandparent.color = NodeColor.RED;
-      const grandGrandparent = grandparent.parent;
+      const greatGrandparent = grandparent.parent;
       const direction = getDirection(grandparent);
-      const newNode = this.rotate(node);
+      const handle = this.rotate(node);
 
       switch (direction) {
         case Direction.ROOT:
-          this.root = newNode;
+          this.root = handle;
           break;
         case Direction.LEFT:
-          if (!grandGrandparent) {
-            throw new Error("Unknown error");
+          if (greatGrandparent === null) {
+            throw new Error("The great grandparent must exist");
           }
 
-          grandGrandparent.leftChild = newNode;
+          greatGrandparent.leftChild = handle;
           break;
         case Direction.RIGHT:
-          if (!grandGrandparent) {
-            throw new Error("Unknown error");
+          if (greatGrandparent === null) {
+            throw new Error("The great grandparent must exist");
           }
 
-          grandGrandparent.rightChild = newNode;
+          greatGrandparent.rightChild = handle;
           break;
       }
 
-      newNode.parent = grandGrandparent;
+      handle.parent = greatGrandparent;
     } else {
-      redParent.color = NodeColor.BLACK;
-      redParent.height += 1;
+      if (uncle === null) {
+        throw new Error("The uncle must exist");
+      }
+
+      parent.color = NodeColor.BLACK;
+      parent.height += 1;
       uncle.color = NodeColor.BLACK;
       uncle.height += 1;
 
@@ -500,14 +504,14 @@ export class RedBlackTree<T> {
   private rotate(node: TreeNode<T>): TreeNode<T> {
     const parent = node.parent;
 
-    if (!parent) {
-      throw new Error("Unknown error");
+    if (parent === null) {
+      throw new Error("The parent must exist");
     }
 
     const grandparent = parent.parent;
 
-    if (!grandparent) {
-      throw new Error("Unknown error");
+    if (grandparent === null) {
+      throw new Error("The grandparent must exist");
     }
 
     if (isLeftChild(parent)) {

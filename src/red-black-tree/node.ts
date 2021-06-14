@@ -1,3 +1,5 @@
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+
 export enum NodeColor {
   RED = "red",
   BLACK = "black",
@@ -26,7 +28,13 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent!.leftChild;
+  const parent = node.parent;
+
+  if (parent === null) {
+    throw new Error("The parent must exist");
+  }
+
+  return node === parent.leftChild;
 }
 
 export function isRightChild<T>(node: TreeNode<T>): boolean {
@@ -34,7 +42,13 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
     return false;
   }
 
-  return node === node.parent!.rightChild;
+  const parent = node.parent;
+
+  if (parent === null) {
+    throw new Error("The parent must exist");
+  }
+
+  return node === parent.rightChild;
 }
 
 export function isBlack<T>(node: TreeNode<T> | null): boolean {
@@ -57,23 +71,23 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
   return -1;
 }
 
-export function getUncle<T>(node: TreeNode<T>): TreeNode<T> {
+export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
-  if (!parent) {
-    throw new Error("The parent node must exist");
+  if (parent === null) {
+    throw new Error("The parent must exist");
   }
 
-  const grandparent = parent.parent!;
+  const grandparent = parent.parent;
 
-  if (!grandparent) {
-    throw new Error("The grandparent node must exist");
+  if (grandparent === null) {
+    throw new Error("The grandparent must exist");
   }
 
   if (isLeftChild(parent)) {
-    return grandparent.rightChild!;
+    return grandparent.rightChild;
   } else {
-    return grandparent.leftChild!;
+    return grandparent.leftChild;
   }
 }
 
@@ -137,36 +151,59 @@ export class TreeNode<T> {
     const queue: Array<TreeNode<T>> = [];
     queue.push(this);
 
-    while (queue.length) {
-      const node = queue.shift()!;
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      if (node === undefined) {
+        throw new Error("The node must exist");
+      }
+
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        queue.push(node.leftChild!);
+        if (node.leftChild === null) {
+          throw new Error("The left child must exist");
+        }
+
+        queue.push(node.leftChild);
       }
 
       if (hasRightChild(node)) {
-        queue.push(node.rightChild!);
+        if (node.rightChild === null) {
+          throw new Error("The right child must exist");
+        }
+
+        queue.push(node.rightChild);
       }
     }
   }
 
   getNext(): TreeNode<T> {
-    let node: TreeNode<T> = this;
+    let node: TreeNode<T>;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        node = node.leftChild!;
+        if (node.leftChild === null) {
+          throw new Error("The left child must exist");
+        }
+
+        node = node.leftChild;
       }
     } else {
+      node = this;
+
       while (isRightChild(node)) {
-        node = node.parent!;
+        if (node.parent === null) {
+          throw new Error("The parent must exist");
+        }
+
+        node = node.parent;
       }
 
-      if (!node.parent) {
-        throw new Error("The next node must exist");
+      if (node.parent === null) {
+        throw new Error("The parent must exist");
       }
 
       node = node.parent;
@@ -176,17 +213,25 @@ export class TreeNode<T> {
   }
 
   traverseIn(visit: (value: T) => void): void {
-    let node: TreeNode<T> | null = this;
+    let node: TreeNode<T> | null;
     const stack: Array<TreeNode<T>> = [];
 
-    while (true) {
+    node = this;
+
+    for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
       saveLeftBranch(node, stack);
 
       if (stack.length === 0) {
         break;
       }
 
-      node = stack.pop()!;
+      const element = stack.pop();
+
+      if (element === undefined) {
+        throw new Error("The element must exist");
+      }
+
+      node = element;
       visit(node.data);
       node = node.rightChild;
     }

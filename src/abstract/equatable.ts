@@ -13,5 +13,5 @@ export function equality<T>(lhs: T, rhs: T): boolean {
     return lhsEquatable.equality(rhsEquatable);
   }
 
-  return lhs == rhs;
+  return lhs === rhs;
 }
