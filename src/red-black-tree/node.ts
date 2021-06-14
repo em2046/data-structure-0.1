@@ -30,8 +30,8 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  if (!parent) {
-    throw new Error("Unknown error");
+  if (parent === null) {
+    throw new Error("The parent must exist");
   }
 
   return node === parent.leftChild;
@@ -44,8 +44,8 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  if (!parent) {
-    throw new Error("Unknown error");
+  if (parent === null) {
+    throw new Error("The parent must exist");
   }
 
   return node === parent.rightChild;
@@ -74,14 +74,14 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
-  if (!parent) {
-    throw new Error("The parent node must exist");
+  if (parent === null) {
+    throw new Error("The parent must exist");
   }
 
   const grandparent = parent.parent;
 
-  if (!grandparent) {
-    throw new Error("The grandparent node must exist");
+  if (grandparent === null) {
+    throw new Error("The grandparent must exist");
   }
 
   if (isLeftChild(parent)) {
@@ -151,26 +151,26 @@ export class TreeNode<T> {
     const queue: Array<TreeNode<T>> = [];
     queue.push(this);
 
-    while (queue.length) {
+    while (queue.length > 0) {
       const node = queue.shift();
 
-      if (!node) {
-        throw new Error("Unknown error");
+      if (node === undefined) {
+        throw new Error("The node must exist");
       }
 
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        if (!node.leftChild) {
-          throw new Error("Unknown error");
+        if (node.leftChild === null) {
+          throw new Error("The left child must exist");
         }
 
         queue.push(node.leftChild);
       }
 
       if (hasRightChild(node)) {
-        if (!node.rightChild) {
-          throw new Error("Unknown error");
+        if (node.rightChild === null) {
+          throw new Error("The right child must exist");
         }
 
         queue.push(node.rightChild);
@@ -185,8 +185,8 @@ export class TreeNode<T> {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        if (!node.leftChild) {
-          throw new Error("Unknown error");
+        if (node.leftChild === null) {
+          throw new Error("The left child must exist");
         }
 
         node = node.leftChild;
@@ -195,15 +195,15 @@ export class TreeNode<T> {
       node = this;
 
       while (isRightChild(node)) {
-        if (!node.parent) {
-          throw new Error("Unknown error");
+        if (node.parent === null) {
+          throw new Error("The parent must exist");
         }
 
         node = node.parent;
       }
 
-      if (!node.parent) {
-        throw new Error("The next node must exist");
+      if (node.parent === null) {
+        throw new Error("The parent must exist");
       }
 
       node = node.parent;
@@ -225,13 +225,13 @@ export class TreeNode<T> {
         break;
       }
 
-      const cache = stack.pop();
+      const element = stack.pop();
 
-      if (!cache) {
-        throw new Error("");
+      if (element === undefined) {
+        throw new Error("The element must exist");
       }
 
-      node = cache;
+      node = element;
       visit(node.data);
       node = node.rightChild;
     }

@@ -41,17 +41,17 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     const elements = this.elements;
     const first = elements[0];
 
-    if (!elements.length) {
+    if (elements.length <= 0) {
       return undefined;
     }
 
-    const temp = elements.pop();
+    const element = elements.pop();
 
-    if (temp === undefined) {
-      throw new Error("Unknown error");
+    if (element === undefined) {
+      throw new Error("The element must exist");
     }
 
-    elements[0] = temp;
+    elements[0] = element;
     this.percolateDown(elements.length, 0);
 
     return first;
@@ -115,7 +115,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
         }
       }
 
-      if (minIndex == index) {
+      if (minIndex === index) {
         break;
       }
 
