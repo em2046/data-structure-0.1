@@ -2,11 +2,12 @@ import { equality, Equatable } from "./equatable";
 import { NovaFlags } from "../shared/flags";
 
 export interface Comparable extends Equatable {
+  readonly [NovaFlags.COMPARABLE]: true;
+
   lessThan: (rhs: this) => boolean;
   lessThanOrEqual?: (rhs: this) => boolean;
   greaterThan?: (rhs: this) => boolean;
   greaterThanOrEqual?: (rhs: this) => boolean;
-  [NovaFlags.COMPARABLE]: true;
 }
 
 interface ComparableWithLessThanOrEqual extends Comparable {

@@ -1,8 +1,9 @@
 import { NovaFlags } from "../shared/flags";
 
 export interface Equatable {
+  readonly [NovaFlags.EQUATABLE]: true;
+
   equality: (rhs: this) => boolean;
-  [NovaFlags.EQUATABLE]: true;
 }
 
 export function equality<T>(lhs: T, rhs: T): boolean {

@@ -1,16 +1,16 @@
 import { assert } from "../shared/assert";
 import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
-export enum NodeColor {
-  RED = "red",
-  BLACK = "black",
-}
-
 export enum Direction {
   UNKNOWN = "unknown",
   ROOT = "root",
   LEFT = "left",
   RIGHT = "right",
+}
+
+export enum NodeColor {
+  RED = "red",
+  BLACK = "black",
 }
 
 export function hasLeftChild<T>(node: TreeNode<T>): boolean {
@@ -61,14 +61,6 @@ export function isRed<T>(node: TreeNode<T> | null): boolean {
   return !isBlack(node);
 }
 
-export function getHeight<T>(node: TreeNode<T> | null): number {
-  if (node !== null) {
-    return node.height;
-  }
-
-  return -1;
-}
-
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
@@ -97,7 +89,15 @@ export function getDirection<T>(node: TreeNode<T>): Direction {
   }
 }
 
-export function balanced<T>(node: TreeNode<T>): boolean {
+export function getHeight<T>(node: TreeNode<T> | null): number {
+  if (node !== null) {
+    return node.height;
+  }
+
+  return -1;
+}
+
+export function isBalanced<T>(node: TreeNode<T>): boolean {
   const leftHeight = getHeight(node.leftChild);
   const rightHeight = getHeight(node.rightChild);
 
@@ -141,31 +141,6 @@ export class TreeNode<T> {
     this.color = color;
   }
 
-  traverseLevel(visit: (value: T) => void): void {
-    const queue: Array<TreeNode<T>> = [];
-    queue.push(this);
-
-    while (queue.length > 0) {
-      const node = queue.shift();
-
-      assert(node !== undefined);
-
-      visit(node.data);
-
-      if (hasLeftChild(node)) {
-        assert(node.leftChild !== null);
-
-        queue.push(node.leftChild);
-      }
-
-      if (hasRightChild(node)) {
-        assert(node.rightChild !== null);
-
-        queue.push(node.rightChild);
-      }
-    }
-  }
-
   getNext(): TreeNode<T> {
     let node: TreeNode<T>;
 
@@ -192,6 +167,31 @@ export class TreeNode<T> {
     }
 
     return node;
+  }
+
+  traverseLevel(visit: (value: T) => void): void {
+    const queue: Array<TreeNode<T>> = [];
+    queue.push(this);
+
+    while (queue.length > 0) {
+      const node = queue.shift();
+
+      assert(node !== undefined);
+
+      visit(node.data);
+
+      if (hasLeftChild(node)) {
+        assert(node.leftChild !== null);
+
+        queue.push(node.leftChild);
+      }
+
+      if (hasRightChild(node)) {
+        assert(node.rightChild !== null);
+
+        queue.push(node.rightChild);
+      }
+    }
   }
 
   traverseIn(visit: (value: T) => void): void {
