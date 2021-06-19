@@ -1,5 +1,5 @@
 import { equality, Equatable } from "./equatable";
-import { NovaFlags } from "./flags";
+import { NovaFlags } from "../shared/flags";
 
 export interface Comparable extends Equatable {
   lessThan: (rhs: Comparable) => boolean;

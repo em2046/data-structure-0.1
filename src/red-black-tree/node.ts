@@ -1,4 +1,5 @@
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+import { assert } from "../shared/assert";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
 export enum NodeColor {
   RED = "red",
@@ -30,9 +31,7 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  if (parent === null) {
-    throw new Error("The parent must exist");
-  }
+  assert(parent !== null);
 
   return node === parent.leftChild;
 }
@@ -44,9 +43,7 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  if (parent === null) {
-    throw new Error("The parent must exist");
-  }
+  assert(parent !== null);
 
   return node === parent.rightChild;
 }
@@ -74,15 +71,11 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
-  if (parent === null) {
-    throw new Error("The parent must exist");
-  }
+  assert(parent !== null);
 
   const grandparent = parent.parent;
 
-  if (grandparent === null) {
-    throw new Error("The grandparent must exist");
-  }
+  assert(grandparent !== null);
 
   if (isLeftChild(parent)) {
     return grandparent.rightChild;
@@ -154,24 +147,18 @@ export class TreeNode<T> {
     while (queue.length > 0) {
       const node = queue.shift();
 
-      if (node === undefined) {
-        throw new Error("The node must exist");
-      }
+      assert(node !== undefined);
 
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        if (node.leftChild === null) {
-          throw new Error("The left child must exist");
-        }
+        assert(node.leftChild !== null);
 
         queue.push(node.leftChild);
       }
 
       if (hasRightChild(node)) {
-        if (node.rightChild === null) {
-          throw new Error("The right child must exist");
-        }
+        assert(node.rightChild !== null);
 
         queue.push(node.rightChild);
       }
@@ -185,9 +172,7 @@ export class TreeNode<T> {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        if (node.leftChild === null) {
-          throw new Error("The left child must exist");
-        }
+        assert(node.leftChild !== null);
 
         node = node.leftChild;
       }
@@ -195,16 +180,12 @@ export class TreeNode<T> {
       node = this;
 
       while (isRightChild(node)) {
-        if (node.parent === null) {
-          throw new Error("The parent must exist");
-        }
+        assert(node.parent !== null);
 
         node = node.parent;
       }
 
-      if (node.parent === null) {
-        throw new Error("The parent must exist");
-      }
+      assert(node.parent !== null);
 
       node = node.parent;
     }
@@ -227,9 +208,7 @@ export class TreeNode<T> {
 
       const element = stack.pop();
 
-      if (element === undefined) {
-        throw new Error("The element must exist");
-      }
+      assert(element !== undefined);
 
       node = element;
       visit(node.data);

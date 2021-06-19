@@ -15,7 +15,8 @@ import {
   TreeNode,
 } from "./node";
 import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
+import { assert } from "../shared/assert";
 
 export class RedBlackTree<T> {
   private root: TreeNode<T> | null = null;
@@ -26,7 +27,7 @@ export class RedBlackTree<T> {
   add(value: T): TreeNode<T> {
     const oldNode = this.get(value);
 
-    if (oldNode) {
+    if (oldNode !== null) {
       return oldNode;
     }
 
@@ -38,15 +39,11 @@ export class RedBlackTree<T> {
     const node = new TreeNode(value, hot, null, null, -1);
 
     if (this.direction === Direction.LEFT) {
-      if (hot === null) {
-        throw new Error("The left child must exist");
-      }
+      assert(hot !== null);
 
       hot.leftChild = node;
     } else if (this.direction === Direction.RIGHT) {
-      if (hot === null) {
-        throw new Error("The right child must exist");
-      }
+      assert(hot !== null);
 
       hot.rightChild = node;
     }
@@ -76,9 +73,7 @@ export class RedBlackTree<T> {
     if (hot === null) {
       const root = this.root;
 
-      if (root === null) {
-        throw new Error("The root must exist");
-      }
+      assert(root !== null);
 
       root.color = NodeColor.BLACK;
       this.updateHeight(root);
@@ -90,9 +85,7 @@ export class RedBlackTree<T> {
     }
 
     if (isRed(node)) {
-      if (node === null) {
-        throw new Error("The node must exist");
-      }
+      assert(node !== null);
 
       node.color = NodeColor.BLACK;
       node.height += 1;
@@ -176,15 +169,11 @@ export class RedBlackTree<T> {
     let sibling: TreeNode<T>;
 
     if (node === parent.leftChild) {
-      if (parent.rightChild === null) {
-        throw new Error("The parent's right child must exist");
-      }
+      assert(parent.rightChild !== null);
 
       sibling = parent.rightChild;
     } else {
-      if (parent.leftChild === null) {
-        throw new Error("The parent's left child must exist");
-      }
+      assert(parent.leftChild !== null);
 
       sibling = parent.leftChild;
     }
@@ -221,16 +210,12 @@ export class RedBlackTree<T> {
         this.root = node;
         break;
       case Direction.LEFT:
-        if (grandparent === null) {
-          throw new Error("The grandparent must exist");
-        }
+        assert(grandparent !== null);
 
         grandparent.leftChild = node;
         break;
       case Direction.RIGHT:
-        if (grandparent === null) {
-          throw new Error("The grandparent must exist");
-        }
+        assert(grandparent !== null);
 
         grandparent.rightChild = node;
         break;
@@ -239,9 +224,7 @@ export class RedBlackTree<T> {
     if (hasLeftChild(node)) {
       const leftNode = node.leftChild;
 
-      if (leftNode === null) {
-        throw new Error("The left child must exist");
-      }
+      assert(leftNode !== null);
 
       leftNode.color = NodeColor.BLACK;
       this.updateHeight(leftNode);
@@ -250,9 +233,7 @@ export class RedBlackTree<T> {
     if (hasRightChild(node)) {
       const rightNode = node.rightChild;
 
-      if (rightNode === null) {
-        throw new Error("The right child must exist");
-      }
+      assert(rightNode !== null);
 
       rightNode.color = NodeColor.BLACK;
       this.updateHeight(rightNode);
@@ -284,15 +265,14 @@ export class RedBlackTree<T> {
     let siblingChild: TreeNode<T>;
 
     if (isLeftChild(sibling)) {
-      if (sibling.leftChild === null) {
-        throw new Error("The sibling's left child must exist");
-      }
+      assert(sibling.leftChild !== null);
 
       siblingChild = sibling.leftChild;
     } else if (isRightChild(sibling)) {
-      if (sibling.rightChild === null) {
-        throw new Error("The sibling's right child must exist");
-      }
+      assert(
+        sibling.rightChild !== null,
+        "The sibling's right child must exist"
+      );
 
       siblingChild = sibling.rightChild;
     } else {
@@ -310,16 +290,12 @@ export class RedBlackTree<T> {
         this.root = newNode;
         break;
       case Direction.LEFT:
-        if (grandparent === null) {
-          throw new Error("The grandparent must exist");
-        }
+        assert(grandparent !== null);
 
         grandparent.leftChild = newNode;
         break;
       case Direction.RIGHT:
-        if (grandparent === null) {
-          throw new Error("The grandparent must exist");
-        }
+        assert(grandparent !== null);
 
         grandparent.rightChild = newNode;
         break;
@@ -341,16 +317,12 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          if (this.hot === null) {
-            throw new Error("The hot must exist");
-          }
+          assert(this.hot !== null);
 
           this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          if (this.hot === null) {
-            throw new Error("The hot must exist");
-          }
+          assert(this.hot !== null);
 
           this.hot.rightChild = current;
       }
@@ -364,16 +336,12 @@ export class RedBlackTree<T> {
           this.root = current;
           break;
         case Direction.LEFT:
-          if (this.hot === null) {
-            throw new Error("The hot must exist");
-          }
+          assert(this.hot !== null);
 
           this.hot.leftChild = current;
           break;
         case Direction.RIGHT:
-          if (this.hot === null) {
-            throw new Error("The hot must exist");
-          }
+          assert(this.hot !== null);
 
           this.hot.rightChild = current;
           break;
@@ -386,9 +354,7 @@ export class RedBlackTree<T> {
       const parent = element.parent;
       next = element.rightChild;
 
-      if (parent === null) {
-        throw new Error("The parent must exist");
-      }
+      assert(parent !== null);
 
       if (parent === current) {
         parent.rightChild = next;
@@ -423,9 +389,7 @@ export class RedBlackTree<T> {
     if (isRoot(node)) {
       const root = this.root;
 
-      if (root === null) {
-        throw new Error("The root must exist");
-      }
+      assert(root !== null);
 
       root.color = NodeColor.BLACK;
       root.height += 1;
@@ -435,9 +399,7 @@ export class RedBlackTree<T> {
 
     const parent = node.parent;
 
-    if (parent === null) {
-      throw new Error("The parent must exist");
-    }
+    assert(parent !== null);
 
     if (isBlack(parent)) {
       return;
@@ -446,9 +408,7 @@ export class RedBlackTree<T> {
     const grandparent = parent.parent;
     const uncle = getUncle(node);
 
-    if (grandparent === null) {
-      throw new Error("The grandparent must exist");
-    }
+    assert(grandparent !== null);
 
     if (isBlack(uncle)) {
       if (isLeftChild(node) === isLeftChild(parent)) {
@@ -467,16 +427,12 @@ export class RedBlackTree<T> {
           this.root = handle;
           break;
         case Direction.LEFT:
-          if (greatGrandparent === null) {
-            throw new Error("The great grandparent must exist");
-          }
+          assert(greatGrandparent !== null);
 
           greatGrandparent.leftChild = handle;
           break;
         case Direction.RIGHT:
-          if (greatGrandparent === null) {
-            throw new Error("The great grandparent must exist");
-          }
+          assert(greatGrandparent !== null);
 
           greatGrandparent.rightChild = handle;
           break;
@@ -484,9 +440,7 @@ export class RedBlackTree<T> {
 
       handle.parent = greatGrandparent;
     } else {
-      if (uncle === null) {
-        throw new Error("The uncle must exist");
-      }
+      assert(uncle !== null);
 
       parent.color = NodeColor.BLACK;
       parent.height += 1;
@@ -504,15 +458,11 @@ export class RedBlackTree<T> {
   private rotate(node: TreeNode<T>): TreeNode<T> {
     const parent = node.parent;
 
-    if (parent === null) {
-      throw new Error("The parent must exist");
-    }
+    assert(parent !== null);
 
     const grandparent = parent.parent;
 
-    if (grandparent === null) {
-      throw new Error("The grandparent must exist");
-    }
+    assert(grandparent !== null);
 
     if (isLeftChild(parent)) {
       if (isLeftChild(node)) {
