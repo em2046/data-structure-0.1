@@ -48,7 +48,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
 
     const element = elements.pop();
 
-    assert(element !== undefined, "The element must exist");
+    assert(element !== undefined);
 
     elements[0] = element;
     this.percolateDown(elements.length, 0);

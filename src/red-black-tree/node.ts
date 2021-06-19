@@ -31,7 +31,7 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  assert(parent !== null, "The parent must exist");
+  assert(parent !== null);
 
   return node === parent.leftChild;
 }
@@ -43,7 +43,7 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
 
   const parent = node.parent;
 
-  assert(parent !== null, "The parent must exist");
+  assert(parent !== null);
 
   return node === parent.rightChild;
 }
@@ -71,11 +71,11 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
 export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   const parent = node.parent;
 
-  assert(parent !== null, "The parent must exist");
+  assert(parent !== null);
 
   const grandparent = parent.parent;
 
-  assert(grandparent !== null, "The grandparent must exist");
+  assert(grandparent !== null);
 
   if (isLeftChild(parent)) {
     return grandparent.rightChild;
@@ -147,18 +147,18 @@ export class TreeNode<T> {
     while (queue.length > 0) {
       const node = queue.shift();
 
-      assert(node !== undefined, "The node must exist");
+      assert(node !== undefined);
 
       visit(node.data);
 
       if (hasLeftChild(node)) {
-        assert(node.leftChild !== null, "The left child must exist");
+        assert(node.leftChild !== null);
 
         queue.push(node.leftChild);
       }
 
       if (hasRightChild(node)) {
-        assert(node.rightChild !== null, "The right child must exist");
+        assert(node.rightChild !== null);
 
         queue.push(node.rightChild);
       }
@@ -172,7 +172,7 @@ export class TreeNode<T> {
       node = this.rightChild;
 
       while (hasLeftChild(node)) {
-        assert(node.leftChild !== null, "The left child must exist");
+        assert(node.leftChild !== null);
 
         node = node.leftChild;
       }
@@ -180,12 +180,12 @@ export class TreeNode<T> {
       node = this;
 
       while (isRightChild(node)) {
-        assert(node.parent !== null, "The parent must exist");
+        assert(node.parent !== null);
 
         node = node.parent;
       }
 
-      assert(node.parent !== null, "The parent must exist");
+      assert(node.parent !== null);
 
       node = node.parent;
     }
@@ -208,7 +208,7 @@ export class TreeNode<T> {
 
       const element = stack.pop();
 
-      assert(element !== undefined, "The element must exist");
+      assert(element !== undefined);
 
       node = element;
       visit(node.data);
