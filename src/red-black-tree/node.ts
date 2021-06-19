@@ -7,6 +7,7 @@ export enum NodeColor {
 }
 
 export enum Direction {
+  UNKNOWN = "unknown",
   ROOT = "root",
   LEFT = "left",
   RIGHT = "right",
