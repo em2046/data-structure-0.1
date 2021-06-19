@@ -22,7 +22,7 @@ export class RedBlackTree<T> {
   private root: TreeNode<T> | null = null;
   private size = 0;
   private hot: TreeNode<T> | null = null;
-  private direction: Direction = Direction.ROOT;
+  private direction: Direction = Direction.UNKNOWN;
 
   add(value: T): TreeNode<T> {
     const oldNode = this.get(value);
@@ -269,35 +269,32 @@ export class RedBlackTree<T> {
 
       siblingChild = sibling.leftChild;
     } else if (isRightChild(sibling)) {
-      assert(
-        sibling.rightChild !== null,
-        "The sibling's right child must exist"
-      );
+      assert(sibling.rightChild !== null);
 
       siblingChild = sibling.rightChild;
     } else {
-      throw new Error("The sibling can't be a root");
+      assert(false);
     }
 
     this.hot = parent;
 
     const parentDirection = getDirection(parent);
     const grandparent = parent.parent;
-    const newNode = this.rotate(siblingChild);
+    const handle = this.rotate(siblingChild);
 
     switch (parentDirection) {
       case Direction.ROOT:
-        this.root = newNode;
+        this.root = handle;
         break;
       case Direction.LEFT:
         assert(grandparent !== null);
 
-        grandparent.leftChild = newNode;
+        grandparent.leftChild = handle;
         break;
       case Direction.RIGHT:
         assert(grandparent !== null);
 
-        grandparent.rightChild = newNode;
+        grandparent.rightChild = handle;
         break;
     }
 
@@ -364,12 +361,7 @@ export class RedBlackTree<T> {
     }
 
     this.hot = element.parent;
-
-    if (isLeftChild(element)) {
-      this.direction = Direction.LEFT;
-    } else {
-      this.direction = Direction.RIGHT;
-    }
+    this.direction = Direction.UNKNOWN;
 
     if (next !== null) {
       next.parent = this.hot;
@@ -437,8 +429,6 @@ export class RedBlackTree<T> {
           greatGrandparent.rightChild = handle;
           break;
       }
-
-      handle.parent = greatGrandparent;
     } else {
       assert(uncle !== null);
 
