@@ -1,7 +1,7 @@
 import { NovaFlags } from "../shared/flags";
 
 export interface Equatable {
-  equality: (rhs: Equatable) => boolean;
+  equality: (rhs: this) => boolean;
   [NovaFlags.EQUATABLE]: true;
 }
 
