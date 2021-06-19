@@ -1,6 +1,7 @@
 import { PriorityQueue } from "../abstract/priority-queue";
 import { lessThan } from "../abstract/comparable";
 import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../shared/constants";
+import { assert } from "../shared/assert";
 
 function hasParent(index: number): boolean {
   return index > 0;
@@ -47,9 +48,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
 
     const element = elements.pop();
 
-    if (element === undefined) {
-      throw new Error("The element must exist");
-    }
+    assert(element !== undefined, "The element must exist");
 
     elements[0] = element;
     this.percolateDown(elements.length, 0);
