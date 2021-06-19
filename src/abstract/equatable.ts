@@ -1,4 +1,4 @@
-import { NovaFlags } from "./flags";
+import { NovaFlags } from "../shared/flags";
 
 export interface Equatable {
   equality: (rhs: Equatable) => boolean;

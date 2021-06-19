@@ -1,6 +1,6 @@
 import { PriorityQueue } from "../abstract/priority-queue";
 import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../constants";
+import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../shared/constants";
 
 function hasParent(index: number): boolean {
   return index > 0;

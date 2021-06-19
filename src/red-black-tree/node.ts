@@ -1,4 +1,4 @@
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
 export enum NodeColor {
   RED = "red",

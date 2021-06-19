@@ -15,7 +15,7 @@ import {
   TreeNode,
 } from "./node";
 import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../constants";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
 export class RedBlackTree<T> {
   private root: TreeNode<T> | null = null;
