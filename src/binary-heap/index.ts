@@ -30,12 +30,23 @@ function getRightChildIndex(index: number): number {
 export class BinaryHeap<T> implements PriorityQueue<T> {
   private elements: T[] = [];
 
+  len(): number {
+    return this.elements.length;
+  }
+
   clear(): void {
     this.elements = [];
   }
 
   peek(): T | undefined {
     return this.elements[0];
+  }
+
+  push(value: T): void {
+    const elements = this.elements;
+
+    elements.push(value);
+    this.percolateUp(elements.length - 1);
   }
 
   pop(): T | undefined {
@@ -54,17 +65,6 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     this.percolateDown(elements.length, 0);
 
     return first;
-  }
-
-  push(value: T): void {
-    const elements = this.elements;
-
-    elements.push(value);
-    this.percolateUp(elements.length - 1);
-  }
-
-  len(): number {
-    return this.elements.length;
   }
 
   private percolateUp(index: number): void {
