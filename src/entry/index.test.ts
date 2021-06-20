@@ -25,6 +25,13 @@ describe("entry", () => {
       value: Symbol("text"),
     });
 
+    expect(gamma.key).toEqual(3);
+    expect(beta.value).toEqual(100n);
+
+    beta.value = 200n;
+
+    expect(beta.value).toEqual(200n);
+
     expect(lessThan(alpha, beta)).toBeTruthy();
     expect(lessThan(beta, gamma)).toBeTruthy();
     expect(lessThanOrEqual(beta, beta)).toBeTruthy();

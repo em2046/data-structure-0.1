@@ -13,19 +13,19 @@ export enum NodeColor {
   BLACK = "black",
 }
 
-export function hasLeftChild<T>(node: TreeNode<T>): boolean {
+export function hasLeftChild<T>(node: BinaryTreeNode<T>): boolean {
   return node.leftChild !== null;
 }
 
-export function hasRightChild<T>(node: TreeNode<T>): boolean {
+export function hasRightChild<T>(node: BinaryTreeNode<T>): boolean {
   return node.rightChild !== null;
 }
 
-export function isRoot<T>(node: TreeNode<T>): boolean {
+export function isRoot<T>(node: BinaryTreeNode<T>): boolean {
   return node.parent === null;
 }
 
-export function isLeftChild<T>(node: TreeNode<T>): boolean {
+export function isLeftChild<T>(node: BinaryTreeNode<T>): boolean {
   if (isRoot(node)) {
     return false;
   }
@@ -37,7 +37,7 @@ export function isLeftChild<T>(node: TreeNode<T>): boolean {
   return node === parent.leftChild;
 }
 
-export function isRightChild<T>(node: TreeNode<T>): boolean {
+export function isRightChild<T>(node: BinaryTreeNode<T>): boolean {
   if (isRoot(node)) {
     return false;
   }
@@ -49,7 +49,7 @@ export function isRightChild<T>(node: TreeNode<T>): boolean {
   return node === parent.rightChild;
 }
 
-export function isBlack<T>(node: TreeNode<T> | null): boolean {
+export function isBlack<T>(node: BinaryTreeNode<T> | null): boolean {
   if (node === null) {
     return true;
   }
@@ -57,11 +57,11 @@ export function isBlack<T>(node: TreeNode<T> | null): boolean {
   return node.color === NodeColor.BLACK;
 }
 
-export function isRed<T>(node: TreeNode<T> | null): boolean {
+export function isRed<T>(node: BinaryTreeNode<T> | null): boolean {
   return !isBlack(node);
 }
 
-export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
+export function getUncle<T>(node: BinaryTreeNode<T>): BinaryTreeNode<T> | null {
   const parent = node.parent;
 
   assert(parent !== null);
@@ -77,7 +77,7 @@ export function getUncle<T>(node: TreeNode<T>): TreeNode<T> | null {
   }
 }
 
-export function getDirection<T>(node: TreeNode<T>): Direction {
+export function getDirection<T>(node: BinaryTreeNode<T>): Direction {
   if (isRoot(node)) {
     return Direction.ROOT;
   }
@@ -89,7 +89,7 @@ export function getDirection<T>(node: TreeNode<T>): Direction {
   }
 }
 
-export function getHeight<T>(node: TreeNode<T> | null): number {
+export function getHeight<T>(node: BinaryTreeNode<T> | null): number {
   if (node !== null) {
     return node.height;
   }
@@ -97,7 +97,7 @@ export function getHeight<T>(node: TreeNode<T> | null): number {
   return -1;
 }
 
-export function isBalanced<T>(node: TreeNode<T>): boolean {
+export function isBalanced<T>(node: BinaryTreeNode<T>): boolean {
   const leftHeight = getHeight(node.leftChild);
   const rightHeight = getHeight(node.rightChild);
 
@@ -108,8 +108,8 @@ export function isBalanced<T>(node: TreeNode<T>): boolean {
 }
 
 function saveLeftBranch<T>(
-  node: TreeNode<T> | null,
-  stack: Array<TreeNode<T>>
+  node: BinaryTreeNode<T> | null,
+  stack: Array<BinaryTreeNode<T>>
 ): void {
   while (node != null) {
     stack.push(node);
@@ -117,19 +117,19 @@ function saveLeftBranch<T>(
   }
 }
 
-export class TreeNode<T> {
+export class BinaryTreeNode<T> {
   data: T;
-  parent: TreeNode<T> | null = null;
-  leftChild: TreeNode<T> | null = null;
-  rightChild: TreeNode<T> | null = null;
+  parent: BinaryTreeNode<T> | null = null;
+  leftChild: BinaryTreeNode<T> | null = null;
+  rightChild: BinaryTreeNode<T> | null = null;
   height = 0;
   color: NodeColor = NodeColor.RED;
 
   constructor(
     value: T,
-    parent: TreeNode<T> | null = null,
-    leftChild: TreeNode<T> | null = null,
-    rightChild: TreeNode<T> | null = null,
+    parent: BinaryTreeNode<T> | null = null,
+    leftChild: BinaryTreeNode<T> | null = null,
+    rightChild: BinaryTreeNode<T> | null = null,
     height = 0,
     color = NodeColor.RED
   ) {
@@ -141,8 +141,8 @@ export class TreeNode<T> {
     this.color = color;
   }
 
-  getNext(): TreeNode<T> {
-    let node: TreeNode<T>;
+  getNext(): BinaryTreeNode<T> {
+    let node: BinaryTreeNode<T>;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
@@ -170,7 +170,7 @@ export class TreeNode<T> {
   }
 
   traverseLevel(visit: (value: T) => void): void {
-    const queue: Array<TreeNode<T>> = [];
+    const queue: Array<BinaryTreeNode<T>> = [];
     queue.push(this);
 
     while (queue.length > 0) {
@@ -195,8 +195,8 @@ export class TreeNode<T> {
   }
 
   traverseIn(visit: (value: T) => void): void {
-    let node: TreeNode<T> | null;
-    const stack: Array<TreeNode<T>> = [];
+    let node: BinaryTreeNode<T> | null;
+    const stack: Array<BinaryTreeNode<T>> = [];
 
     node = this;
 

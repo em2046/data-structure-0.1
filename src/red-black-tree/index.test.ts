@@ -1,9 +1,12 @@
 import { RedBlackTree } from "./index";
+import { isLeftChild, isRightChild } from "./node";
 
 describe("red-black-tree", () => {
   test("init", () => {
     const origin = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     const result: number[] = [];
+    const levelOrigin = [3, 1, 5, 0, 2, 4, 7, 6, 8, 9];
+    const levelResult: number[] = [];
 
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
@@ -11,8 +14,33 @@ describe("red-black-tree", () => {
       redBlackTree.add(value);
     });
 
+
+
+    expect(redBlackTree.delete(20)).toBeFalsy();
+
     const len = origin.length;
     expect(redBlackTree.len()).toEqual(len);
+
+    redBlackTree.add(1)
+    expect(redBlackTree.len()).toEqual(len);
+
+    const nodeOne = redBlackTree.getNode(1);
+    const nodeThree = redBlackTree.getNode(3);
+
+    if (nodeOne) {
+      const next = nodeOne.getNext().getNext().getNext();
+      expect(next.data).toEqual(4);
+    }
+
+    if (nodeThree) {
+      expect(isLeftChild(nodeThree)).toBeFalsy();
+      expect(isRightChild(nodeThree)).toBeFalsy();
+    }
+
+    redBlackTree.traverseLevel((value) => {
+      levelResult.push(value);
+    });
+    expect(levelResult).toEqual(levelOrigin);
 
     redBlackTree.traverseIn((value) => {
       result.push(value);
