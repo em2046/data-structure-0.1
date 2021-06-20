@@ -105,3 +105,6 @@ dist
 
 # JetBrains files
 .idea/
+
+# macOS Desktop Services Store file
+.DS_Store
