@@ -13,9 +13,25 @@ describe("binary-heap", () => {
     });
 
     const len = origin.length;
+    expect(binaryHeap.len()).toEqual(len);
+
     for (let i = 0; i < len; i++) {
       expect(binaryHeap.pop()).toEqual(result[i]);
     }
+
+    expect(binaryHeap.len()).toEqual(0);
+
+    expect(binaryHeap.pop()).toBeUndefined();
+
+    origin.forEach((value) => {
+      binaryHeap.push(value);
+    });
+
+    expect(binaryHeap.len()).toEqual(len);
+
+    binaryHeap.clear();
+
+    expect(binaryHeap.len()).toEqual(0);
   });
 
   test("random", () => {
