@@ -63,7 +63,7 @@ export function greaterThan<T>(lhs: T, rhs: T): boolean {
     return !lessThanOrEqual(lhs, rhs);
   }
 
-  return lhs > lhs;
+  return lhs > rhs;
 }
 
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean {

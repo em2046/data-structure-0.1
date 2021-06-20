@@ -61,6 +61,10 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
 
     assert(element !== undefined);
 
+    if (elements.length <= 0) {
+      return first;
+    }
+
     elements[0] = element;
     this.percolateDown(elements.length, 0);
 
