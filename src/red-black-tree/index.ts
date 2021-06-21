@@ -20,16 +20,19 @@ import { assert } from "../shared/assert";
 
 export class RedBlackTree<T> {
   private root: BinaryTreeNode<T> | null = null;
-  private size = 0;
   private hot: BinaryTreeNode<T> | null = null;
   private direction: Direction = Direction.UNKNOWN;
 
-  len(): number {
-    return this.size;
+  private _size = 0;
+
+  get size(): number {
+    return this._size;
   }
 
-  add(value: T): void {
-    this.insert(value);
+  add(value: T): this {
+    this.addNode(value);
+
+    return this;
   }
 
   delete(value: T): boolean {
@@ -39,10 +42,10 @@ export class RedBlackTree<T> {
       return false;
     }
 
-    const node = this.deleteImpl(oldNode);
-    this.size -= 1;
+    const node = this.deleteNode(oldNode);
+    this._size -= 1;
 
-    if (this.size === 0) {
+    if (this._size === 0) {
       return true;
     }
 
@@ -75,7 +78,49 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  getNode(value: T): BinaryTreeNode<T> | null {
+  get(value: T): T | undefined {
+    const node = this.getNode(value);
+
+    if (node === null) {
+      return undefined;
+    }
+
+    return node.data;
+  }
+
+  getNext(value: T): T | undefined {
+    const node = this.getNode(value);
+
+    if (node === null) {
+      return undefined;
+    }
+
+    const next = node.getNext();
+
+    if (next === null) {
+      return undefined;
+    }
+
+    return next.data;
+  }
+
+  traverseLevel(visit: (value: T) => void): void {
+    const root = this.root;
+
+    if (root !== null) {
+      root.traverseLevel(visit);
+    }
+  }
+
+  traverseIn(visit: (value: T) => void): void {
+    const root = this.root;
+
+    if (root !== null) {
+      root.traverseIn(visit);
+    }
+  }
+
+  private getNode(value: T): BinaryTreeNode<T> | null {
     const root = this.root;
 
     if (root === null || value === root.data) {
@@ -111,23 +156,7 @@ export class RedBlackTree<T> {
     assert(false);
   }
 
-  traverseLevel(visit: (value: T) => void): void {
-    const root = this.root;
-
-    if (root !== null) {
-      root.traverseLevel(visit);
-    }
-  }
-
-  traverseIn(visit: (value: T) => void): void {
-    const root = this.root;
-
-    if (root !== null) {
-      root.traverseIn(visit);
-    }
-  }
-
-  private insert(value: T): BinaryTreeNode<T> {
+  private addNode(value: T): BinaryTreeNode<T> {
     const oldNode = this.getNode(value);
 
     if (oldNode !== null) {
@@ -135,7 +164,7 @@ export class RedBlackTree<T> {
     }
 
     if (this.direction === Direction.ROOT) {
-      return this.insertAsRoot(value);
+      return this.addRoot(value);
     }
 
     const hot = this.hot;
@@ -151,14 +180,14 @@ export class RedBlackTree<T> {
       hot.rightChild = node;
     }
 
-    this.size += 1;
+    this._size += 1;
     this.solveDoubleRed(node);
 
     return node;
   }
 
-  private insertAsRoot(value: T): BinaryTreeNode<T> {
-    this.size = 1;
+  private addRoot(value: T): BinaryTreeNode<T> {
+    this._size = 1;
     this.root = new BinaryTreeNode(value, null, null, null, 0, NodeColor.BLACK);
 
     return this.root;
@@ -286,8 +315,8 @@ export class RedBlackTree<T> {
     return center;
   }
 
-  private deleteImpl(node: BinaryTreeNode<T>): BinaryTreeNode<T> | null {
-    let element = node;
+  private deleteNode(node: BinaryTreeNode<T>): BinaryTreeNode<T> | null {
+    let element: BinaryTreeNode<T> | null = node;
     let current: BinaryTreeNode<T> | null = node;
     let next: BinaryTreeNode<T> | null;
 
@@ -332,6 +361,9 @@ export class RedBlackTree<T> {
       next = current;
     } else {
       element = element.getNext();
+
+      assert(element !== null);
+
       [current.data, element.data] = [element.data, current.data];
       const parent = element.parent;
       next = element.rightChild;

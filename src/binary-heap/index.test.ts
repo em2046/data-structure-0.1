@@ -13,13 +13,13 @@ describe("binary-heap", () => {
     });
 
     const len = origin.length;
-    expect(binaryHeap.len()).toEqual(len);
+    expect(binaryHeap.size).toEqual(len);
 
     for (let i = 0; i < len; i++) {
       expect(binaryHeap.pop()).toEqual(result[i]);
     }
 
-    expect(binaryHeap.len()).toEqual(0);
+    expect(binaryHeap.size).toEqual(0);
 
     expect(binaryHeap.pop()).toBeUndefined();
 
@@ -27,11 +27,11 @@ describe("binary-heap", () => {
       binaryHeap.push(value);
     });
 
-    expect(binaryHeap.len()).toEqual(len);
+    expect(binaryHeap.size).toEqual(len);
 
     binaryHeap.clear();
 
-    expect(binaryHeap.len()).toEqual(0);
+    expect(binaryHeap.size).toEqual(0);
   });
 
   test("random", () => {

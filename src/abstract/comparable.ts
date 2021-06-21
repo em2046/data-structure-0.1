@@ -4,22 +4,25 @@ import { NovaFlags } from "../shared/flags";
 export interface Comparable extends Equatable {
   readonly [NovaFlags.COMPARABLE]: true;
 
-  lessThan: (rhs: this) => boolean;
-  lessThanOrEqual?: (rhs: this) => boolean;
-  greaterThan?: (rhs: this) => boolean;
-  greaterThanOrEqual?: (rhs: this) => boolean;
+  lessThan(rhs: this): boolean;
+
+  lessThanOrEqual?(rhs: this): boolean;
+
+  greaterThan?(rhs: this): boolean;
+
+  greaterThanOrEqual?(rhs: this): boolean;
 }
 
 interface ComparableWithLessThanOrEqual extends Comparable {
-  lessThanOrEqual: (rhs: this) => boolean;
+  lessThanOrEqual(rhs: this): boolean;
 }
 
 interface ComparableWithGreaterThan extends Comparable {
-  greaterThan: (rhs: this) => boolean;
+  greaterThan(rhs: this): boolean;
 }
 
 interface ComparableWithGreaterThanOrEqual extends Comparable {
-  greaterThanOrEqual: (rhs: this) => boolean;
+  greaterThanOrEqual(rhs: this): boolean;
 }
 
 export function lessThan<T>(lhs: T, rhs: T): boolean {

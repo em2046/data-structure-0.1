@@ -1,5 +1,4 @@
 export { RedBlackTree } from "./red-black-tree";
-export { BinaryTreeNode } from "./red-black-tree/node";
 export { BinaryHeap } from "./binary-heap";
 export { Entry } from "./entry";
 export {
