@@ -1,5 +1,4 @@
 import { RedBlackTree } from "./index";
-import { isLeftChild, isRightChild } from "./node";
 
 describe("red-black-tree", () => {
   test("init", () => {
@@ -14,27 +13,19 @@ describe("red-black-tree", () => {
       redBlackTree.add(value);
     });
 
-
-
     expect(redBlackTree.delete(20)).toBeFalsy();
 
     const len = origin.length;
-    expect(redBlackTree.len()).toEqual(len);
+    expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.add(1)
-    expect(redBlackTree.len()).toEqual(len);
+    redBlackTree.add(1);
+    expect(redBlackTree.size).toEqual(len);
 
-    const nodeOne = redBlackTree.getNode(1);
-    const nodeThree = redBlackTree.getNode(3);
-
-    if (nodeOne) {
-      const next = nodeOne.getNext().getNext().getNext();
-      expect(next.data).toEqual(4);
-    }
-
-    if (nodeThree) {
-      expect(isLeftChild(nodeThree)).toBeFalsy();
-      expect(isRightChild(nodeThree)).toBeFalsy();
+    for (let i = 0; i < 9; i++) {
+      const j = redBlackTree.getNext(i);
+      const k = redBlackTree.get(i);
+      expect(j).toEqual(i + 1);
+      expect(k).toEqual(i);
     }
 
     redBlackTree.traverseLevel((value) => {
@@ -52,7 +43,7 @@ describe("red-black-tree", () => {
       redBlackTree.delete(origin[i]);
     }
 
-    expect(redBlackTree.len()).toEqual(0);
+    expect(redBlackTree.size).toEqual(0);
   });
 
   test("change", () => {
@@ -63,13 +54,13 @@ describe("red-black-tree", () => {
       redBlackTree.add(i);
     }
 
-    expect(redBlackTree.len()).toEqual(len);
+    expect(redBlackTree.size).toEqual(len);
 
     for (let i = 0; i < len; i++) {
       redBlackTree.delete(i);
     }
 
-    expect(redBlackTree.len()).toEqual(0);
+    expect(redBlackTree.size).toEqual(0);
   });
 
   test("mess", () => {
@@ -87,13 +78,13 @@ describe("red-black-tree", () => {
       redBlackTree.add(origin[i]);
     }
 
-    expect(redBlackTree.len()).toEqual(len);
+    expect(redBlackTree.size).toEqual(len);
 
     for (let i = 0; i < len; i++) {
       redBlackTree.delete(origin[i]);
     }
 
-    expect(redBlackTree.len()).toEqual(0);
+    expect(redBlackTree.size).toEqual(0);
   });
 
   test("random", () => {
@@ -106,12 +97,12 @@ describe("red-black-tree", () => {
       redBlackTree.add(origin[i]);
     }
 
-    expect(redBlackTree.len()).toEqual(len);
+    expect(redBlackTree.size).toEqual(len);
 
     for (let i = 0; i < len; i++) {
       redBlackTree.delete(origin[i]);
     }
 
-    expect(redBlackTree.len()).toEqual(0);
+    expect(redBlackTree.size).toEqual(0);
   });
 });

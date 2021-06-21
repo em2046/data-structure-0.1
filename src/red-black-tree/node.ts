@@ -141,8 +141,8 @@ export class BinaryTreeNode<T> {
     this.color = color;
   }
 
-  getNext(): BinaryTreeNode<T> {
-    let node: BinaryTreeNode<T>;
+  getNext(): BinaryTreeNode<T> | null {
+    let node: BinaryTreeNode<T> | null;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
@@ -160,8 +160,6 @@ export class BinaryTreeNode<T> {
 
         node = node.parent;
       }
-
-      assert(node.parent !== null);
 
       node = node.parent;
     }
