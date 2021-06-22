@@ -28,12 +28,12 @@ describe("red-black-tree", () => {
       expect(k).toEqual(i);
     }
 
-    redBlackTree.traverseLevel((value) => {
+    redBlackTree.levelTraversal((value) => {
       levelResult.push(value);
     });
     expect(levelResult).toEqual(levelOrigin);
 
-    redBlackTree.traverseIn((value) => {
+    redBlackTree.inorderTraversal((value) => {
       result.push(value);
     });
 
@@ -84,7 +84,7 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.traverseIn((value) => {
+    redBlackTree.inorderTraversal((value) => {
       result.push(value);
     });
 
@@ -113,7 +113,7 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.traverseIn((value) => {
+    redBlackTree.inorderTraversal((value) => {
       result.push(value);
     });
 

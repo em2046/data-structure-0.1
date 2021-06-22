@@ -166,7 +166,7 @@ export class BinaryTreeNode<T> {
     return node;
   }
 
-  traverseLevel(visit: (value: T) => void): void {
+  levelTraversal(visit: (value: T) => void): void {
     const queue: Array<BinaryTreeNode<T>> = [];
     queue.push(this);
 
@@ -191,7 +191,7 @@ export class BinaryTreeNode<T> {
     }
   }
 
-  traverseIn(visit: (value: T) => void): void {
+  inorderTraversal(visit: (value: T) => void): void {
     let node: BinaryTreeNode<T> | null;
     const stack: Array<BinaryTreeNode<T>> = [];
 

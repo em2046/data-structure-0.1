@@ -81,42 +81,29 @@ export class RedBlackTree<T> {
   get(value: T): T | undefined {
     const node = this.getNode(value);
 
-    if (node === null) {
-      return undefined;
-    }
-
-    return node.data;
+    return node?.data;
   }
 
   getNext(value: T): T | undefined {
     const node = this.getNode(value);
+    const next = node?.getNext();
 
-    if (node === null) {
-      return undefined;
-    }
-
-    const next = node.getNext();
-
-    if (next === null) {
-      return undefined;
-    }
-
-    return next.data;
+    return next?.data;
   }
 
-  traverseLevel(visit: (value: T) => void): void {
+  levelTraversal(visit: (value: T) => void): void {
     const root = this.root;
 
     if (root !== null) {
-      root.traverseLevel(visit);
+      root.levelTraversal(visit);
     }
   }
 
-  traverseIn(visit: (value: T) => void): void {
+  inorderTraversal(visit: (value: T) => void): void {
     const root = this.root;
 
     if (root !== null) {
-      root.traverseIn(visit);
+      root.inorderTraversal(visit);
     }
   }
 
