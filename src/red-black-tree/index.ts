@@ -123,7 +123,14 @@ export class RedBlackTree<T> {
   private getNode(value: T): BinaryTreeNode<T> | null {
     const root = this.root;
 
-    if (root === null || value === root.data) {
+    if (root === null) {
+      this.hot = null;
+      this.direction = Direction.UNKNOWN;
+
+      return null;
+    }
+
+    if (value === root.data) {
       this.hot = null;
       this.direction = Direction.ROOT;
 
@@ -163,7 +170,7 @@ export class RedBlackTree<T> {
       return oldNode;
     }
 
-    if (this.direction === Direction.ROOT) {
+    if (this.direction === Direction.UNKNOWN) {
       return this.addRoot(value);
     }
 

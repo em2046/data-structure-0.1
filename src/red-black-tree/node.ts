@@ -1,5 +1,4 @@
 import { assert } from "../shared/assert";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
 export enum Direction {
   UNKNOWN = "unknown",
@@ -111,7 +110,7 @@ function saveLeftBranch<T>(
   node: BinaryTreeNode<T> | null,
   stack: Array<BinaryTreeNode<T>>
 ): void {
-  while (node != null) {
+  while (node !== null) {
     stack.push(node);
     node = node.leftChild;
   }
@@ -198,7 +197,7 @@ export class BinaryTreeNode<T> {
 
     node = this;
 
-    for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
+    for (let i = 0; i < Number.MAX_SAFE_INTEGER; i++) {
       saveLeftBranch(node, stack);
 
       if (stack.length === 0) {
