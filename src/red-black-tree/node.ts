@@ -1,5 +1,4 @@
 import { assert } from "../shared/assert";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
 
 export enum Direction {
   UNKNOWN = "unknown",
@@ -111,7 +110,7 @@ function saveLeftBranch<T>(
   node: BinaryTreeNode<T> | null,
   stack: Array<BinaryTreeNode<T>>
 ): void {
-  while (node != null) {
+  while (node !== null) {
     stack.push(node);
     node = node.leftChild;
   }
@@ -167,7 +166,7 @@ export class BinaryTreeNode<T> {
     return node;
   }
 
-  traverseLevel(visit: (value: T) => void): void {
+  levelTraversal(visit: (value: T) => void): void {
     const queue: Array<BinaryTreeNode<T>> = [];
     queue.push(this);
 
@@ -192,13 +191,13 @@ export class BinaryTreeNode<T> {
     }
   }
 
-  traverseIn(visit: (value: T) => void): void {
+  inorderTraversal(visit: (value: T) => void): void {
     let node: BinaryTreeNode<T> | null;
     const stack: Array<BinaryTreeNode<T>> = [];
 
     node = this;
 
-    for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
+    for (let i = 0; i < Number.MAX_SAFE_INTEGER; i++) {
       saveLeftBranch(node, stack);
 
       if (stack.length === 0) {

@@ -2,38 +2,38 @@ import { Comparable } from "../abstract/comparable";
 import { NovaFlags } from "../shared/flags";
 import { KeyValuePair } from "./pair";
 
-export class Entry<KeyType, ValueType>
-  implements Comparable, KeyValuePair<KeyType, ValueType>
+export class Entry<TKey, TValue>
+  implements Comparable, KeyValuePair<TKey, TValue>
 {
   readonly [NovaFlags.EQUATABLE]: true = true;
   readonly [NovaFlags.COMPARABLE]: true = true;
 
-  private readonly _key: KeyType;
+  private readonly _key: TKey;
 
-  constructor({ key, value }: KeyValuePair<KeyType, ValueType>) {
+  constructor({ key, value }: KeyValuePair<TKey, TValue>) {
     this._key = key;
     this._value = value;
   }
 
-  private _value: ValueType;
+  private _value: TValue;
 
-  get value(): ValueType {
+  get value(): TValue {
     return this._value;
   }
 
-  set value(value: ValueType) {
+  set value(value: TValue) {
     this._value = value;
   }
 
-  get key(): KeyType {
+  get key(): TKey {
     return this._key;
   }
 
-  equality(rhs: Entry<KeyType, ValueType>): boolean {
+  equality(rhs: Entry<TKey, TValue>): boolean {
     return this._key === rhs._key;
   }
 
-  lessThan(rhs: Entry<KeyType, ValueType>): boolean {
+  lessThan(rhs: Entry<TKey, TValue>): boolean {
     return this._key < rhs._key;
   }
 }

@@ -1,4 +1,4 @@
-export interface KeyValuePair<KeyType, ValueType> {
-  key: KeyType;
-  value: ValueType;
+export interface KeyValuePair<TKey, TValue> {
+  key: TKey;
+  value: TValue;
 }

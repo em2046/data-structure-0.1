@@ -28,12 +28,12 @@ describe("red-black-tree", () => {
       expect(k).toEqual(i);
     }
 
-    redBlackTree.traverseLevel((value) => {
+    redBlackTree.levelTraversal((value) => {
       levelResult.push(value);
     });
     expect(levelResult).toEqual(levelOrigin);
 
-    redBlackTree.traverseIn((value) => {
+    redBlackTree.inorderTraversal((value) => {
       result.push(value);
     });
 
@@ -70,6 +70,10 @@ describe("red-black-tree", () => {
       83, 49, 12, 97, 21, 15, 50, 65, 40, 55, 98, 86, 2, 100, 63, 75, 14, 9, 62,
       43, 69, 19, 0, 53, 80, 33, 47, 44,
     ];
+    const ordered = [...origin].sort((a, b) => {
+      return a - b;
+    });
+    const result: number[] = [];
 
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
@@ -79,6 +83,12 @@ describe("red-black-tree", () => {
     }
 
     expect(redBlackTree.size).toEqual(len);
+
+    redBlackTree.inorderTraversal((value) => {
+      result.push(value);
+    });
+
+    expect(ordered).toEqual(result);
 
     for (let i = 0; i < len; i++) {
       redBlackTree.delete(origin[i]);
@@ -90,6 +100,10 @@ describe("red-black-tree", () => {
   test("random", () => {
     const len = 1000;
     const origin = new Array(len).fill(0).map(() => Math.random());
+    const ordered = [...origin].sort((a, b) => {
+      return a - b;
+    });
+    const result: number[] = [];
 
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
@@ -98,6 +112,12 @@ describe("red-black-tree", () => {
     }
 
     expect(redBlackTree.size).toEqual(len);
+
+    redBlackTree.inorderTraversal((value) => {
+      result.push(value);
+    });
+
+    expect(ordered).toEqual(result);
 
     for (let i = 0; i < len; i++) {
       redBlackTree.delete(origin[i]);
