@@ -3,6 +3,11 @@ import { lessThan } from "../abstract/comparable";
 import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../shared/constants";
 import { assert } from "../shared/assert";
 
+/***
+ * Reference
+ * https://github.com/rust-lang/rust/blob/53cb7b09b00cbea8754ffb78e7e3cb521cb8af4b/library/alloc/src/collections/binary_heap.rs
+ */
+
 function hasParent(index: number): boolean {
   return index > 0;
 }
@@ -27,9 +32,18 @@ function getRightChildIndex(index: number): number {
   return (index + 1) * 2;
 }
 
+/**
+ * @public
+ * A priority queue implemented with a binary heap.
+ *
+ * This will be a min-heap.
+ */
 export class BinaryHeap<T> implements PriorityQueue<T> {
   private elements: T[] = [];
 
+  /**
+   * Get the length of the binary heap.
+   */
   get size(): number {
     return this.elements.length;
   }

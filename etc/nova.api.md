@@ -7,7 +7,7 @@
 // @public (undocumented)
 export function assert(value: boolean, message?: string | Error): asserts value;
 
-// @public (undocumented)
+// @public
 export class BinaryHeap<T> implements PriorityQueue<T> {
     // (undocumented)
     clear(): void;
@@ -17,21 +17,16 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     pop(): T | undefined;
     // (undocumented)
     push(value: T): this;
-    // (undocumented)
     get size(): number;
 }
 
-// @public (undocumented)
+// @public
 export interface Comparable extends Equatable {
     // (undocumented)
     readonly [NovaFlags.COMPARABLE]: true;
-    // (undocumented)
     greaterThan?(rhs: this): boolean;
-    // (undocumented)
     greaterThanOrEqual?(rhs: this): boolean;
-    // (undocumented)
     lessThan(rhs: this): boolean;
-    // (undocumented)
     lessThanOrEqual?(rhs: this): boolean;
 }
 
@@ -55,27 +50,26 @@ export class Entry<TKey, TValue> implements Comparable, KeyValuePair<TKey, TValu
     set value(value: TValue);
     }
 
-// @public (undocumented)
+// @public
 export function equality<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export interface Equatable {
     // (undocumented)
     readonly [NovaFlags.EQUATABLE]: true;
-    // (undocumented)
     equality(rhs: this): boolean;
 }
 
-// @public (undocumented)
+// @public
 export function greaterThan<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export function lessThan<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export function lessThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
 // @public (undocumented)
@@ -88,15 +82,10 @@ export const enum NovaFlags {
 
 // @public (undocumented)
 export interface PriorityQueue<T> {
-    // (undocumented)
     clear(): void;
-    // (undocumented)
     peek(): T | undefined;
-    // (undocumented)
     pop(): T | undefined;
-    // (undocumented)
     push(value: T): this;
-    // (undocumented)
     size: number;
 }
 
