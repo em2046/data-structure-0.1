@@ -8,6 +8,11 @@
  */
 export interface PriorityQueue<T> {
   /**
+   * Indicate the length of the priority queue.
+   */
+  size: number;
+
+  /**
    * Pushes an item onto the priority queue.
    *
    * @param value - The new item to push onto the priority queue.
@@ -30,9 +35,4 @@ export interface PriorityQueue<T> {
    * Drops all items form the priority queue.
    */
   clear(): void;
-
-  /**
-   * Indicate the length of the priority queue.
-   */
-  size: number;
 }

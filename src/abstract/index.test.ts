@@ -1,4 +1,4 @@
-import { equality } from "./equatable";
+import { equality, inequality } from "./equatable";
 import {
   Comparable,
   greaterThan,
@@ -21,6 +21,10 @@ class Wrap implements Comparable {
     return this.value === rhs.value;
   }
 
+  inequality(rhs: this): boolean {
+    return this.value !== rhs.value;
+  }
+
   lessThan(rhs: this): boolean {
     return this.value < rhs.value;
   }
@@ -41,11 +45,15 @@ class Wrap implements Comparable {
 describe("abstract", () => {
   test("equatable", () => {
     expect(equality(1 + 1, 2)).toBeTruthy();
+    expect(inequality(1, 2)).toBeTruthy();
+    expect(inequality(1 + 1, 2)).toBeFalsy();
 
     const one = new Wrap(1);
     const two = new Wrap(2);
 
     expect(equality(one, two)).toBeFalsy();
+    expect(inequality(one, two)).toBeTruthy();
+    expect(inequality(one, one)).toBeFalsy();
   });
 
   test("comparable", () => {

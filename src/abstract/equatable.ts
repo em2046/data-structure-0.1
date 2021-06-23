@@ -18,6 +18,13 @@ export interface Equatable {
    * @param rhs - Another value to compare.
    */
   equality(rhs: this): boolean;
+
+  /**
+   * Returns a Boolean value indicating whether two values are not equal.
+   *
+   * @param rhs - Another value to compare
+   */
+  inequality?(rhs: this): boolean;
 }
 
 /**
@@ -36,4 +43,30 @@ export function equality<T>(lhs: T, rhs: T): boolean {
   }
 
   return lhs === rhs;
+}
+
+interface EquatableWithInequality extends Equatable {
+  inequality(rhs: this): boolean;
+}
+
+/**
+ * @public
+ * Returns a Boolean value indicating whether two value are not equal.
+ *
+ * @param lhs - A value to compare.
+ * @param rhs - Another value to compare.
+ */
+export function inequality<T>(lhs: T, rhs: T): boolean {
+  const lx = lhs as unknown as EquatableWithInequality;
+  const rx = rhs as unknown as EquatableWithInequality;
+
+  if (lx[NovaFlags.EQUATABLE] && rx[NovaFlags.EQUATABLE]) {
+    if (typeof lx.inequality === "function") {
+      return lx.inequality(rx);
+    }
+
+    return !equality(lhs, rhs);
+  }
+
+  return lhs !== rhs;
 }
