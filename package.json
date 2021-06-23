@@ -1,10 +1,14 @@
 {
   "name": "nova",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "repository": "https://github.com/jiangshengdev/nova.git",
   "author": "jiangshengdev <jiangshengdev@outlook.com>",
   "license": "MIT",
+  "scripts": {
+    "api": "tsc && api-extractor run --local --verbose"
+  },
   "devDependencies": {
     "@types/jest": "^26.0.23",
     "@typescript-eslint/eslint-plugin": "^4.26.1",
