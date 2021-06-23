@@ -7,5 +7,5 @@ export interface PriorityQueue<T> {
 
   clear(): void;
 
-  get size(): number;
+  size: number;
 }
