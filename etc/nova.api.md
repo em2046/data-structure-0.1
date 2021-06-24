@@ -64,6 +64,9 @@ export function greaterThan<T>(lhs: T, rhs: T): boolean;
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
 // @public
+export function inequality<T>(lhs: T, rhs: T): boolean;
+
+// @public
 export function lessThan<T>(lhs: T, rhs: T): boolean;
 
 // @public

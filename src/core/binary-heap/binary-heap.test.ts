@@ -6,6 +6,7 @@ describe("binary-heap", () => {
     const result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
     const binaryHeap = new BinaryHeap();
+
     expect(binaryHeap.peek()).toBeUndefined();
 
     origin.forEach((value) => {
@@ -13,6 +14,7 @@ describe("binary-heap", () => {
     });
 
     const len = origin.length;
+
     expect(binaryHeap.size).toEqual(len);
 
     for (let i = 0; i < len; i++) {
@@ -52,6 +54,7 @@ describe("binary-heap", () => {
     });
 
     const len = origin.length;
+
     for (let i = 0; i < len; i++) {
       expect(binaryHeap.pop()).toEqual(result[i]);
     }

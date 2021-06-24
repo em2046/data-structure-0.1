@@ -168,6 +168,7 @@ export class BinaryTreeNode<T> {
 
   levelTraversal(visit: (value: T) => void): void {
     const queue: Array<BinaryTreeNode<T>> = [];
+
     queue.push(this);
 
     while (queue.length > 0) {

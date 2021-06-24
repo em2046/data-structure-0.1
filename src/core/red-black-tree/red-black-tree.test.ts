@@ -16,6 +16,7 @@ describe("red-black-tree", () => {
     expect(redBlackTree.delete(20)).toBeFalsy();
 
     const len = origin.length;
+
     expect(redBlackTree.size).toEqual(len);
 
     redBlackTree.add(1);
@@ -24,6 +25,7 @@ describe("red-black-tree", () => {
     for (let i = 0; i < 9; i++) {
       const j = redBlackTree.getNext(i);
       const k = redBlackTree.get(i);
+
       expect(j).toEqual(i + 1);
       expect(k).toEqual(i);
     }
@@ -50,6 +52,7 @@ describe("red-black-tree", () => {
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     const len = 1000;
+
     for (let i = 0; i < len; i++) {
       redBlackTree.add(i);
     }
@@ -78,6 +81,7 @@ describe("red-black-tree", () => {
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     const len = origin.length;
+
     for (let i = 0; i < len; i++) {
       redBlackTree.add(origin[i]);
     }
