@@ -1,3 +1,4 @@
+import { assert } from "../../shared";
 import {
   BinaryTreeNode,
   Direction,
@@ -15,7 +16,6 @@ import {
   NodeColor,
 } from "./binary-tree-node";
 import { lessThan } from "../comparable";
-import { assert } from "../../shared";
 import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
 
 export class RedBlackTree<T> {

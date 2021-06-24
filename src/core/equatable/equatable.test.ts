@@ -1,5 +1,5 @@
-import { NovaFlags } from "../../shared";
 import { equality, Equatable, inequality } from "./equatable";
+import { NovaFlags } from "../../shared";
 
 class Wrap implements Equatable {
   readonly [NovaFlags.EQUATABLE] = true;
