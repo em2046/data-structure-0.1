@@ -10,6 +10,9 @@ import { NovaFlags } from "../../shared";
  * A type that can be compared for value equality.
  */
 export interface Equatable {
+  /**
+   * Equatable flag.
+   */
   readonly [NovaFlags.EQUATABLE]: true;
 
   /**

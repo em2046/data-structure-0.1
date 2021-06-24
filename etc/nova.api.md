@@ -4,8 +4,8 @@
 
 ```ts
 
-// @public (undocumented)
-export function assert(value: boolean, message?: string | Error): asserts value;
+// @public
+export function assert(condition: boolean, msg?: string): asserts condition;
 
 // @public
 export class BinaryHeap<T> implements PriorityQueue<T> {
@@ -18,7 +18,6 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
 
 // @public
 export interface Comparable extends Equatable {
-    // (undocumented)
     readonly [NovaFlags.COMPARABLE]: true;
     greaterThan?(rhs: this): boolean;
     greaterThanOrEqual?(rhs: this): boolean;
@@ -26,24 +25,16 @@ export interface Comparable extends Equatable {
     lessThanOrEqual?(rhs: this): boolean;
 }
 
-// Warning: (ae-forgotten-export) The symbol "KeyValuePair" needs to be exported by the entry point index.d.ts
-//
-// @public (undocumented)
-export class Entry<TKey, TValue> implements Comparable, KeyValuePair<TKey, TValue> {
-    constructor({ key, value }: KeyValuePair<TKey, TValue>);
-    // (undocumented)
+// @public
+export class Entry<Key, Value> implements Comparable, KeyValuePair<Key, Value> {
+    constructor(pair: KeyValuePair<Key, Value>);
     readonly [NovaFlags.COMPARABLE]: true;
-    // (undocumented)
     readonly [NovaFlags.EQUATABLE]: true;
-    // (undocumented)
-    equality(rhs: Entry<TKey, TValue>): boolean;
-    // (undocumented)
-    get key(): TKey;
-    // (undocumented)
-    lessThan(rhs: Entry<TKey, TValue>): boolean;
-    // (undocumented)
-    get value(): TValue;
-    set value(value: TValue);
+    equality(rhs: Entry<Key, Value>): boolean;
+    get key(): Key;
+    lessThan(rhs: Entry<Key, Value>): boolean;
+    get value(): Value;
+    set value(newValue: Value);
     }
 
 // @public
@@ -51,7 +42,6 @@ export function equality<T>(lhs: T, rhs: T): boolean;
 
 // @public
 export interface Equatable {
-    // (undocumented)
     readonly [NovaFlags.EQUATABLE]: true;
     equality(rhs: this): boolean;
     inequality?(rhs: this): boolean;
@@ -67,20 +57,24 @@ export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 export function inequality<T>(lhs: T, rhs: T): boolean;
 
 // @public
+export interface KeyValuePair<Key, Value> {
+    key: Key;
+    value: Value;
+}
+
+// @public
 export function lessThan<T>(lhs: T, rhs: T): boolean;
 
 // @public
 export function lessThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export const enum NovaFlags {
-    // (undocumented)
     COMPARABLE = "__nova_comparable",
-    // (undocumented)
     EQUATABLE = "__nova_equatable"
 }
 
-// @public (undocumented)
+// @public
 export interface PriorityQueue<T> {
     clear(): void;
     peek(): T | undefined;

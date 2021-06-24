@@ -5,10 +5,11 @@
 
 /**
  * @public
+ * A partial ordered, minimum-access collection.
  */
 export interface PriorityQueue<T> {
   /**
-   * Indicate the length of the priority queue.
+   * Indicating the length of the priority queue.
    */
   size: number;
 

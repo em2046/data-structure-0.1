@@ -12,6 +12,9 @@ import { NovaFlags } from "../../shared";
  * `<`, `<=`, `>`, and `>=`.
  */
 export interface Comparable extends Equatable {
+  /**
+   * Comparable flag.
+   */
   readonly [NovaFlags.COMPARABLE]: true;
 
   /**
