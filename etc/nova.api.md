@@ -9,14 +9,10 @@ export function assert(value: boolean, message?: string | Error): asserts value;
 
 // @public
 export class BinaryHeap<T> implements PriorityQueue<T> {
-    // (undocumented)
     clear(): void;
-    // (undocumented)
     peek(): T | undefined;
-    // (undocumented)
     pop(): T | undefined;
-    // (undocumented)
-    push(value: T): this;
+    push(newElement: T): this;
     get size(): number;
 }
 
@@ -58,6 +54,7 @@ export interface Equatable {
     // (undocumented)
     readonly [NovaFlags.EQUATABLE]: true;
     equality(rhs: this): boolean;
+    inequality?(rhs: this): boolean;
 }
 
 // @public
@@ -85,7 +82,7 @@ export interface PriorityQueue<T> {
     clear(): void;
     peek(): T | undefined;
     pop(): T | undefined;
-    push(value: T): this;
+    push(newElement: T): this;
     size: number;
 }
 
