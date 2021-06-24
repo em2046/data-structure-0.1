@@ -1,5 +1,5 @@
-import { equality, Equatable } from "./equatable";
-import { NovaFlags } from "../shared/flags";
+import { equality, Equatable } from "../equatable";
+import { NovaFlags } from "../../shared";
 
 /***
  * Reference

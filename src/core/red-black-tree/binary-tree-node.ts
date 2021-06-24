@@ -1,4 +1,4 @@
-import { assert } from "../shared/assert";
+import { assert } from "../../shared";
 
 export enum Direction {
   UNKNOWN = "unknown",

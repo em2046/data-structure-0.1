@@ -1,11 +1,11 @@
-import { equality, inequality } from "./equatable";
+import { equality, inequality } from "../equatable";
 import {
   Comparable,
   greaterThan,
   greaterThanOrEqual,
   lessThanOrEqual,
 } from "./comparable";
-import { NovaFlags } from "../shared/flags";
+import { NovaFlags } from "../../shared";
 
 class Wrap implements Comparable {
   readonly [NovaFlags.EQUATABLE] = true;

@@ -1,4 +1,4 @@
-import { BinaryHeap } from "./index";
+import { BinaryHeap } from "./binary-heap";
 
 describe("binary-heap", () => {
   test("init", () => {

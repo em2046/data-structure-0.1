@@ -1,7 +1,6 @@
-import { PriorityQueue } from "../abstract/priority-queue";
-import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../shared/constants";
-import { assert } from "../shared/assert";
+import { PriorityQueue } from "../priority-queue";
+import { lessThan } from "../comparable";
+import { assert, MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../../shared";
 
 /***
  * Reference

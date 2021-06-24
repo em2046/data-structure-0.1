@@ -13,10 +13,9 @@ import {
   isRightChild,
   isRoot,
   NodeColor,
-} from "./node";
-import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
-import { assert } from "../shared/assert";
+} from "./binary-tree-node";
+import { lessThan } from "../comparable";
+import { assert, MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../shared";
 
 export class RedBlackTree<T> {
   private root: BinaryTreeNode<T> | null = null;

@@ -1,4 +1,4 @@
-import { NovaFlags } from "../shared/flags";
+import { NovaFlags } from "../../shared";
 
 /***
  * Reference

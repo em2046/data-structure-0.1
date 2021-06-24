@@ -1,6 +1,6 @@
-import { Comparable } from "../abstract/comparable";
-import { NovaFlags } from "../shared/flags";
-import { KeyValuePair } from "./pair";
+import { Comparable } from "../comparable";
+import { NovaFlags } from "../../shared";
+import { KeyValuePair } from "./key-value-pair";
 
 export class Entry<TKey, TValue>
   implements Comparable, KeyValuePair<TKey, TValue>

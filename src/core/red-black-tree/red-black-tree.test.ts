@@ -1,4 +1,4 @@
-import { RedBlackTree } from "./index";
+import { RedBlackTree } from "./red-black-tree";
 
 describe("red-black-tree", () => {
   test("init", () => {
