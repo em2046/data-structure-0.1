@@ -1,3 +1,4 @@
+import { assert } from "../../shared";
 import {
   BinaryTreeNode,
   Direction,
@@ -13,10 +14,9 @@ import {
   isRightChild,
   isRoot,
   NodeColor,
-} from "./node";
-import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../shared/constants";
-import { assert } from "../shared/assert";
+} from "./binary-tree-node";
+import { lessThan } from "../comparable";
+import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
 
 export class RedBlackTree<T> {
   private root: BinaryTreeNode<T> | null = null;
@@ -43,6 +43,7 @@ export class RedBlackTree<T> {
     }
 
     const node = this.deleteNode(oldNode);
+
     this._size -= 1;
 
     if (this._size === 0) {
@@ -58,6 +59,7 @@ export class RedBlackTree<T> {
 
       root.color = NodeColor.BLACK;
       this.updateHeight(root);
+
       return true;
     }
 
@@ -70,6 +72,7 @@ export class RedBlackTree<T> {
 
       node.color = NodeColor.BLACK;
       node.height += 1;
+
       return true;
     }
 
@@ -190,6 +193,7 @@ export class RedBlackTree<T> {
   private updateHeight(node: BinaryTreeNode<T>): number {
     const leftHeight = getHeight(node.leftChild);
     const rightHeight = getHeight(node.rightChild);
+
     node.height = Math.max(leftHeight, rightHeight);
 
     if (isBlack(node)) {
@@ -360,6 +364,7 @@ export class RedBlackTree<T> {
 
       [current.data, element.data] = [element.data, current.data];
       const parent = element.parent;
+
       next = element.rightChild;
 
       assert(parent !== null);

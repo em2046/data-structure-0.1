@@ -1,10 +1,10 @@
-import { Entry } from "./index";
+import { Entry } from "./entry";
 import {
   greaterThan,
   greaterThanOrEqual,
   lessThan,
   lessThanOrEqual,
-} from "../abstract/comparable";
+} from "../comparable";
 
 describe("entry", () => {
   test("init", () => {

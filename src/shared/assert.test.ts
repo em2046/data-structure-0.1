@@ -1,7 +1,7 @@
 import { assert } from "./assert";
 
-describe("shared", () => {
-  test("assert", () => {
+describe("assert", () => {
+  test("basic", () => {
     expect(() => {
       assert(false);
     }).toThrow();

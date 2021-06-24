@@ -1,7 +1,7 @@
-import { PriorityQueue } from "../abstract/priority-queue";
-import { lessThan } from "../abstract/comparable";
-import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../shared/constants";
-import { assert } from "../shared/assert";
+import { assert } from "../../shared";
+import { lessThan } from "../comparable";
+import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../../constants";
+import { PriorityQueue } from "../priority-queue";
 
 /***
  * Reference
@@ -140,6 +140,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
           minIndex = leftChildIndex;
         }
       }
+
       if (hasRightChild(len, index)) {
         const rightChildIndex = getRightChildIndex(index);
         const rightChild = elements[rightChildIndex];

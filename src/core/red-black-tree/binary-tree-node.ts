@@ -1,4 +1,4 @@
-import { assert } from "../shared/assert";
+import { assert } from "../../shared";
 
 export enum Direction {
   UNKNOWN = "unknown",
@@ -168,6 +168,7 @@ export class BinaryTreeNode<T> {
 
   levelTraversal(visit: (value: T) => void): void {
     const queue: Array<BinaryTreeNode<T>> = [];
+
     queue.push(this);
 
     while (queue.length > 0) {

@@ -1,4 +1,4 @@
-import { NovaFlags } from "../shared/flags";
+import { NovaFlags } from "../../shared";
 
 /***
  * Reference
@@ -10,6 +10,9 @@ import { NovaFlags } from "../shared/flags";
  * A type that can be compared for value equality.
  */
 export interface Equatable {
+  /**
+   * Equatable flag.
+   */
   readonly [NovaFlags.EQUATABLE]: true;
 
   /**
