@@ -1,4 +1,3 @@
-import { equality, inequality } from "../equatable";
 import {
   Comparable,
   greaterThan,
@@ -42,21 +41,8 @@ class Wrap implements Comparable {
   }
 }
 
-describe("abstract", () => {
-  test("equatable", () => {
-    expect(equality(1 + 1, 2)).toBeTruthy();
-    expect(inequality(1, 2)).toBeTruthy();
-    expect(inequality(1 + 1, 2)).toBeFalsy();
-
-    const one = new Wrap(1);
-    const two = new Wrap(2);
-
-    expect(equality(one, two)).toBeFalsy();
-    expect(inequality(one, two)).toBeTruthy();
-    expect(inequality(one, one)).toBeFalsy();
-  });
-
-  test("comparable", () => {
+describe("comparable", () => {
+  test("basic", () => {
     expect(lessThanOrEqual(1, 2)).toBeTruthy();
     expect(lessThanOrEqual(2, 2)).toBeTruthy();
 
