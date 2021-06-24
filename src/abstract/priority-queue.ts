@@ -13,26 +13,26 @@ export interface PriorityQueue<T> {
   size: number;
 
   /**
-   * Pushes an item onto the priority queue.
-   *
-   * @param value - The new item to push onto the priority queue.
+   * Drops all elements form the priority queue.
    */
-  push(value: T): this;
+  clear(): void;
 
   /**
-   * Removes the minimum item form the priority queue and returns it,
-   * or `undefined` if it is empty.
-   */
-  pop(): T | undefined;
-
-  /**
-   * Returns the minimum item in the priority queue,
+   * Returns the minimum element in the priority queue,
    * or `undefined` if it is empty.
    */
   peek(): T | undefined;
 
   /**
-   * Drops all items form the priority queue.
+   * Pushes a new element onto the priority queue.
+   *
+   * @param newElement - The new element to push onto the priority queue.
    */
-  clear(): void;
+  push(newElement: T): this;
+
+  /**
+   * Removes the minimum element form the priority queue and returns it,
+   * or `undefined` if it is empty.
+   */
+  pop(): T | undefined;
 }

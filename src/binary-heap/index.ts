@@ -48,23 +48,39 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     return this.elements.length;
   }
 
+  /**
+   * Drops all elements form the binary heap.
+   */
   clear(): void {
     this.elements = [];
   }
 
+  /**
+   * Returns the minimum element in the binary heap,
+   * or `undefined` if it is empty.
+   */
   peek(): T | undefined {
     return this.elements[0];
   }
 
-  push(value: T): this {
+  /**
+   * Pushes a new element onto the binary heap.
+   *
+   * @param newElement - The new element to push onto the binary heap.
+   */
+  push(newElement: T): this {
     const elements = this.elements;
 
-    elements.push(value);
+    elements.push(newElement);
     this.percolateUp(elements.length - 1);
 
     return this;
   }
 
+  /**
+   * Removes the minimum element form the binary heap and returns it,
+   * or `undefined` if it is empty.
+   */
   pop(): T | undefined {
     const elements = this.elements;
     const first = elements[0];
