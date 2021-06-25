@@ -6,7 +6,6 @@ describe("red-black-tree", () => {
     const result: number[] = [];
     const levelOrigin = [3, 1, 5, 0, 2, 4, 7, 6, 8, 9];
     const levelResult: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     origin.forEach((value) => {
@@ -50,7 +49,6 @@ describe("red-black-tree", () => {
 
   test("change", () => {
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
-
     const len = 1000;
 
     for (let i = 0; i < len; i++) {
@@ -77,9 +75,7 @@ describe("red-black-tree", () => {
       return a - b;
     });
     const result: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
-
     const len = origin.length;
 
     for (let i = 0; i < len; i++) {
@@ -108,7 +104,6 @@ describe("red-black-tree", () => {
       return a - b;
     });
     const result: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     for (let i = 0; i < len; i++) {

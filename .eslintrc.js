@@ -13,7 +13,7 @@ module.exports = {
         next: "*",
       },
       {
-        blankLine: "any",
+        blankLine: "never",
         prev: ["const", "let", "var"],
         next: ["const", "let", "var"],
       },
