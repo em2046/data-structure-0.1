@@ -8,6 +8,7 @@
  * Assertion function.
  *
  * That throw an error if something unexpected happened.
+ *
  * @param condition - Expected.
  * @param msg - Error message.
  */

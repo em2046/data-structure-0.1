@@ -4,11 +4,11 @@
  */
 export interface KeyValuePair<Key, Value> {
   /**
-   * Key.
+   * Key of the key-value pair.
    */
   key: Key;
   /**
-   * Value.
+   * Value of the key-value pair.
    */
   value: Value;
 }

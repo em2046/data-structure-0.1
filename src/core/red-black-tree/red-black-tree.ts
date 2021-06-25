@@ -19,7 +19,8 @@ import { lessThan } from "../comparable";
 import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
 
 /**
- * A kind of self-balancing binary search tree
+ * @public
+ * A kind of self-balancing binary search tree.
  */
 export class RedBlackTree<T> {
   private root: BinaryTreeNode<T> | null = null;
@@ -37,7 +38,8 @@ export class RedBlackTree<T> {
 
   /**
    * Adds the given element in the tree if it is not already present.
-   * @param newElement
+   *
+   * @param newElement - An element to add into the tree.
    */
   add(newElement: T): this {
     this.addNode(newElement);
@@ -45,6 +47,11 @@ export class RedBlackTree<T> {
     return this;
   }
 
+  /**
+   * Deletes the specified element from the tree.
+   *
+   * @param element - The element to delete from the tree.
+   */
   delete(element: T): boolean {
     const oldNode = this.getNode(element);
 
@@ -91,12 +98,12 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  get(element: T): T | undefined {
-    const node = this.getNode(element);
-
-    return node?.element;
-  }
-
+  /**
+   * Finds the next element of the current element and returns it,
+   * or `undefined` if no next element exists.
+   *
+   * @param element - Current element
+   */
   getNext(element: T): T | undefined {
     const node = this.getNode(element);
     const next = node?.getNext();

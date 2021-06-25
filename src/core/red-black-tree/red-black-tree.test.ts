@@ -23,10 +23,8 @@ describe("red-black-tree", () => {
 
     for (let i = 0; i < 9; i++) {
       const j = redBlackTree.getNext(i);
-      const k = redBlackTree.get(i);
 
       expect(j).toEqual(i + 1);
-      expect(k).toEqual(i);
     }
 
     redBlackTree.levelTraversal((element) => {
