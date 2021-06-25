@@ -117,7 +117,7 @@ function saveLeftBranch<T>(
 }
 
 export class BinaryTreeNode<T> {
-  data: T;
+  element: T;
   parent: BinaryTreeNode<T> | null = null;
   leftChild: BinaryTreeNode<T> | null = null;
   rightChild: BinaryTreeNode<T> | null = null;
@@ -125,14 +125,14 @@ export class BinaryTreeNode<T> {
   color: NodeColor = NodeColor.RED;
 
   constructor(
-    value: T,
+    element: T,
     parent: BinaryTreeNode<T> | null = null,
     leftChild: BinaryTreeNode<T> | null = null,
     rightChild: BinaryTreeNode<T> | null = null,
     height = 0,
     color = NodeColor.RED
   ) {
-    this.data = value;
+    this.element = element;
     this.parent = parent;
     this.leftChild = leftChild;
     this.rightChild = rightChild;
@@ -166,7 +166,7 @@ export class BinaryTreeNode<T> {
     return node;
   }
 
-  levelTraversal(visit: (value: T) => void): void {
+  levelTraversal(visit: (element: T) => void): void {
     const queue: Array<BinaryTreeNode<T>> = [];
 
     queue.push(this);
@@ -176,7 +176,7 @@ export class BinaryTreeNode<T> {
 
       assert(node !== undefined);
 
-      visit(node.data);
+      visit(node.element);
 
       if (hasLeftChild(node)) {
         assert(node.leftChild !== null);
@@ -192,7 +192,7 @@ export class BinaryTreeNode<T> {
     }
   }
 
-  inorderTraversal(visit: (value: T) => void): void {
+  inorderTraversal(visit: (element: T) => void): void {
     let node: BinaryTreeNode<T> | null;
     const stack: Array<BinaryTreeNode<T>> = [];
 
@@ -210,7 +210,7 @@ export class BinaryTreeNode<T> {
       assert(element !== undefined);
 
       node = element;
-      visit(node.data);
+      visit(node.element);
       node = node.rightChild;
     }
   }

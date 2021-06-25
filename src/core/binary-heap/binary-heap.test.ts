@@ -4,13 +4,12 @@ describe("binary-heap", () => {
   test("init", () => {
     const origin = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
     const result = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
     const binaryHeap = new BinaryHeap();
 
     expect(binaryHeap.peek()).toBeUndefined();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     const len = origin.length;
@@ -25,8 +24,8 @@ describe("binary-heap", () => {
 
     expect(binaryHeap.pop()).toBeUndefined();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     expect(binaryHeap.size).toEqual(len);
@@ -46,11 +45,10 @@ describe("binary-heap", () => {
     const result = [...origin].sort((a, b) => {
       return a - b;
     });
-
     const binaryHeap = new BinaryHeap();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     const len = origin.length;

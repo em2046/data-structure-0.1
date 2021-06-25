@@ -4,7 +4,7 @@ import { MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT } from "../../constants";
 import { PriorityQueue } from "../priority-queue";
 
 /***
- * Reference
+ * Reference:
  * https://github.com/rust-lang/rust/blob/53cb7b09b00cbea8754ffb78e7e3cb521cb8af4b/library/alloc/src/collections/binary_heap.rs
  */
 
@@ -72,7 +72,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     const elements = this.elements;
 
     elements.push(newElement);
-    this.percolateUp(elements.length - 1);
+    this.siftUp(elements.length - 1);
 
     return this;
   }
@@ -98,17 +98,16 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     }
 
     elements[0] = element;
-    this.percolateDown(elements.length, 0);
+    this.siftDown(elements.length, 0);
 
     return first;
   }
 
-  private percolateUp(index: number): void {
+  private siftUp(index: number): void {
     const elements = this.elements;
 
     while (hasParent(index)) {
       const parentIndex = getParentIndex(index);
-
       const current = elements[index];
       const parent = elements[parentIndex];
 
@@ -124,7 +123,7 @@ export class BinaryHeap<T> implements PriorityQueue<T> {
     }
   }
 
-  private percolateDown(len: number, index: number): void {
+  private siftDown(len: number, index: number): void {
     const elements = this.elements;
 
     for (let i = 0; i < MAX_SAFE_COMPLETE_BINARY_TREE_HEIGHT; i++) {

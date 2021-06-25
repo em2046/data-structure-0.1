@@ -1,5 +1,5 @@
 /***
- * Reference
+ * Reference:
  * https://github.com/rust-lang/rust/blob/53cb7b09b00cbea8754ffb78e7e3cb521cb8af4b/library/alloc/src/collections/binary_heap.rs
  */
 

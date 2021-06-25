@@ -6,11 +6,10 @@ describe("red-black-tree", () => {
     const result: number[] = [];
     const levelOrigin = [3, 1, 5, 0, 2, 4, 7, 6, 8, 9];
     const levelResult: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
-    origin.forEach((value) => {
-      redBlackTree.add(value);
+    origin.forEach((element) => {
+      redBlackTree.add(element);
     });
 
     expect(redBlackTree.delete(20)).toBeFalsy();
@@ -24,19 +23,17 @@ describe("red-black-tree", () => {
 
     for (let i = 0; i < 9; i++) {
       const j = redBlackTree.getNext(i);
-      const k = redBlackTree.get(i);
 
       expect(j).toEqual(i + 1);
-      expect(k).toEqual(i);
     }
 
-    redBlackTree.levelTraversal((value) => {
-      levelResult.push(value);
+    redBlackTree.levelTraversal((element) => {
+      levelResult.push(element);
     });
     expect(levelResult).toEqual(levelOrigin);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(result).toEqual(origin);
@@ -50,7 +47,6 @@ describe("red-black-tree", () => {
 
   test("change", () => {
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
-
     const len = 1000;
 
     for (let i = 0; i < len; i++) {
@@ -77,9 +73,7 @@ describe("red-black-tree", () => {
       return a - b;
     });
     const result: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
-
     const len = origin.length;
 
     for (let i = 0; i < len; i++) {
@@ -88,8 +82,8 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(ordered).toEqual(result);
@@ -108,7 +102,6 @@ describe("red-black-tree", () => {
       return a - b;
     });
     const result: number[] = [];
-
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
     for (let i = 0; i < len; i++) {
@@ -117,8 +110,8 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(ordered).toEqual(result);

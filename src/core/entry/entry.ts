@@ -21,6 +21,7 @@ export class Entry<Key, Value> implements Comparable, KeyValuePair<Key, Value> {
 
   /**
    * Initialization from an existing key-value pair.
+   *
    * @param pair - A key-value pair.
    */
   constructor(pair: KeyValuePair<Key, Value>) {

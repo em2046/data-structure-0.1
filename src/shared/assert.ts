@@ -1,5 +1,5 @@
 /***
- * Reference
+ * Reference:
  * https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-7.html#assertion-functions
  */
 
@@ -8,6 +8,7 @@
  * Assertion function.
  *
  * That throw an error if something unexpected happened.
+ *
  * @param condition - Expected.
  * @param msg - Error message.
  */

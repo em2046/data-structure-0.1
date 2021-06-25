@@ -83,21 +83,13 @@ export interface PriorityQueue<T> {
     size: number;
 }
 
-// @public (undocumented)
+// @public
 export class RedBlackTree<T> {
-    // (undocumented)
-    add(value: T): this;
-    // (undocumented)
-    delete(value: T): boolean;
-    // (undocumented)
-    get(value: T): T | undefined;
-    // (undocumented)
-    getNext(value: T): T | undefined;
-    // (undocumented)
-    inorderTraversal(visit: (value: T) => void): void;
-    // (undocumented)
-    levelTraversal(visit: (value: T) => void): void;
-    // (undocumented)
+    add(newElement: T): this;
+    delete(element: T): boolean;
+    getNext(element: T): T | undefined;
+    inorderTraversal(visit: (element: T) => void): void;
+    levelTraversal(visit: (element: T) => void): void;
     get size(): number;
     }
 
