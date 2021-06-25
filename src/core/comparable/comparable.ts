@@ -2,7 +2,7 @@ import { equality, Equatable } from "../equatable";
 import { NovaFlags } from "../../shared";
 
 /***
- * Reference
+ * Reference:
  * https://github.com/apple/swift/blob/53fe241c0e8622ac4c62a9c147626d4eda9c0e6a/stdlib/public/core/Comparable.swift
  */
 

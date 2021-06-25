@@ -1,5 +1,5 @@
 /***
- * Reference
+ * Reference:
  * https://github.com/vuejs/vue-next/blob/870f2a7ba35245fd8c008d2ff666ea130a7e4704/packages/reactivity/src/reactive.ts
  */
 

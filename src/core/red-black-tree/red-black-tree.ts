@@ -18,6 +18,11 @@ import {
 import { lessThan } from "../comparable";
 import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
 
+/***
+ * Reference:
+ * https://en.wikipedia.org/wiki/Tree_traversal
+ */
+
 /**
  * @public
  * A kind of self-balancing binary search tree.
@@ -111,6 +116,18 @@ export class RedBlackTree<T> {
     return next?.element;
   }
 
+  /**
+   * Visit every node on a level before going to a lower level.
+   *
+   * This search is referred to as breadth-first search,
+   * as the search tree is broadened as much as possible on
+   * each depth before going to the next depth.
+   *
+   * Reference:
+   * https://en.wikipedia.org/wiki/Tree_traversal#Breadth-first_search,_or_level_order
+   *
+   * @param visit - Visit callback
+   */
   levelTraversal(visit: (element: T) => void): void {
     const root = this.root;
 
@@ -119,6 +136,18 @@ export class RedBlackTree<T> {
     }
   }
 
+  /**
+   * Traverse the left subtree by recursively calling the in-order function.
+   *
+   * Access the data part of the current node.
+   *
+   * Traverse the right subtree by recursively calling the in-order function.
+   *
+   * Reference:
+   * https://en.wikipedia.org/wiki/Tree_traversal#In-order,_LNR
+   *
+   * @param visit - Visit callback
+   */
   inorderTraversal(visit: (element: T) => void): void {
     const root = this.root;
 
