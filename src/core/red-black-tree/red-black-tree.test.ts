@@ -8,8 +8,8 @@ describe("red-black-tree", () => {
     const levelResult: number[] = [];
     const redBlackTree: RedBlackTree<number> = new RedBlackTree();
 
-    origin.forEach((value) => {
-      redBlackTree.add(value);
+    origin.forEach((element) => {
+      redBlackTree.add(element);
     });
 
     expect(redBlackTree.delete(20)).toBeFalsy();
@@ -29,13 +29,13 @@ describe("red-black-tree", () => {
       expect(k).toEqual(i);
     }
 
-    redBlackTree.levelTraversal((value) => {
-      levelResult.push(value);
+    redBlackTree.levelTraversal((element) => {
+      levelResult.push(element);
     });
     expect(levelResult).toEqual(levelOrigin);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(result).toEqual(origin);
@@ -84,8 +84,8 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(ordered).toEqual(result);
@@ -112,8 +112,8 @@ describe("red-black-tree", () => {
 
     expect(redBlackTree.size).toEqual(len);
 
-    redBlackTree.inorderTraversal((value) => {
-      result.push(value);
+    redBlackTree.inorderTraversal((element) => {
+      result.push(element);
     });
 
     expect(ordered).toEqual(result);

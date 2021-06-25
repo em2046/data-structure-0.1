@@ -8,8 +8,8 @@ describe("binary-heap", () => {
 
     expect(binaryHeap.peek()).toBeUndefined();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     const len = origin.length;
@@ -24,8 +24,8 @@ describe("binary-heap", () => {
 
     expect(binaryHeap.pop()).toBeUndefined();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     expect(binaryHeap.size).toEqual(len);
@@ -47,8 +47,8 @@ describe("binary-heap", () => {
     });
     const binaryHeap = new BinaryHeap();
 
-    origin.forEach((value) => {
-      binaryHeap.push(value);
+    origin.forEach((element) => {
+      binaryHeap.push(element);
     });
 
     const len = origin.length;

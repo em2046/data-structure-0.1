@@ -18,6 +18,9 @@ import {
 import { lessThan } from "../comparable";
 import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
 
+/**
+ * A kind of self-balancing binary search tree
+ */
 export class RedBlackTree<T> {
   private root: BinaryTreeNode<T> | null = null;
   private hot: BinaryTreeNode<T> | null = null;
@@ -25,18 +28,25 @@ export class RedBlackTree<T> {
 
   private _size = 0;
 
+  /**
+   * Get the size of the tree.
+   */
   get size(): number {
     return this._size;
   }
 
-  add(value: T): this {
-    this.addNode(value);
+  /**
+   * Adds the given element in the tree if it is not already present.
+   * @param newElement
+   */
+  add(newElement: T): this {
+    this.addNode(newElement);
 
     return this;
   }
 
-  delete(value: T): boolean {
-    const oldNode = this.getNode(value);
+  delete(element: T): boolean {
+    const oldNode = this.getNode(element);
 
     if (oldNode === null) {
       return false;
@@ -81,20 +91,20 @@ export class RedBlackTree<T> {
     return true;
   }
 
-  get(value: T): T | undefined {
-    const node = this.getNode(value);
+  get(element: T): T | undefined {
+    const node = this.getNode(element);
 
-    return node?.data;
+    return node?.element;
   }
 
-  getNext(value: T): T | undefined {
-    const node = this.getNode(value);
+  getNext(element: T): T | undefined {
+    const node = this.getNode(element);
     const next = node?.getNext();
 
-    return next?.data;
+    return next?.element;
   }
 
-  levelTraversal(visit: (value: T) => void): void {
+  levelTraversal(visit: (element: T) => void): void {
     const root = this.root;
 
     if (root !== null) {
@@ -102,7 +112,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  inorderTraversal(visit: (value: T) => void): void {
+  inorderTraversal(visit: (element: T) => void): void {
     const root = this.root;
 
     if (root !== null) {
@@ -110,7 +120,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  private getNode(value: T): BinaryTreeNode<T> | null {
+  private getNode(element: T): BinaryTreeNode<T> | null {
     const root = this.root;
 
     if (root === null) {
@@ -120,7 +130,7 @@ export class RedBlackTree<T> {
       return null;
     }
 
-    if (value === root.data) {
+    if (element === root.element) {
       this.hot = null;
       this.direction = Direction.ROOT;
 
@@ -131,7 +141,7 @@ export class RedBlackTree<T> {
     let current: BinaryTreeNode<T> | null = root;
 
     for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
-      if (lessThan(value, current.data)) {
+      if (lessThan(element, current.element)) {
         this.direction = Direction.LEFT;
         current = current.leftChild;
       } else {
@@ -143,7 +153,7 @@ export class RedBlackTree<T> {
         return null;
       }
 
-      if (value === current.data) {
+      if (element === current.element) {
         return current;
       }
 
@@ -153,19 +163,19 @@ export class RedBlackTree<T> {
     assert(false);
   }
 
-  private addNode(value: T): BinaryTreeNode<T> {
-    const oldNode = this.getNode(value);
+  private addNode(element: T): BinaryTreeNode<T> {
+    const oldNode = this.getNode(element);
 
     if (oldNode !== null) {
       return oldNode;
     }
 
     if (this.direction === Direction.UNKNOWN) {
-      return this.addRoot(value);
+      return this.addRoot(element);
     }
 
     const hot = this.hot;
-    const node = new BinaryTreeNode(value, hot, null, null, -1);
+    const node = new BinaryTreeNode(element, hot, null, null, -1);
 
     if (this.direction === Direction.LEFT) {
       assert(hot !== null);
@@ -183,9 +193,16 @@ export class RedBlackTree<T> {
     return node;
   }
 
-  private addRoot(value: T): BinaryTreeNode<T> {
+  private addRoot(element: T): BinaryTreeNode<T> {
     this._size = 1;
-    this.root = new BinaryTreeNode(value, null, null, null, 0, NodeColor.BLACK);
+    this.root = new BinaryTreeNode(
+      element,
+      null,
+      null,
+      null,
+      0,
+      NodeColor.BLACK
+    );
 
     return this.root;
   }
@@ -362,7 +379,7 @@ export class RedBlackTree<T> {
 
       assert(element !== null);
 
-      [current.data, element.data] = [element.data, current.data];
+      [current.element, element.element] = [element.element, current.element];
       const parent = element.parent;
 
       next = element.rightChild;
