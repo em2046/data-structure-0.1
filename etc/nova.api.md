@@ -88,9 +88,7 @@ export class RedBlackTree<T> {
     add(newElement: T): this;
     delete(element: T): boolean;
     getNext(element: T): T | undefined;
-    // (undocumented)
     inorderTraversal(visit: (element: T) => void): void;
-    // (undocumented)
     levelTraversal(visit: (element: T) => void): void;
     get size(): number;
     }
