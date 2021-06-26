@@ -19,6 +19,22 @@ class Wrap implements Equatable {
   }
 }
 
+class Point implements Equatable {
+  readonly [NovaFlags.EQUATABLE] = true;
+
+  x: number;
+  y: number;
+
+  constructor(x: number, y: number) {
+    this.x = x;
+    this.y = y;
+  }
+
+  equality(rhs: this): boolean {
+    return this.x === rhs.x && this.y === rhs.y;
+  }
+}
+
 describe("equatable", () => {
   test("basic", () => {
     expect(equality(1 + 1, 2)).toBeTruthy();
@@ -31,5 +47,12 @@ describe("equatable", () => {
     expect(equality(one, two)).toBeFalsy();
     expect(inequality(one, two)).toBeTruthy();
     expect(inequality(one, one)).toBeFalsy();
+  });
+
+  test("point", () => {
+    const a = new Point(1, 2);
+    const b = new Point(2, 3);
+
+    expect(inequality(a, b)).toBeTruthy();
   });
 });
