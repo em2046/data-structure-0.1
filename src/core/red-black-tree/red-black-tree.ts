@@ -554,44 +554,44 @@ export class RedBlackTree<T> {
     const cachedColor = parent.color;
     const parentDirection = getDirection(parent);
     const grandparent = parent.parent;
-    const node = this.rotate(siblingChild);
+    const handle = this.rotate(siblingChild);
 
     switch (parentDirection) {
       case Direction.ROOT:
-        this.root = node;
+        this.root = handle;
         break;
       case Direction.LEFT:
         assert(grandparent !== null);
 
-        grandparent.leftChild = node;
+        grandparent.leftChild = handle;
         break;
       case Direction.RIGHT:
         assert(grandparent !== null);
 
-        grandparent.rightChild = node;
+        grandparent.rightChild = handle;
         break;
     }
 
-    if (hasLeftChild(node)) {
-      const leftNode = node.leftChild;
+    if (hasLeftChild(handle)) {
+      const leftChild = handle.leftChild;
 
-      assert(leftNode !== null);
+      assert(leftChild !== null);
 
-      leftNode.color = NodeColor.BLACK;
-      this.updateHeight(leftNode);
+      leftChild.color = NodeColor.BLACK;
+      this.updateHeight(leftChild);
     }
 
-    if (hasRightChild(node)) {
-      const rightNode = node.rightChild;
+    if (hasRightChild(handle)) {
+      const rightChild = handle.rightChild;
 
-      assert(rightNode !== null);
+      assert(rightChild !== null);
 
-      rightNode.color = NodeColor.BLACK;
-      this.updateHeight(rightNode);
+      rightChild.color = NodeColor.BLACK;
+      this.updateHeight(rightChild);
     }
 
-    node.color = cachedColor;
-    this.updateHeight(node);
+    handle.color = cachedColor;
+    this.updateHeight(handle);
   }
 
   private blackBlackBeta(parent: Node<T>, sibling: Node<T>): void {
