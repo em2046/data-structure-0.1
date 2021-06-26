@@ -28,8 +28,8 @@ export interface Comparable extends Equatable {
 // @public
 export class Entry<Key, Value> implements Comparable, KeyValuePair<Key, Value> {
     constructor(pair: KeyValuePair<Key, Value>);
-    readonly [NovaFlags.COMPARABLE]: true;
-    readonly [NovaFlags.EQUATABLE]: true;
+    readonly [NovaFlags.COMPARABLE] = true;
+    readonly [NovaFlags.EQUATABLE] = true;
     equality(rhs: Entry<Key, Value>): boolean;
     get key(): Key;
     lessThan(rhs: Entry<Key, Value>): boolean;

@@ -11,11 +11,12 @@ export class Entry<Key, Value> implements Comparable, KeyValuePair<Key, Value> {
   /**
    * Equatable flag.
    */
-  readonly [NovaFlags.EQUATABLE]: true = true;
+  readonly [NovaFlags.EQUATABLE] = true;
+
   /**
    * Comparable flag.
    */
-  readonly [NovaFlags.COMPARABLE]: true = true;
+  readonly [NovaFlags.COMPARABLE] = true;
 
   private readonly _key: Key;
 

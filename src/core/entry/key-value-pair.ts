@@ -7,6 +7,7 @@ export interface KeyValuePair<Key, Value> {
    * Key of the key-value pair.
    */
   key: Key;
+
   /**
    * Value of the key-value pair.
    */
