@@ -12,6 +12,7 @@ export const enum NovaFlags {
    * Indicating equatable.
    */
   EQUATABLE = "__nova_equatable",
+
   /**
    * Indicating comparable.
    */

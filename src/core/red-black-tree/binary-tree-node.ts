@@ -101,9 +101,9 @@ export function getHeight<T>(node: Node<T> | null): number {
 export function isBalanced<T>(node: Node<T>): boolean {
   const leftHeight = getHeight(node.leftChild);
   const rightHeight = getHeight(node.rightChild);
-  const expectHeight = isRed(node) ? leftHeight : leftHeight + 1;
+  const expectedHeight = isRed(node) ? leftHeight : leftHeight + 1;
 
-  return leftHeight === rightHeight && node.height === expectHeight;
+  return leftHeight === rightHeight && node.height === expectedHeight;
 }
 
 function saveLeftBranch<T>(node: Node<T> | null, stack: Array<Node<T>>): void {
@@ -190,25 +190,25 @@ export class BinaryTreeNode<T> {
   }
 
   inorderTraversal(visit: (element: T) => void): void {
-    let node: Node<T> | null;
+    let current: Node<T> | null;
     const stack: Array<Node<T>> = [];
 
-    node = this;
+    current = this;
 
     for (let i = 0; i < Number.MAX_SAFE_INTEGER; i++) {
-      saveLeftBranch(node, stack);
+      saveLeftBranch(current, stack);
 
       if (stack.length === 0) {
         break;
       }
 
-      const element = stack.pop();
+      const node = stack.pop();
 
-      assert(element !== undefined);
+      assert(node !== undefined);
 
-      node = element;
-      visit(node.element);
-      node = node.rightChild;
+      current = node;
+      visit(current.element);
+      current = current.rightChild;
     }
   }
 }

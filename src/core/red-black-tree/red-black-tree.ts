@@ -59,13 +59,13 @@ export class RedBlackTree<T> {
    * @param element - The element to delete from the tree.
    */
   delete(element: T): boolean {
-    const oldNode = this.getNode(element);
+    const target = this.getNode(element);
 
-    if (oldNode === null) {
+    if (target === null) {
       return false;
     }
 
-    const node = this.deleteNode(oldNode);
+    const node = this.deleteNode(target);
 
     this._size -= 1;
 
@@ -201,10 +201,10 @@ export class RedBlackTree<T> {
   }
 
   private addNode(element: T): Node<T> {
-    const oldNode = this.getNode(element);
+    const target = this.getNode(element);
 
-    if (oldNode !== null) {
-      return oldNode;
+    if (target !== null) {
+      return target;
     }
 
     if (this.direction === Direction.UNKNOWN) {
@@ -368,69 +368,65 @@ export class RedBlackTree<T> {
   }
 
   private deleteNode(node: Node<T>): Node<T> | null {
-    let element: Node<T> | null = node;
-    let current: Node<T> | null = node;
+    let target: Node<T> | null = node;
     let next: Node<T> | null;
 
-    if (!hasLeftChild(current)) {
-      current = current.rightChild;
+    if (!hasLeftChild(node)) {
+      next = node.rightChild;
 
       switch (this.direction) {
         case Direction.ROOT:
-          this.root = current;
+          this.root = next;
           break;
         case Direction.LEFT:
           assert(this.hot !== null);
 
-          this.hot.leftChild = current;
+          this.hot.leftChild = next;
           break;
         case Direction.RIGHT:
           assert(this.hot !== null);
 
-          this.hot.rightChild = current;
+          this.hot.rightChild = next;
+          break;
       }
-
-      next = current;
-    } else if (!hasRightChild(current)) {
-      current = current.leftChild;
+    } else if (!hasRightChild(node)) {
+      next = node.leftChild;
 
       switch (this.direction) {
         case Direction.ROOT:
-          this.root = current;
+          this.root = next;
           break;
         case Direction.LEFT:
           assert(this.hot !== null);
 
-          this.hot.leftChild = current;
+          this.hot.leftChild = next;
           break;
         case Direction.RIGHT:
           assert(this.hot !== null);
 
-          this.hot.rightChild = current;
+          this.hot.rightChild = next;
           break;
       }
-
-      next = current;
     } else {
-      element = element.getNext();
+      target = target.getNext();
 
-      assert(element !== null);
+      assert(target !== null);
 
-      [current.element, element.element] = [element.element, current.element];
-      const parent = element.parent;
+      [node.element, target.element] = [target.element, node.element];
+      const parent = target.parent;
 
-      next = element.rightChild;
+      next = target.rightChild;
 
       assert(parent !== null);
 
-      if (parent === current) {
+      if (parent === node) {
         parent.rightChild = next;
       } else {
         parent.leftChild = next;
       }
     }
 
-    this.hot = element.parent;
+    this.hot = target.parent;
     this.direction = Direction.UNKNOWN;
 
     if (next !== null) {
@@ -555,7 +551,7 @@ export class RedBlackTree<T> {
   }
 
   private blackBlackAlpha(parent: Node<T>, siblingChild: Node<T>): void {
-    const oldColor = parent.color;
+    const cachedColor = parent.color;
     const parentDirection = getDirection(parent);
     const grandparent = parent.parent;
     const node = this.rotate(siblingChild);
@@ -594,7 +590,7 @@ export class RedBlackTree<T> {
       this.updateHeight(rightNode);
     }
 
-    node.color = oldColor;
+    node.color = cachedColor;
     this.updateHeight(node);
   }
 
