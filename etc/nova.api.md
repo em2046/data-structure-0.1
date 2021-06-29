@@ -74,6 +74,15 @@ export const enum NovaFlags {
     EQUATABLE = "__nova_equatable"
 }
 
+// @public (undocumented)
+export class Point2d {
+    constructor(x: number, y: number);
+    // (undocumented)
+    readonly x: number;
+    // (undocumented)
+    readonly y: number;
+}
+
 // @public
 export interface PriorityQueue<T> {
     clear(): void;
@@ -92,6 +101,15 @@ export class RedBlackTree<T> {
     levelTraversal(visit: (element: T) => void): void;
     get size(): number;
     }
+
+// @public (undocumented)
+export class Segment2d {
+    constructor(start: Point2d, end: Point2d);
+    // (undocumented)
+    readonly end: Point2d;
+    // (undocumented)
+    readonly start: Point2d;
+}
 
 
 // (No @packageDocumentation comment for this package)
