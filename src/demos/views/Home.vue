@@ -4,18 +4,18 @@
     <circle
       v-for="point in points"
       :key="point.id"
-      :r="settings.size"
       :cx="point.x"
       :cy="point.y"
+      :r="settings.size"
     ></circle>
     <line
       v-for="segment in segments"
       :key="segment.id"
+      :stroke-width="settings.size"
       :x1="segment.start.x"
       :x2="segment.end.x"
       :y1="segment.start.y"
       :y2="segment.end.y"
-      stroke-width="0.005"
       stroke="black"
     ></line>
   </svg>
@@ -23,31 +23,30 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { pointsData } from "../data/points-data";
+import { pointsRaw } from "../data/points-raw";
 import { Point2d, Segment2d } from "../../geometry";
+
+const point2dList = pointsRaw.map((point) => {
+  return new Point2d(point.x, point.y, point.id);
+});
+const segmentsRaw = pointsRaw.filter((_, index) => {
+  return index % 5 === 0;
+});
+const segment2dList: Segment2d[] = [];
+
+for (let i = 0; i < segmentsRaw.length / 2; i++) {
+  const start = segmentsRaw[i * 2];
+  const end = segmentsRaw[i * 2 + 1];
+
+  segment2dList.push(new Segment2d(start, end, `${start.id}-${end.id}`));
+}
 
 export default defineComponent({
   name: "Home",
   setup() {
-    let points = ref<Point2d[]>(pointsData);
-    let segmentsData = pointsData.filter((point, index) => {
-      return index % 5 === 0;
-    });
-    let segmentList: Segment2d = [];
-
-    for (let i = 0; i < segmentsData.length / 2; i++) {
-      let start = segmentsData[i * 2];
-      let end = segmentsData[i * 2 + 1];
-
-      segmentList.push({
-        start: start,
-        end: end,
-        key: `${start.id}x${end.id}`,
-      });
-    }
-
-    let segments = ref<Segment2d[]>(segmentList);
-    let settings = reactive({
+    const points = ref<Point2d[]>(point2dList);
+    const segments = ref<Segment2d[]>(segment2dList);
+    const settings = reactive({
       size: 0.005,
     });
 

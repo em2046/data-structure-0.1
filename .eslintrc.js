@@ -12,6 +12,7 @@ module.exports = {
     "plugin:prettier/recommended",
   ],
   rules: {
+    "prefer-const": "error",
     "padding-line-between-statements": [
       "error",
       { blankLine: "always", prev: "*", next: "return" },

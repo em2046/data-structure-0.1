@@ -53,6 +53,12 @@ export function greaterThan<T>(lhs: T, rhs: T): boolean;
 // @public
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
+// @public (undocumented)
+export interface Identifiable {
+    // (undocumented)
+    readonly id: unknown;
+}
+
 // @public
 export function inequality<T>(lhs: T, rhs: T): boolean;
 
@@ -75,8 +81,10 @@ export const enum NovaFlags {
 }
 
 // @public (undocumented)
-export class Point2d {
-    constructor(x: number, y: number);
+export class Point2d implements Identifiable {
+    constructor(x: number, y: number, id: string);
+    // (undocumented)
+    readonly id: string;
     // (undocumented)
     readonly x: number;
     // (undocumented)
@@ -103,10 +111,12 @@ export class RedBlackTree<T> {
     }
 
 // @public (undocumented)
-export class Segment2d {
-    constructor(start: Point2d, end: Point2d);
+export class Segment2d implements Identifiable {
+    constructor(start: Point2d, end: Point2d, id: string);
     // (undocumented)
     readonly end: Point2d;
+    // (undocumented)
+    readonly id: string;
     // (undocumented)
     readonly start: Point2d;
 }
