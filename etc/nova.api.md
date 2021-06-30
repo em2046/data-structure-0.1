@@ -87,7 +87,7 @@ export const enum NovaFlags {
     EQUATABLE = "__nova_equatable"
 }
 
-// @public (undocumented)
+// @public
 export function planeSweep(segments: LineSegment2d[]): Point2d[];
 
 // @public
