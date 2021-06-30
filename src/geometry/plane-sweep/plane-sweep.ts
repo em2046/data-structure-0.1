@@ -4,89 +4,86 @@ import { BinaryHeap, Comparable, RedBlackTree } from "../../core";
 import { assert, NovaFlags } from "../../shared";
 
 let sweepLineBase: Point2d | null;
-const intersectionSheet = new Map<string, Set<string>>();
+const intersectionCache = new Map<string, Set<string>>();
 const minValue = Math.pow(10, -15);
 
-function intersectionWithSweepLine(segment: SegmentPlaneSweep): Point2d {
+function intersectionWithSweepLine(segment: StateSegment): Point2d {
   assert(sweepLineBase !== null);
 
   const top = new Point2d(sweepLineBase.x, 0, "sweep-line-top");
   const bottom = new Point2d(sweepLineBase.x, 1, "sweep-line-bottom");
-  const sweepSegment = new LineSegment2d(top, bottom, "sweep-line");
-  const sweepSegmentPlaneSweep = new SegmentPlaneSweep(sweepSegment);
+  const sweepLine = new LineSegment2d(top, bottom, "sweep-line");
+  const stateSegment = new StateSegment(sweepLine);
 
-  return segmentIntersection(segment, sweepSegmentPlaneSweep);
+  return segmentIntersection(segment, stateSegment);
 }
 
-function segmentIntersection(
-  lhs: SegmentPlaneSweep,
-  rhs: SegmentPlaneSweep
-): Point2d {
-  const lhsStart = lhs.leftEndPoint;
-  const lhsEnd = lhs.rightEndPoint;
-  const rhsStart = rhs.leftEndPoint;
-  const rhsEnd = rhs.rightEndPoint;
+function segmentIntersection(lhs: StateSegment, rhs: StateSegment): Point2d {
+  const lhsLeft = lhs.leftEvent;
+  const lhsRight = lhs.rightEvent;
+  const rhsLeft = rhs.leftEvent;
+  const rhsRight = rhs.rightEvent;
   const [x, y] = lineLineIntersection(
-    lhsStart.x,
-    lhsStart.y,
-    lhsEnd.x,
-    lhsEnd.y,
-    rhsStart.x,
-    rhsStart.y,
-    rhsEnd.x,
-    rhsEnd.y
+    lhsLeft.x,
+    lhsLeft.y,
+    lhsRight.x,
+    lhsRight.y,
+    rhsLeft.x,
+    rhsLeft.y,
+    rhsRight.x,
+    rhsRight.y
   );
 
-  return new Point2d(x, y, "temp");
+  return new Point2d(x, y, `${lhs.id}x${rhs.id}`);
 }
 
+/**
+ * Reference:
+ * https://en.wikipedia.org/wiki/Line–line_intersection
+ */
 function lineLineIntersection(
-  lhsStartX: number,
-  lhsStartY: number,
-  lhsEndX: number,
-  lhsEndY: number,
-  rhsStartX: number,
-  rhsStartY: number,
-  rhsEndX: number,
-  rhsEndY: number
+  x1: number,
+  y1: number,
+  x2: number,
+  y2: number,
+  x3: number,
+  y3: number,
+  x4: number,
+  y4: number
 ): [x: number, y: number] {
+  const denominator = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4);
   const x =
-    ((lhsStartX * lhsEndY - lhsStartY * lhsEndX) * (rhsStartX - rhsEndX) -
-      (lhsStartX - lhsEndX) * (rhsStartX * rhsEndY - rhsStartY * rhsEndX)) /
-    ((lhsStartX - lhsEndX) * (rhsStartY - rhsEndY) -
-      (lhsStartY - lhsEndY) * (rhsStartX - rhsEndX));
+    ((x1 * y2 - y1 * x2) * (x3 - x4) - (x1 - x2) * (x3 * y4 - y3 * x4)) /
+    denominator;
   const y =
-    ((lhsStartX * lhsEndY - lhsStartY * lhsEndX) * (rhsStartY - rhsEndY) -
-      (lhsStartY - lhsEndY) * (rhsStartX * rhsEndY - rhsStartY * rhsEndX)) /
-    ((lhsStartX - lhsEndX) * (rhsStartY - rhsEndY) -
-      (lhsStartY - lhsEndY) * (rhsStartX - rhsEndX));
+    ((x1 * y2 - y1 * x2) * (y3 - y4) - (y1 - y2) * (x3 * y4 - y3 * x4)) /
+    denominator;
 
   return [x, y];
 }
 
-function isSegmentIntersection(
-  lhs: SegmentPlaneSweep,
-  rhs: SegmentPlaneSweep
-): boolean {
-  const lhsStart = lhs.leftEndPoint;
-  const lhsEnd = lhs.rightEndPoint;
-  const rhsStart = rhs.leftEndPoint;
-  const rhsEnd = rhs.rightEndPoint;
+function hasIntersection(lhs: StateSegment, rhs: StateSegment): boolean {
+  const lhsLeft = lhs.leftEvent;
+  const lhsRight = lhs.rightEvent;
+  const rhsLeft = rhs.leftEvent;
+  const rhsRight = rhs.rightEvent;
   const rightBothSideOfLeft =
-    toLeft(lhsStart, lhsEnd, rhsStart) !== toLeft(lhsStart, lhsEnd, rhsEnd);
+    isToLeft(lhsLeft, lhsRight, rhsLeft) !==
+    isToLeft(lhsLeft, lhsRight, rhsRight);
   const leftBothSideOfRight =
-    toLeft(rhsStart, rhsEnd, lhsStart) !== toLeft(rhsStart, rhsEnd, lhsEnd);
+    isToLeft(rhsLeft, rhsRight, lhsLeft) !==
+    isToLeft(rhsLeft, rhsRight, lhsRight);
 
   return rightBothSideOfLeft && leftBothSideOfRight;
 }
 
-class SegmentPlaneSweep implements Comparable {
+class StateSegment implements Comparable {
   readonly [NovaFlags.COMPARABLE] = true;
   readonly [NovaFlags.EQUATABLE] = true;
 
   id: string;
-  leftEndPoint: Point2d;
-  rightEndPoint: Point2d;
+  leftEvent: Point2d;
+  rightEvent: Point2d;
 
   constructor(segment: LineSegment2d) {
     const start = segment.start;
@@ -96,19 +93,19 @@ class SegmentPlaneSweep implements Comparable {
 
     if (start.x === end.x) {
       if (start.y < end.y) {
-        this.leftEndPoint = start;
-        this.rightEndPoint = end;
+        this.leftEvent = start;
+        this.rightEvent = end;
       } else {
-        this.leftEndPoint = end;
-        this.rightEndPoint = start;
+        this.leftEvent = end;
+        this.rightEvent = start;
       }
     } else {
       if (start.x < end.x) {
-        this.leftEndPoint = start;
-        this.rightEndPoint = end;
+        this.leftEvent = start;
+        this.rightEvent = end;
       } else {
-        this.leftEndPoint = end;
-        this.rightEndPoint = start;
+        this.leftEvent = end;
+        this.rightEvent = start;
       }
     }
   }
@@ -128,39 +125,39 @@ class SegmentPlaneSweep implements Comparable {
   }
 }
 
-enum EndPointType {
+enum EventPointType {
   LEFT = "left",
   RIGHT = "right",
   INTERSECTION = "intersection",
 }
 
-class EndPoint implements Comparable {
+class EventPoint implements Comparable {
   readonly [NovaFlags.COMPARABLE] = true;
   readonly [NovaFlags.EQUATABLE] = true;
 
   point: Point2d;
-  segment: SegmentPlaneSweep | null = null;
-  lhs: SegmentPlaneSweep | null = null;
-  rhs: SegmentPlaneSweep | null = null;
-  type: EndPointType;
+  segment: StateSegment | null = null;
+  lhs: StateSegment | null = null;
+  rhs: StateSegment | null = null;
+  type: EventPointType;
 
-  constructor(point: Point2d, segment: SegmentPlaneSweep, type: EndPointType);
+  constructor(endPoint: Point2d, state: StateSegment, type: EventPointType);
 
-  constructor(point: Point2d, lhs: SegmentPlaneSweep, rhs: SegmentPlaneSweep);
+  constructor(intersectionPoint: Point2d, lhs: StateSegment, rhs: StateSegment);
 
-  constructor(arg1: Point2d, arg2: SegmentPlaneSweep, arg3: unknown) {
-    this.point = arg1;
+  constructor(point: Point2d, arg2: StateSegment, arg3: unknown) {
+    this.point = point;
 
-    if (arg3 instanceof SegmentPlaneSweep) {
-      const lhs: SegmentPlaneSweep = arg2;
-      const rhs: SegmentPlaneSweep = arg3;
+    if (arg3 instanceof StateSegment) {
+      const lhs: StateSegment = arg2;
+      const rhs: StateSegment = arg3;
 
       this.lhs = lhs;
       this.rhs = rhs;
-      this.type = EndPointType.INTERSECTION;
+      this.type = EventPointType.INTERSECTION;
     } else {
-      const segment: SegmentPlaneSweep = arg2;
-      const type: EndPointType = arg3 as EndPointType;
+      const segment: StateSegment = arg2;
+      const type: EventPointType = arg3 as EventPointType;
 
       this.segment = segment;
       this.type = type;
@@ -191,71 +188,86 @@ function area2(alpha: Point2d, beta: Point2d, gamma: Point2d) {
   );
 }
 
-function toLeft(alpha: Point2d, beta: Point2d, gamma: Point2d) {
+function isToLeft(alpha: Point2d, beta: Point2d, gamma: Point2d) {
   return area2(alpha, beta, gamma) > 0;
 }
 
+/**
+ * @public
+ * Bentley–Ottmann algorithm.
+ *
+ * It finds the intersection points of line segments.
+ *
+ * Reference:
+ * https://en.wikipedia.org/wiki/Multiple_line_segment_intersection
+ *
+ * @param segments - Line segments
+ */
 export function planeSweep(segments: LineSegment2d[]): Point2d[] {
   sweepLineBase = null;
 
-  intersectionSheet.clear();
+  intersectionCache.clear();
 
-  const segmentPlaneSweepList = segments.map((segment) => {
-    return new SegmentPlaneSweep(segment);
+  const stateSegments = segments.map((segment) => {
+    return new StateSegment(segment);
   });
-  const events: BinaryHeap<EndPoint> = new BinaryHeap();
-  const sweepLineStatus: RedBlackTree<SegmentPlaneSweep> = new RedBlackTree();
+  const events: BinaryHeap<EventPoint> = new BinaryHeap();
+  const sweepLineStatus: RedBlackTree<StateSegment> = new RedBlackTree();
 
-  segmentPlaneSweepList.forEach((segment) => {
-    const left = new EndPoint(segment.leftEndPoint, segment, EndPointType.LEFT);
-    const right = new EndPoint(
-      segment.rightEndPoint,
-      segment,
-      EndPointType.RIGHT
+  stateSegments.forEach((stateSegment) => {
+    const left = new EventPoint(
+      stateSegment.leftEvent,
+      stateSegment,
+      EventPointType.LEFT
+    );
+    const right = new EventPoint(
+      stateSegment.rightEvent,
+      stateSegment,
+      EventPointType.RIGHT
     );
 
     events.push(left);
     events.push(right);
   });
 
-  const ret: Point2d[] = [];
+  const intersections: Point2d[] = [];
 
   while (events.size > 0) {
-    const endPoint = events.pop();
+    const event = events.pop();
 
-    assert(endPoint !== undefined);
+    assert(event !== undefined);
 
-    if (endPoint.type === EndPointType.INTERSECTION) {
-      ret.push(endPoint.point);
+    if (event.type === EventPointType.INTERSECTION) {
+      intersections.push(event.point);
     }
 
-    handleEventPoint(endPoint, sweepLineStatus, events);
+    handleEventPoint(event, sweepLineStatus, events);
   }
 
-  return ret;
+  return intersections;
 }
 
 function handleEventPoint(
-  endPoint: EndPoint,
-  sweepLineStatus: RedBlackTree<SegmentPlaneSweep>,
-  events: BinaryHeap<EndPoint>
+  event: EventPoint,
+  sweepLineStatus: RedBlackTree<StateSegment>,
+  events: BinaryHeap<EventPoint>
 ) {
-  if (endPoint.type === EndPointType.RIGHT) {
-    handleRight(endPoint, sweepLineStatus, events);
-  } else if (endPoint.type === EndPointType.LEFT) {
-    handleLeft(endPoint, sweepLineStatus, events);
-  } else if (endPoint.type === EndPointType.INTERSECTION) {
-    handleIntersection(endPoint, sweepLineStatus, events);
+  if (event.type === EventPointType.RIGHT) {
+    handleRight(event, sweepLineStatus, events);
+  } else if (event.type === EventPointType.LEFT) {
+    handleLeft(event, sweepLineStatus, events);
+  } else if (event.type === EventPointType.INTERSECTION) {
+    handleIntersection(event, sweepLineStatus, events);
   }
 }
 
 function handleIntersection(
-  endPoint: EndPoint,
-  sweepLineStatus: RedBlackTree<SegmentPlaneSweep>,
-  events: BinaryHeap<EndPoint>
+  event: EventPoint,
+  sweepLineStatus: RedBlackTree<StateSegment>,
+  events: BinaryHeap<EventPoint>
 ) {
-  const lhs = endPoint.lhs;
-  const rhs = endPoint.rhs;
+  const lhs = event.lhs;
+  const rhs = event.rhs;
 
   assert(lhs !== null);
   assert(rhs !== null);
@@ -268,12 +280,9 @@ function handleIntersection(
 
   const lhsNext = lhsNode.getNext();
   const rhsPrevious = rhsNode.getPrevious();
+  const point = event.point;
 
-  sweepLineBase = new Point2d(
-    endPoint.point.x - minValue,
-    endPoint.point.y,
-    endPoint.point.id
-  );
+  sweepLineBase = new Point2d(point.x - minValue, point.y, point.id);
 
   [lhsNode.element, rhsNode.element] = [rhsNode.element, lhsNode.element];
 
@@ -287,13 +296,13 @@ function handleIntersection(
 }
 
 function handleLeft(
-  endPoint: EndPoint,
-  sweepLineStatus: RedBlackTree<SegmentPlaneSweep>,
-  events: BinaryHeap<EndPoint>
+  event: EventPoint,
+  sweepLineStatus: RedBlackTree<StateSegment>,
+  events: BinaryHeap<EventPoint>
 ) {
-  sweepLineBase = endPoint.point;
+  sweepLineBase = event.point;
 
-  const segment = endPoint.segment;
+  const segment = event.segment;
 
   assert(segment !== null);
   const node = sweepLineStatus.unsafeGetNode(segment);
@@ -316,13 +325,13 @@ function handleLeft(
 }
 
 function handleRight(
-  endPoint: EndPoint,
-  sweepLineStatus: RedBlackTree<SegmentPlaneSweep>,
-  events: BinaryHeap<EndPoint>
+  event: EventPoint,
+  sweepLineStatus: RedBlackTree<StateSegment>,
+  events: BinaryHeap<EventPoint>
 ) {
-  sweepLineBase = endPoint.point;
+  sweepLineBase = event.point;
 
-  const segment = endPoint.segment;
+  const segment = event.segment;
 
   assert(segment !== null);
   sweepLineStatus.add(segment);
@@ -349,14 +358,14 @@ function handleRight(
 }
 
 function testIntersection(
-  lhs: SegmentPlaneSweep,
-  rhs: SegmentPlaneSweep,
-  events: BinaryHeap<EndPoint>
+  lhs: StateSegment,
+  rhs: StateSegment,
+  events: BinaryHeap<EventPoint>
 ) {
-  if (isSegmentIntersection(lhs, rhs)) {
+  if (hasIntersection(lhs, rhs)) {
     const intersection = segmentIntersection(lhs, rhs);
-    const endPoint = new EndPoint(intersection, lhs, rhs);
-    const lhsSet = intersectionSheet.get(lhs.id);
+    const event = new EventPoint(intersection, lhs, rhs);
+    const lhsSet = intersectionCache.get(lhs.id);
 
     if (lhsSet !== undefined) {
       if (lhsSet.has(rhs.id)) {
@@ -364,27 +373,27 @@ function testIntersection(
       }
     }
 
-    events.push(endPoint);
-    updateIntersectionSheet(endPoint);
+    events.push(event);
+    updateIntersectionCache(event);
   }
 }
 
-function updateIntersectionSheet(endPoint: EndPoint) {
-  assert(endPoint.lhs !== null);
-  assert(endPoint.rhs !== null);
+function updateIntersectionCache(event: EventPoint) {
+  assert(event.lhs !== null);
+  assert(event.rhs !== null);
 
-  const lhsId = endPoint.lhs.id;
-  const rhsId = endPoint.rhs.id;
+  const lhsId = event.lhs.id;
+  const rhsId = event.rhs.id;
 
-  if (intersectionSheet.get(lhsId) === undefined) {
-    intersectionSheet.set(lhsId, new Set([rhsId]));
+  if (intersectionCache.get(lhsId) === undefined) {
+    intersectionCache.set(lhsId, new Set([rhsId]));
   } else {
-    intersectionSheet.get(lhsId)?.add(rhsId);
+    intersectionCache.get(lhsId)?.add(rhsId);
   }
 
-  if (intersectionSheet.get(rhsId) === undefined) {
-    intersectionSheet.set(rhsId, new Set([lhsId]));
+  if (intersectionCache.get(rhsId) === undefined) {
+    intersectionCache.set(rhsId, new Set([lhsId]));
   } else {
-    intersectionSheet.get(rhsId)?.add(lhsId);
+    intersectionCache.get(rhsId)?.add(lhsId);
   }
 }

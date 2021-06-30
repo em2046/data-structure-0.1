@@ -112,15 +112,12 @@ export class RedBlackTree<T> {
     add(newElement: T): this;
     delete(element: T): boolean;
     getNext(element: T): T | undefined;
-    // (undocumented)
     getPrevious(element: T): T | undefined;
     inorderTraversal(visit: (element: T) => void): void;
     levelTraversal(visit: (element: T) => void): void;
     get size(): number;
-    // Warning: (ae-forgotten-export) The symbol "Node" needs to be exported by the entry point index.d.ts
-    //
-    // (undocumented)
-    unsafeGetNode(element: T): Node_2<T> | null;
+    // Warning: (ae-forgotten-export) The symbol "BinNode" needs to be exported by the entry point index.d.ts
+    unsafeGetNode(element: T): BinNode<T> | null;
     }
 
 
