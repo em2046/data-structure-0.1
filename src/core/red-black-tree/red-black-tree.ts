@@ -13,7 +13,7 @@ import {
   isRed,
   isRightChild,
   isRoot,
-  Node,
+  BinNode,
   NodeColor,
 } from "./binary-tree-node";
 import { lessThan } from "../comparable";
@@ -29,8 +29,8 @@ import { MAX_SAFE_RED_BLACK_TREE_HEIGHT } from "../../constants";
  * A kind of self-balancing binary search tree.
  */
 export class RedBlackTree<T> {
-  private root: Node<T> | null = null;
-  private hot: Node<T> | null = null;
+  private root: BinNode<T> | null = null;
+  private hot: BinNode<T> | null = null;
   private direction: Direction = Direction.UNKNOWN;
 
   private _size = 0;
@@ -164,11 +164,11 @@ export class RedBlackTree<T> {
     }
   }
 
-  unsafeGetNode(element: T): Node<T> | null {
+  unsafeGetNode(element: T): BinNode<T> | null {
     return this.getNode(element);
   }
 
-  private getNode(element: T): Node<T> | null {
+  private getNode(element: T): BinNode<T> | null {
     const root = this.root;
 
     if (root === null) {
@@ -186,7 +186,7 @@ export class RedBlackTree<T> {
     }
 
     this.hot = root;
-    let current: Node<T> | null = root;
+    let current: BinNode<T> | null = root;
 
     for (let i = 0; i < MAX_SAFE_RED_BLACK_TREE_HEIGHT; i++) {
       if (lessThan(element, current.element)) {
@@ -211,7 +211,7 @@ export class RedBlackTree<T> {
     assert(false);
   }
 
-  private addNode(element: T): Node<T> {
+  private addNode(element: T): BinNode<T> {
     const target = this.getNode(element);
 
     if (target !== null) {
@@ -241,7 +241,7 @@ export class RedBlackTree<T> {
     return node;
   }
 
-  private addRoot(element: T): Node<T> {
+  private addRoot(element: T): BinNode<T> {
     this._size = 1;
     this.root = new BinaryTreeNode(
       element,
@@ -255,7 +255,7 @@ export class RedBlackTree<T> {
     return this.root;
   }
 
-  private updateHeight(node: Node<T>): number {
+  private updateHeight(node: BinNode<T>): number {
     const leftHeight = getHeight(node.leftChild);
     const rightHeight = getHeight(node.rightChild);
 
@@ -268,7 +268,7 @@ export class RedBlackTree<T> {
     return node.height;
   }
 
-  private rotate(node: Node<T>): Node<T> {
+  private rotate(node: BinNode<T>): BinNode<T> {
     const parent = node.parent;
 
     assert(parent !== null);
@@ -333,14 +333,14 @@ export class RedBlackTree<T> {
   }
 
   private refactor(
-    left: Node<T>,
-    center: Node<T>,
-    right: Node<T>,
-    leftOuter: Node<T> | null,
-    leftInner: Node<T> | null,
-    rightInner: Node<T> | null,
-    rightOuter: Node<T> | null
-  ): Node<T> {
+    left: BinNode<T>,
+    center: BinNode<T>,
+    right: BinNode<T>,
+    leftOuter: BinNode<T> | null,
+    leftInner: BinNode<T> | null,
+    rightInner: BinNode<T> | null,
+    rightOuter: BinNode<T> | null
+  ): BinNode<T> {
     left.leftChild = leftOuter;
 
     if (leftOuter !== null) {
@@ -378,9 +378,9 @@ export class RedBlackTree<T> {
     return center;
   }
 
-  private deleteNode(node: Node<T>): Node<T> | null {
-    let target: Node<T> | null = node;
-    let next: Node<T> | null;
+  private deleteNode(node: BinNode<T>): BinNode<T> | null {
+    let target: BinNode<T> | null = node;
+    let next: BinNode<T> | null;
 
     if (!hasLeftChild(node)) {
       next = node.rightChild;
@@ -447,7 +447,7 @@ export class RedBlackTree<T> {
     return next;
   }
 
-  private solveDoubleRed(node: Node<T>): void {
+  private solveDoubleRed(node: BinNode<T>): void {
     if (isRoot(node)) {
       const root = this.root;
 
@@ -515,8 +515,8 @@ export class RedBlackTree<T> {
     }
   }
 
-  private solveDoubleBlack(node: Node<T> | null): void {
-    let parent: Node<T> | null;
+  private solveDoubleBlack(node: BinNode<T> | null): void {
+    let parent: BinNode<T> | null;
 
     if (node !== null) {
       parent = node.parent;
@@ -528,7 +528,7 @@ export class RedBlackTree<T> {
       return;
     }
 
-    let sibling: Node<T>;
+    let sibling: BinNode<T>;
 
     if (node === parent.leftChild) {
       assert(parent.rightChild !== null);
@@ -541,7 +541,7 @@ export class RedBlackTree<T> {
     }
 
     if (isBlack(sibling)) {
-      let siblingChild: Node<T> | null = null;
+      let siblingChild: BinNode<T> | null = null;
 
       if (isRed(sibling.rightChild)) {
         siblingChild = sibling.rightChild;
@@ -561,7 +561,7 @@ export class RedBlackTree<T> {
     }
   }
 
-  private blackBlackAlpha(parent: Node<T>, siblingChild: Node<T>): void {
+  private blackBlackAlpha(parent: BinNode<T>, siblingChild: BinNode<T>): void {
     const cachedColor = parent.color;
     const parentDirection = getDirection(parent);
     const grandparent = parent.parent;
@@ -605,7 +605,7 @@ export class RedBlackTree<T> {
     this.updateHeight(handle);
   }
 
-  private blackBlackBeta(parent: Node<T>, sibling: Node<T>): void {
+  private blackBlackBeta(parent: BinNode<T>, sibling: BinNode<T>): void {
     sibling.color = NodeColor.RED;
     sibling.height -= 1;
 
@@ -618,13 +618,13 @@ export class RedBlackTree<T> {
   }
 
   private blackBlackGamma(
-    node: Node<T> | null,
-    parent: Node<T>,
-    sibling: Node<T>
+    node: BinNode<T> | null,
+    parent: BinNode<T>,
+    sibling: BinNode<T>
   ): void {
     sibling.color = NodeColor.BLACK;
     parent.color = NodeColor.RED;
-    let siblingChild: Node<T>;
+    let siblingChild: BinNode<T>;
 
     if (isLeftChild(sibling)) {
       assert(sibling.leftChild !== null);
