@@ -1,1 +1,1 @@
-export { Segment2d } from "./segment2d";
+export { LineSegment2d } from "./line-segment-2d";

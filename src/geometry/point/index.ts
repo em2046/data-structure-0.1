@@ -1,1 +1,1 @@
-export { Point2d } from "./point2d";
+export { Point2d } from "./point-2d";

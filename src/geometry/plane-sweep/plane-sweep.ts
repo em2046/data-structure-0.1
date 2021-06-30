@@ -1,4 +1,4 @@
-import { Segment2d } from "../segment";
+import { LineSegment2d } from "../segment";
 import { Point2d } from "../point";
 import { BinaryHeap, Comparable, RedBlackTree } from "../../core";
 import { assert, NovaFlags } from "../../shared";
@@ -12,7 +12,7 @@ function intersectionWithSweepLine(segment: SegmentPlaneSweep): Point2d {
 
   const top = new Point2d(sweepLineBase.x, 0, "sweep-line-top");
   const bottom = new Point2d(sweepLineBase.x, 1, "sweep-line-bottom");
-  const sweepSegment = new Segment2d(top, bottom, "sweep-line");
+  const sweepSegment = new LineSegment2d(top, bottom, "sweep-line");
   const sweepSegmentPlaneSweep = new SegmentPlaneSweep(sweepSegment);
 
   return segmentIntersection(segment, sweepSegmentPlaneSweep);
@@ -88,7 +88,7 @@ class SegmentPlaneSweep implements Comparable {
   leftEndPoint: Point2d;
   rightEndPoint: Point2d;
 
-  constructor(segment: Segment2d) {
+  constructor(segment: LineSegment2d) {
     const start = segment.start;
     const end = segment.end;
 
@@ -195,7 +195,7 @@ function toLeft(alpha: Point2d, beta: Point2d, gamma: Point2d) {
   return area2(alpha, beta, gamma) > 0;
 }
 
-export function planeSweep(segments: Segment2d[]): Point2d[] {
+export function planeSweep(segments: LineSegment2d[]): Point2d[] {
   sweepLineBase = null;
 
   intersectionSheet.clear();

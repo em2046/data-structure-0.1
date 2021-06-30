@@ -53,9 +53,8 @@ export function greaterThan<T>(lhs: T, rhs: T): boolean;
 // @public
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
-// @public (undocumented)
+// @public
 export interface Identifiable {
-    // (undocumented)
     readonly id: unknown;
 }
 
@@ -75,22 +74,27 @@ export function lessThan<T>(lhs: T, rhs: T): boolean;
 export function lessThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
 // @public
+export class LineSegment2d implements Identifiable {
+    constructor(start: Point2d, end: Point2d, id: string);
+    readonly end: Point2d;
+    readonly id: string;
+    readonly start: Point2d;
+}
+
+// @public
 export const enum NovaFlags {
     COMPARABLE = "__nova_comparable",
     EQUATABLE = "__nova_equatable"
 }
 
 // @public (undocumented)
-export function planeSweep(segments: Segment2d[]): Point2d[];
+export function planeSweep(segments: LineSegment2d[]): Point2d[];
 
-// @public (undocumented)
+// @public
 export class Point2d implements Identifiable {
     constructor(x: number, y: number, id: string);
-    // (undocumented)
     readonly id: string;
-    // (undocumented)
     readonly x: number;
-    // (undocumented)
     readonly y: number;
 }
 
@@ -118,17 +122,6 @@ export class RedBlackTree<T> {
     // (undocumented)
     unsafeGetNode(element: T): Node_2<T> | null;
     }
-
-// @public (undocumented)
-export class Segment2d implements Identifiable {
-    constructor(start: Point2d, end: Point2d, id: string);
-    // (undocumented)
-    readonly end: Point2d;
-    // (undocumented)
-    readonly id: string;
-    // (undocumented)
-    readonly start: Point2d;
-}
 
 
 // (No @packageDocumentation comment for this package)

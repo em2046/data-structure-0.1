@@ -23,13 +23,13 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { planeSweep, Point2d, Segment2d } from "../../geometry";
+import { planeSweep, Point2d, LineSegment2d } from "../../geometry";
 import { segmentList } from "../../data/segment-list";
 
 export default defineComponent({
   name: "Home",
   setup() {
-    const segments = ref<Segment2d[]>(segmentList);
+    const segments = ref<LineSegment2d[]>(segmentList);
     const settings = reactive({
       lineWidth: 0.001,
       size: 0.002,
