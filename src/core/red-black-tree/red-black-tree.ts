@@ -1,6 +1,7 @@
 import { assert } from "../../shared";
 import {
   BinaryTreeNode,
+  BinNode,
   Direction,
   getDirection,
   getHeight,
@@ -13,7 +14,6 @@ import {
   isRed,
   isRightChild,
   isRoot,
-  BinNode,
   NodeColor,
 } from "./binary-tree-node";
 import { lessThan } from "../comparable";
@@ -117,6 +117,12 @@ export class RedBlackTree<T> {
     return next?.element;
   }
 
+  /**
+   * Finds the previous element of the current element and returns it,
+   * or `undefined` if no next element exists.
+   *
+   * @param element - Current element
+   */
   getPrevious(element: T): T | undefined {
     const node = this.getNode(element);
     const next = node?.getPrevious();
@@ -164,6 +170,12 @@ export class RedBlackTree<T> {
     }
   }
 
+  /**
+   * Finds the element and returns its node
+   * or `null` if no element exists.
+   *
+   * @param element - Target element
+   */
   unsafeGetNode(element: T): BinNode<T> | null {
     return this.getNode(element);
   }
