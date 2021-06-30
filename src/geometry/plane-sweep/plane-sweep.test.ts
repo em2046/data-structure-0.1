@@ -3,8 +3,8 @@ import { segmentList } from "../../data/segment-list";
 
 describe("plane-sweep", () => {
   test("basic", () => {
-    const point2ds = planeSweep(segmentList);
+    const points = planeSweep(segmentList);
 
-    expect(point2ds.length).toEqual(66);
+    expect(points.length).toEqual(66);
   });
 });

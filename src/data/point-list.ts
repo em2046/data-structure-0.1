@@ -503,7 +503,7 @@ const rawList = [
   },
 ];
 
-function getPointList() {
+export function getPointList(): Point2d[] {
   return rawList.map((raw) => {
     return new Point2d(raw.x, raw.y, raw.id);
   });

@@ -1,5 +1,12 @@
 <template>
   <h1>Home</h1>
+  <input
+    v-model="step"
+    max="10"
+    min="2"
+    type="number"
+    @change="handleStepChange"
+  />
   <svg viewBox="0 0 1 1">
     <circle
       v-for="point in points"
@@ -7,6 +14,8 @@
       :cx="point.x"
       :cy="point.y"
       :r="settings.size"
+      fill="orange"
+      opacity="0.5"
     ></circle>
     <line
       v-for="segment in segments"
@@ -16,19 +25,22 @@
       :x2="segment.end.x"
       :y1="segment.start.y"
       :y2="segment.end.y"
-      stroke="black"
+      opacity="0.5"
+      stroke="gray"
     ></line>
   </svg>
 </template>
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { planeSweep, Point2d, LineSegment2d } from "../../geometry";
-import { segmentList } from "../../data/segment-list";
+import { LineSegment2d, planeSweep, Point2d } from "../../geometry";
+import { getSegmentList } from "../../data/segment-list";
 
 export default defineComponent({
   name: "Home",
   setup() {
+    const step = ref(5);
+    const segmentList = getSegmentList(step.value);
     const segments = ref<LineSegment2d[]>(segmentList);
     const settings = reactive({
       lineWidth: 0.001,
@@ -37,10 +49,19 @@ export default defineComponent({
     const intersections = planeSweep(segmentList);
     const points = ref<Point2d[]>(intersections);
 
+    function handleStepChange() {
+      const newSegmentList = getSegmentList(step.value);
+
+      segments.value = newSegmentList;
+      points.value = planeSweep(newSegmentList);
+    }
+
     return {
+      step,
       points,
       segments,
       settings,
+      handleStepChange,
     };
   },
 });

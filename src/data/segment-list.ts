@@ -1,10 +1,9 @@
 import { LineSegment2d } from "../geometry";
 import { pointList } from "./point-list";
 
-function getSegmentList() {
+export function getSegmentList(step = 5): LineSegment2d[] {
   const list: LineSegment2d[] = [];
   const len = pointList.length;
-  const step = 5;
 
   for (let i = 0; i < len; i++) {
     if (i % step !== 0) {
