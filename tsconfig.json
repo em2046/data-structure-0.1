@@ -4,12 +4,16 @@
     "declaration": true,
     "declarationMap": true,
     "esModuleInterop": true,
+    "jsx": "preserve",
+    "lib": ["ESNext", "DOM"],
     "module": "CommonJS",
+    "moduleResolution": "Node",
     "outDir": "lib",
+    "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
     "target": "ESNext"
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["node_modules", "src/**/*.test.ts"]
 }

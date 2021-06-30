@@ -1,6 +1,6 @@
 import { assert } from "../../shared";
 
-export type Node<T> = BinaryTreeNode<T>;
+export type BinNode<T> = BinaryTreeNode<T>;
 
 export enum Direction {
   UNKNOWN = "unknown",
@@ -14,19 +14,19 @@ export enum NodeColor {
   BLACK = "black",
 }
 
-export function hasLeftChild<T>(node: Node<T>): boolean {
+export function hasLeftChild<T>(node: BinNode<T>): boolean {
   return node.leftChild !== null;
 }
 
-export function hasRightChild<T>(node: Node<T>): boolean {
+export function hasRightChild<T>(node: BinNode<T>): boolean {
   return node.rightChild !== null;
 }
 
-export function isRoot<T>(node: Node<T>): boolean {
+export function isRoot<T>(node: BinNode<T>): boolean {
   return node.parent === null;
 }
 
-export function isLeftChild<T>(node: Node<T>): boolean {
+export function isLeftChild<T>(node: BinNode<T>): boolean {
   if (isRoot(node)) {
     return false;
   }
@@ -38,7 +38,7 @@ export function isLeftChild<T>(node: Node<T>): boolean {
   return node === parent.leftChild;
 }
 
-export function isRightChild<T>(node: Node<T>): boolean {
+export function isRightChild<T>(node: BinNode<T>): boolean {
   if (isRoot(node)) {
     return false;
   }
@@ -50,7 +50,7 @@ export function isRightChild<T>(node: Node<T>): boolean {
   return node === parent.rightChild;
 }
 
-export function isBlack<T>(node: Node<T> | null): boolean {
+export function isBlack<T>(node: BinNode<T> | null): boolean {
   if (node === null) {
     return true;
   }
@@ -58,11 +58,11 @@ export function isBlack<T>(node: Node<T> | null): boolean {
   return node.color === NodeColor.BLACK;
 }
 
-export function isRed<T>(node: Node<T> | null): boolean {
+export function isRed<T>(node: BinNode<T> | null): boolean {
   return !isBlack(node);
 }
 
-export function getUncle<T>(node: Node<T>): Node<T> | null {
+export function getUncle<T>(node: BinNode<T>): BinNode<T> | null {
   const parent = node.parent;
 
   assert(parent !== null);
@@ -78,7 +78,7 @@ export function getUncle<T>(node: Node<T>): Node<T> | null {
   }
 }
 
-export function getDirection<T>(node: Node<T>): Direction {
+export function getDirection<T>(node: BinNode<T>): Direction {
   if (isRoot(node)) {
     return Direction.ROOT;
   }
@@ -90,7 +90,7 @@ export function getDirection<T>(node: Node<T>): Direction {
   }
 }
 
-export function getHeight<T>(node: Node<T> | null): number {
+export function getHeight<T>(node: BinNode<T> | null): number {
   if (node !== null) {
     return node.height;
   }
@@ -98,7 +98,7 @@ export function getHeight<T>(node: Node<T> | null): number {
   return -1;
 }
 
-export function isBalanced<T>(node: Node<T>): boolean {
+export function isBalanced<T>(node: BinNode<T>): boolean {
   const leftHeight = getHeight(node.leftChild);
   const rightHeight = getHeight(node.rightChild);
   const expectedHeight = isRed(node) ? leftHeight : leftHeight + 1;
@@ -106,7 +106,10 @@ export function isBalanced<T>(node: Node<T>): boolean {
   return leftHeight === rightHeight && node.height === expectedHeight;
 }
 
-function saveLeftBranch<T>(node: Node<T> | null, stack: Array<Node<T>>): void {
+function saveLeftBranch<T>(
+  node: BinNode<T> | null,
+  stack: Array<BinNode<T>>
+): void {
   while (node !== null) {
     stack.push(node);
     node = node.leftChild;
@@ -115,17 +118,17 @@ function saveLeftBranch<T>(node: Node<T> | null, stack: Array<Node<T>>): void {
 
 export class BinaryTreeNode<T> {
   element: T;
-  parent: Node<T> | null = null;
-  leftChild: Node<T> | null = null;
-  rightChild: Node<T> | null = null;
+  parent: BinNode<T> | null = null;
+  leftChild: BinNode<T> | null = null;
+  rightChild: BinNode<T> | null = null;
   height = 0;
   color: NodeColor = NodeColor.RED;
 
   constructor(
     element: T,
-    parent: Node<T> | null = null,
-    leftChild: Node<T> | null = null,
-    rightChild: Node<T> | null = null,
+    parent: BinNode<T> | null = null,
+    leftChild: BinNode<T> | null = null,
+    rightChild: BinNode<T> | null = null,
     height = 0,
     color = NodeColor.RED
   ) {
@@ -137,8 +140,8 @@ export class BinaryTreeNode<T> {
     this.color = color;
   }
 
-  getNext(): Node<T> | null {
-    let node: Node<T> | null;
+  getNext(): BinNode<T> | null {
+    let node: BinNode<T> | null;
 
     if (this.rightChild !== null) {
       node = this.rightChild;
@@ -163,8 +166,34 @@ export class BinaryTreeNode<T> {
     return node;
   }
 
+  getPrevious(): BinNode<T> | null {
+    let node: BinNode<T> | null;
+
+    if (this.leftChild !== null) {
+      node = this.leftChild;
+
+      while (hasRightChild(node)) {
+        assert(node.rightChild !== null);
+
+        node = node.rightChild;
+      }
+    } else {
+      node = this;
+
+      while (isLeftChild(node)) {
+        assert(node.parent !== null);
+
+        node = node.parent;
+      }
+
+      node = node.parent;
+    }
+
+    return node;
+  }
+
   levelTraversal(visit: (element: T) => void): void {
-    const queue: Array<Node<T>> = [];
+    const queue: Array<BinNode<T>> = [];
 
     queue.push(this);
 
@@ -190,8 +219,8 @@ export class BinaryTreeNode<T> {
   }
 
   inorderTraversal(visit: (element: T) => void): void {
-    let current: Node<T> | null;
-    const stack: Array<Node<T>> = [];
+    let current: BinNode<T> | null;
+    const stack: Array<BinNode<T>> = [];
 
     current = this;
 

@@ -1,2 +1,2 @@
 export { Entry } from "./entry";
-export { KeyValuePair } from "./key-value-pair";
+export type { KeyValuePair } from "./key-value-pair";

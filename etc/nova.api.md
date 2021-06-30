@@ -54,6 +54,11 @@ export function greaterThan<T>(lhs: T, rhs: T): boolean;
 export function greaterThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
 // @public
+export interface Identifiable {
+    readonly id: unknown;
+}
+
+// @public
 export function inequality<T>(lhs: T, rhs: T): boolean;
 
 // @public
@@ -69,9 +74,28 @@ export function lessThan<T>(lhs: T, rhs: T): boolean;
 export function lessThanOrEqual<T>(lhs: T, rhs: T): boolean;
 
 // @public
+export class LineSegment2d implements Identifiable {
+    constructor(start: Point2d, end: Point2d, id: string);
+    readonly end: Point2d;
+    readonly id: string;
+    readonly start: Point2d;
+}
+
+// @public
 export const enum NovaFlags {
     COMPARABLE = "__nova_comparable",
     EQUATABLE = "__nova_equatable"
+}
+
+// @public
+export function planeSweep(segments: LineSegment2d[]): Point2d[];
+
+// @public
+export class Point2d implements Identifiable {
+    constructor(x: number, y: number, id: string);
+    readonly id: string;
+    readonly x: number;
+    readonly y: number;
 }
 
 // @public
@@ -88,9 +112,12 @@ export class RedBlackTree<T> {
     add(newElement: T): this;
     delete(element: T): boolean;
     getNext(element: T): T | undefined;
+    getPrevious(element: T): T | undefined;
     inorderTraversal(visit: (element: T) => void): void;
     levelTraversal(visit: (element: T) => void): void;
     get size(): number;
+    // Warning: (ae-forgotten-export) The symbol "BinNode" needs to be exported by the entry point index.d.ts
+    unsafeGetNode(element: T): BinNode<T> | null;
     }
 
 
