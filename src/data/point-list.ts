@@ -1,4 +1,6 @@
-export const pointsRaw = [
+import { Point2d } from "../geometry";
+
+const pointsRaw = [
   {
     id: "1001",
     x: 0.8152563701791398,
@@ -500,3 +502,11 @@ export const pointsRaw = [
     y: 0.7430738878351999,
   },
 ];
+
+function getList() {
+  return pointsRaw.map((point) => {
+    return new Point2d(point.x, point.y, point.id);
+  });
+}
+
+export const pointList = getList();

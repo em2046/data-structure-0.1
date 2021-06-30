@@ -1,5 +1,5 @@
+export type { Comparable } from "./comparable";
 export {
-  Comparable,
   lessThan,
   lessThanOrEqual,
   greaterThan,

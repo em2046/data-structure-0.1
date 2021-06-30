@@ -1,1 +1,1 @@
-export { Identifiable } from "./identifiable";
+export type { Identifiable } from "./identifiable";

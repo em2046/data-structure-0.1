@@ -163,6 +163,32 @@ export class BinaryTreeNode<T> {
     return node;
   }
 
+  getPrevious(): Node<T> | null {
+    let node: Node<T> | null;
+
+    if (this.leftChild !== null) {
+      node = this.leftChild;
+
+      while (hasRightChild(node)) {
+        assert(node.rightChild !== null);
+
+        node = node.rightChild;
+      }
+    } else {
+      node = this;
+
+      while (isLeftChild(node)) {
+        assert(node.parent !== null);
+
+        node = node.parent;
+      }
+
+      node = node.parent;
+    }
+
+    return node;
+  }
+
   levelTraversal(visit: (element: T) => void): void {
     const queue: Array<Node<T>> = [];
 

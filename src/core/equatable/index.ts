@@ -1,1 +1,2 @@
-export { Equatable, equality, inequality } from "./equatable";
+export type { Equatable } from "./equatable";
+export { equality, inequality } from "./equatable";

@@ -81,6 +81,9 @@ export const enum NovaFlags {
 }
 
 // @public (undocumented)
+export function planeSweep(segments: Segment2d[]): Point2d[];
+
+// @public (undocumented)
 export class Point2d implements Identifiable {
     constructor(x: number, y: number, id: string);
     // (undocumented)
@@ -105,9 +108,15 @@ export class RedBlackTree<T> {
     add(newElement: T): this;
     delete(element: T): boolean;
     getNext(element: T): T | undefined;
+    // (undocumented)
+    getPrevious(element: T): T | undefined;
     inorderTraversal(visit: (element: T) => void): void;
     levelTraversal(visit: (element: T) => void): void;
     get size(): number;
+    // Warning: (ae-forgotten-export) The symbol "Node" needs to be exported by the entry point index.d.ts
+    //
+    // (undocumented)
+    unsafeGetNode(element: T): Node_2<T> | null;
     }
 
 // @public (undocumented)

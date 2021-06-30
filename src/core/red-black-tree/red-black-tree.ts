@@ -117,6 +117,13 @@ export class RedBlackTree<T> {
     return next?.element;
   }
 
+  getPrevious(element: T): T | undefined {
+    const node = this.getNode(element);
+    const next = node?.getPrevious();
+
+    return next?.element;
+  }
+
   /**
    * Visit every node on a level before going to a lower level.
    *
@@ -155,6 +162,10 @@ export class RedBlackTree<T> {
     if (root !== null) {
       root.inorderTraversal(visit);
     }
+  }
+
+  unsafeGetNode(element: T): Node<T> | null {
+    return this.getNode(element);
   }
 
   private getNode(element: T): Node<T> | null {
