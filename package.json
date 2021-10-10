@@ -30,5 +30,8 @@
     "vue": "^3.0.5",
     "vue-router": "^4.0.10",
     "vue-tsc": "^0.0.24"
+  },
+  "dependencies": {
+    "splaytree": "^3.1.0"
   }
 }

@@ -86,8 +86,8 @@ class StateSegment implements Comparable {
   rightEvent: Point2d;
 
   constructor(segment: LineSegment2d) {
-    const start = segment.start;
-    const end = segment.end;
+    const start = segment.from;
+    const end = segment.to;
 
     this.id = segment.id;
 

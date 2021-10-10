@@ -21,10 +21,10 @@
       v-for="segment in segments"
       :key="segment.id"
       :stroke-width="settings.lineWidth"
-      :x1="segment.start.x"
-      :x2="segment.end.x"
-      :y1="segment.start.y"
-      :y2="segment.end.y"
+      :x1="segment.from.x"
+      :x2="segment.to.x"
+      :y1="segment.from.y"
+      :y2="segment.to.y"
       opacity="0.5"
       stroke="gray"
     ></line>
@@ -33,8 +33,9 @@
 
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
-import { LineSegment2d, planeSweep, Point2d } from "../../geometry";
+import { LineSegment2d, Point2d } from "../../geometry";
 import { getSegmentList } from "../../data/segment-list";
+import sweep from "../../isect/sweep";
 
 export default defineComponent({
   name: "Home",
@@ -46,14 +47,22 @@ export default defineComponent({
       lineWidth: 0.001,
       size: 0.002,
     });
-    const intersections = planeSweep(segmentList);
-    const points = ref<Point2d[]>(intersections);
+
+    function getIntersection(segmentList) {
+      let result = sweep(segmentList).run();
+
+      return result?.map((item) => {
+        return item.point;
+      });
+    }
+
+    const points = ref<Point2d[]>(getIntersection(segmentList));
 
     function handleStepChange() {
       const newSegmentList = getSegmentList(step.value);
 
       segments.value = newSegmentList;
-      points.value = planeSweep(newSegmentList);
+      points.value = getIntersection(newSegmentList);
     }
 
     return {
