@@ -11,7 +11,7 @@
     "outDir": "lib",
     "resolveJsonModule": true,
     "sourceMap": true,
-    "strict": true,
+    "strict": false,
     "target": "ESNext"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],

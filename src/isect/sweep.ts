@@ -33,7 +33,7 @@ import { intersectSegments, EPS, angle, samePoint } from "./geom";
 
 // We use EMPTY array to avoid pressure on garbage collector. Need to be
 // very cautious to not mutate this array.
-var EMPTY = [];
+const EMPTY = [];
 
 /**
  * Finds all intersections among given segments.
@@ -48,15 +48,13 @@ var EMPTY = [];
  * @returns {ISectResult}
  */
 export default function isect(segments, options) {
-  var results = [];
-  var reportIntersection =
+  const results = [];
+  const reportIntersection =
     (options && options.onFound) || defaultIntersectionReporter;
-
-  var onError = (options && options.onError) || defaultErrorReporter;
-
-  var eventQueue = createEventQueue(byY);
-  var sweepStatus = createSweepStatus(onError, EPS);
-  var lower, interior, lastPoint;
+  const onError = (options && options.onError) || defaultErrorReporter;
+  const eventQueue = createEventQueue(byY);
+  const sweepStatus = createSweepStatus(onError, EPS);
+  let lower, interior, lastPoint;
 
   segments.forEach(addSegment);
 
@@ -103,7 +101,8 @@ export default function isect(segments, options) {
 
   function run() {
     while (!eventQueue.isEmpty()) {
-      var eventPoint = eventQueue.pop();
+      const eventPoint = eventQueue.pop();
+
       if (handleEventPoint(eventPoint)) {
         // they decided to stop.
         return;
@@ -115,19 +114,22 @@ export default function isect(segments, options) {
 
   function step() {
     if (!eventQueue.isEmpty()) {
-      var eventPoint = eventQueue.pop();
+      const eventPoint = eventQueue.pop();
+
       handleEventPoint(eventPoint);
+
       // Note: we don't check results of `handleEventPoint()`
       // assumption is that client controls `step()` and thus they
       // know better if they want to stop.
       return true;
     }
+
     return false;
   }
 
   function handleEventPoint(p) {
     lastPoint = p.point;
-    var upper = p.from || EMPTY;
+    const upper = p.from || EMPTY;
 
     lower = interior = undefined;
     // TODO: move lower/interior into sweep status method?
@@ -140,12 +142,11 @@ export default function isect(segments, options) {
     if (!lower) lower = EMPTY;
     if (!interior) interior = EMPTY;
 
-    var uLength = upper.length;
-    var iLength = interior.length;
-    var lLength = lower.length;
-
-    var hasIntersection = uLength + iLength + lLength > 1;
-    var hasPointIntersection =
+    const uLength = upper.length;
+    const iLength = interior.length;
+    const lLength = lower.length;
+    const hasIntersection = uLength + iLength + lLength > 1;
+    const hasPointIntersection =
       !hasIntersection && uLength === 0 && lLength === 0 && iLength > 0;
 
     if (hasIntersection || hasPointIntersection) {
@@ -158,12 +159,12 @@ export default function isect(segments, options) {
     sweepStatus.deleteSegments(lower, interior, lastPoint);
     sweepStatus.insertSegments(interior, upper, lastPoint);
 
-    var sLeft, sRight;
-
-    var hasNoCrossing = uLength + iLength === 0;
+    let sLeft, sRight;
+    const hasNoCrossing = uLength + iLength === 0;
 
     if (hasNoCrossing) {
-      var leftRight = sweepStatus.getLeftRightPoint(lastPoint);
+      const leftRight = sweepStatus.getLeftRightPoint(lastPoint);
+
       sLeft = leftRight.left;
       if (!sLeft) return;
 
@@ -172,7 +173,7 @@ export default function isect(segments, options) {
 
       findNewEvent(sLeft, sRight, p);
     } else {
-      var boundarySegments = sweepStatus.getBoundarySegments(upper, interior);
+      const boundarySegments = sweepStatus.getBoundarySegments(upper, interior);
 
       findNewEvent(boundarySegments.beforeLeft, boundarySegments.left, p);
       findNewEvent(boundarySegments.right, boundarySegments.afterRight, p);
@@ -194,18 +195,21 @@ export default function isect(segments, options) {
   function findNewEvent(left, right, p) {
     if (!left || !right) return;
 
-    var intersection = intersectSegments(left, right);
+    const intersection = intersectSegments(left, right);
+
     if (!intersection) {
       return;
     }
 
-    var dy = p.point.y - intersection.y;
+    const dy = p.point.y - intersection.y;
+
     // TODO: should I add dy to intersection.y?
     if (dy < -EPS) {
       // this means intersection happened after the sweep line.
       // We already processed it.
       return;
     }
+
     if (Math.abs(dy) < EPS && intersection.x <= p.point.x) {
       return;
     }
@@ -214,17 +218,19 @@ export default function isect(segments, options) {
     // since otherwise it gives rounding errors:
     roundNearZero(intersection);
 
-    var current = eventQueue.find(intersection);
+    const current = eventQueue.find(intersection);
 
     if (current && current.isReported) {
       // We already reported this event. No need to add it one more time
       // TODO: Is this case even possible?
       onError("We already reported this event.");
+
       return;
     }
 
     if (!current) {
-      var event = new SweepEvent(intersection);
+      const event = new SweepEvent(intersection);
+
       eventQueue.insert(event);
     }
   }
@@ -237,14 +243,14 @@ export default function isect(segments, options) {
   }
 
   function addSegment(segment) {
-    var from = segment.from;
-    var to = segment.to;
+    let from = segment.from;
+    let to = segment.to;
 
     // Small numbers give more precision errors. Rounding them to 0.
     roundNearZero(from);
     roundNearZero(to);
 
-    var dy = from.y - to.y;
+    const dy = from.y - to.y;
 
     // Note: dy is much smaller then EPS on purpose. I found that higher
     // precision here does less good - getting way more rounding errors.
@@ -252,8 +258,10 @@ export default function isect(segments, options) {
       from.y = to.y;
       segment.dy = 0;
     }
+
     if (from.y < to.y || (from.y === to.y && from.x > to.x)) {
-      var temp = from;
+      const temp = from;
+
       from = segment.from = to;
       to = segment.to = temp;
     }
@@ -265,19 +273,23 @@ export default function isect(segments, options) {
     segment.dx = from.x - to.x;
     segment.angle = angle(segment.dy, segment.dx);
 
-    var isPoint = segment.dy === segment.dx && segment.dy === 0;
-    var prev = eventQueue.find(from);
+    const isPoint = segment.dy === segment.dx && segment.dy === 0;
+    const prev = eventQueue.find(from);
+
     if (prev && !isPoint) {
       // this detects identical segments early. Without this check
       // the algorithm would break since sweep line has no means to
       // detect identical segments.
-      var prevFrom = prev.data.from;
+      const prevFrom = prev.data.from;
+
       if (prevFrom) {
-        for (var i = 0; i < prevFrom.length; ++i) {
-          var s = prevFrom[i];
+        for (let i = 0; i < prevFrom.length; ++i) {
+          const s = prevFrom[i];
+
           if (samePoint(s.to, to)) {
             reportIntersection(s.from, [s.from, s.to]);
             reportIntersection(s.to, [s.from, s.to]);
+
             return;
           }
         }
@@ -289,13 +301,17 @@ export default function isect(segments, options) {
         if (prev.data.from) prev.data.from.push(segment);
         else prev.data.from = [segment];
       } else {
-        var e = new SweepEvent(from, segment);
+        const e = new SweepEvent(from, segment);
+
         eventQueue.insert(e);
       }
+
       var event = new SweepEvent(to);
+
       eventQueue.insert(event);
     } else {
       var event = new SweepEvent(to);
+
       eventQueue.insert(event);
     }
   }
@@ -319,7 +335,8 @@ function union(a, b) {
 
 function byY(a, b) {
   // decreasing Y
-  var res = b.y - a.y;
+  let res = b.y - a.y;
+
   // TODO: This might mess up the status tree.
   if (Math.abs(res) < EPS) {
     // increasing x.

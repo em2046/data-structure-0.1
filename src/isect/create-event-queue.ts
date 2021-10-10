@@ -1,35 +1,36 @@
 import SplayTree from "splaytree";
 
 export default function createEventQueue(byY) {
-  const q = new SplayTree(byY);
+  const priorityQueue = new SplayTree(byY);
 
   return {
-    isEmpty: isEmpty,
-    size: size,
-    pop: pop,
-    find: find,
-    insert: insert,
+    isEmpty,
+    size,
+    pop,
+    find,
+    insert,
   };
 
-  function find(p) {
-    return q.find(p);
+  function find(point) {
+    return priorityQueue.find(point);
   }
 
   function size() {
-    return q.size;
+    return priorityQueue.size;
   }
 
   function isEmpty() {
-    return q.isEmpty();
+    return priorityQueue.isEmpty();
   }
 
   function insert(event) {
     // debugger;
-    q.add(event.point, event);
+    priorityQueue.add(event.point, event);
   }
 
   function pop() {
-    var node = q.pop();
+    const node = priorityQueue.pop();
+
     return node && node.data;
   }
 }

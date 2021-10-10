@@ -5,20 +5,18 @@ import { samePoint, getIntersectionXPoint } from "./geom";
  * Creates a new sweep status data structure.
  */
 export default function createSweepStatus(onError, EPS) {
-  var lastPointY, prevY;
-  var lastPointX, prevX;
-  var useBelow = false;
-  var status = new SplayTree(compareSegments);
-
+  let lastPointY, prevY;
+  let lastPointX, prevX;
+  let useBelow = false;
+  const status = new SplayTree(compareSegments);
   // To save on GC we return mutable object.
-  var currentBoundary = {
+  const currentBoundary = {
     beforeLeft: null,
     left: null,
     right: null,
     afterRight: null,
   };
-
-  var currentLeftRight = { left: null, right: null };
+  const currentLeftRight = { left: null, right: null };
 
   return {
     /**
@@ -71,21 +69,23 @@ export default function createSweepStatus(onError, EPS) {
   function compareSegments(a, b) {
     if (a === b) return 0;
 
-    var ak = getIntersectionXPoint(a, lastPointX, lastPointY);
-    var bk = getIntersectionXPoint(b, lastPointX, lastPointY);
+    const ak = getIntersectionXPoint(a, lastPointX, lastPointY);
+    const bk = getIntersectionXPoint(b, lastPointX, lastPointY);
+    const res = ak - bk;
 
-    var res = ak - bk;
     if (Math.abs(res) >= EPS) {
       // We are okay fine. Intersection distance between two segments
       // is good to give conclusive answer
       return res;
     }
 
-    var aIsHorizontal = Math.abs(a.dy) < EPS;
-    var bIsHorizontal = Math.abs(b.dy) < EPS;
+    const aIsHorizontal = Math.abs(a.dy) < EPS;
+    const bIsHorizontal = Math.abs(b.dy) < EPS;
+
     if (aIsHorizontal && bIsHorizontal) {
       return b.to.x - a.to.x;
     }
+
     // TODO: What if both a and b is horizontal?
     // move horizontal to end
     if (aIsHorizontal) {
@@ -96,19 +96,24 @@ export default function createSweepStatus(onError, EPS) {
       if (useBelow) {
         return b.from.x >= lastPointX ? -1 : 1;
       }
+
       return -1;
       // return useBelow ? 1 : -1;
     }
-    var pa = a.angle;
-    var pb = b.angle;
+
+    const pa = a.angle;
+    const pb = b.angle;
+
     if (Math.abs(pa - pb) >= EPS) {
       return useBelow ? pa - pb : pb - pa;
     }
 
-    var segDist = a.from.y - b.from.y;
+    let segDist = a.from.y - b.from.y;
+
     if (Math.abs(segDist) >= EPS) {
       return -segDist;
     }
+
     segDist = a.to.y - b.to.y;
     if (Math.abs(segDist) >= EPS) {
       // TODO: Is this accurate?
@@ -123,8 +128,8 @@ export default function createSweepStatus(onError, EPS) {
   }
 
   function getBoundarySegments(upper, interior) {
-    var leftMost, rightMost, i;
-    var uLength = upper.length;
+    let leftMost, rightMost, i;
+    const uLength = upper.length;
 
     if (uLength > 0) {
       leftMost = rightMost = upper[0];
@@ -135,13 +140,15 @@ export default function createSweepStatus(onError, EPS) {
     for (i = 1; i < uLength; ++i) {
       var s = upper[i];
       var cmp = compareSegments(leftMost, s);
+
       if (cmp > 0) leftMost = s;
 
       cmp = compareSegments(rightMost, s);
       if (cmp < 0) rightMost = s;
     }
 
-    var startFrom = uLength > 0 ? 0 : 1;
+    const startFrom = uLength > 0 ? 0 : 1;
+
     for (i = startFrom; i < interior.length; ++i) {
       s = interior[i];
       cmp = compareSegments(leftMost, s);
@@ -153,18 +160,20 @@ export default function createSweepStatus(onError, EPS) {
 
     // at this point we have our left/right segments in the status.
     // Let's find their prev/next elements and report them back:
-    var left = status.find(leftMost);
+    const left = status.find(leftMost);
+
     if (!left) {
       onError("Left is missing. Precision error?");
     }
 
-    var right = status.find(rightMost);
+    const right = status.find(rightMost);
+
     if (!right) {
       onError("Right is missing. Precision error?");
     }
 
-    var beforeLeft = left && status.prev(left);
-    var afterRight = right && status.next(right);
+    const beforeLeft = left && status.prev(left);
+    let afterRight = right && status.next(right);
 
     while (afterRight && right.key.dy === 0 && afterRight.key.dy === 0) {
       // horizontal segments are special :(
@@ -183,14 +192,15 @@ export default function createSweepStatus(onError, EPS) {
     // We are trying to find left and right segments that are nearest to the
     // point p. For this we traverse the binary search tree, and remember
     // node with the shortest distance to p.
-    var lastLeft;
-    var current = status._root;
-    var minX = Number.POSITIVE_INFINITY;
+    let lastLeft;
+    let current = status._root;
+    let minX = Number.POSITIVE_INFINITY;
+    let useNext = false;
 
-    var useNext = false;
     while (current) {
-      var x = getIntersectionXPoint(current.key, p.x, p.y);
-      var dx = p.x - x;
+      const x = getIntersectionXPoint(current.key, p.x, p.y);
+      const dx = p.x - x;
+
       if (dx >= 0) {
         if (dx < minX) {
           minX = dx;
@@ -211,14 +221,17 @@ export default function createSweepStatus(onError, EPS) {
         }
       }
     }
+
     if (useNext) {
       // I'm not sure why I did this. I don't this this is right now.
       // lastLeft = status.next(lastLeft);
     }
 
     currentLeftRight.left = lastLeft && lastLeft.key;
-    var next = lastLeft && status.next(lastLeft);
+    const next = lastLeft && status.next(lastLeft);
+
     currentLeftRight.right = next && next.key;
+
     return currentLeftRight;
 
     // Conceptually, the code above should be equivalent to the code below;
@@ -291,11 +304,12 @@ export default function createSweepStatus(onError, EPS) {
     // return res;
 
     // option 3.
-    var current = status._root;
+    let current = status._root;
 
     while (current) {
-      var x = getIntersectionXPoint(current.key, p.x, p.y);
-      var dx = p.x - x;
+      const x = getIntersectionXPoint(current.key, p.x, p.y);
+      const dx = p.x - x;
+
       if (Math.abs(dx) < EPS) {
         collectAdjacentNodes(current, p, onFound);
         break;
@@ -315,8 +329,9 @@ export default function createSweepStatus(onError, EPS) {
 
   function goOverPredecessors(root, p, res) {
     if (!root) return;
-    var x = getIntersectionXPoint(root.key, p.x, p.y);
-    var dx = p.x - x;
+    const x = getIntersectionXPoint(root.key, p.x, p.y);
+    const dx = p.x - x;
+
     if (Math.abs(dx) < EPS) {
       collectAdjacentNodes(root, p, res);
     } else {
@@ -326,8 +341,9 @@ export default function createSweepStatus(onError, EPS) {
 
   function goOverSuccessors(root, p, res) {
     if (!root) return;
-    var x = getIntersectionXPoint(root.key, p.x, p.y);
-    var dx = p.x - x;
+    const x = getIntersectionXPoint(root.key, p.x, p.y);
+    const dx = p.x - x;
+
     if (Math.abs(dx) < EPS) {
       collectAdjacentNodes(root, p, res);
     } else {
@@ -336,9 +352,10 @@ export default function createSweepStatus(onError, EPS) {
   }
 
   function checkDuplicate() {
-    var prev;
+    let prev;
+
     status.forEach((node) => {
-      var current = node.key;
+      const current = node.key;
 
       if (prev) {
         if (
@@ -351,6 +368,7 @@ export default function createSweepStatus(onError, EPS) {
           );
         }
       }
+
       prev = current;
     });
   }
@@ -359,7 +377,7 @@ export default function createSweepStatus(onError, EPS) {
     // eslint-disable-next-line
     console.log(prefix, "status line: ", lastPointX, lastPointY);
     status.forEach((node) => {
-      var x = getIntersectionXPoint(node.key, lastPointX, lastPointY);
+      const x = getIntersectionXPoint(node.key, lastPointX, lastPointY);
       // eslint-disable-next-line
       console.log(x + " " + node.key.name);
     });
@@ -368,12 +386,13 @@ export default function createSweepStatus(onError, EPS) {
   function insertSegments(interior, upper, sweepLinePos) {
     lastPointY = sweepLinePos.y;
     lastPointX = sweepLinePos.x;
-    var key;
+    let key;
 
     for (var i = 0; i < interior.length; ++i) {
       key = interior[i];
       status.add(key);
     }
+
     for (i = 0; i < upper.length; ++i) {
       key = upper[i];
       status.add(key);
@@ -387,8 +406,9 @@ export default function createSweepStatus(onError, EPS) {
     // the segment that needs to be deleted. If that happens I'm trying to
     // use previous point and repeat the process. This may result in
     // incorrect state. In that case I report an error.
-    var i;
-    var prevCount = status._size;
+    let i;
+    const prevCount = status._size;
+
     prevX = lastPointX;
     prevY = lastPointY;
     lastPointY = sweepLinePos.y;
@@ -398,9 +418,11 @@ export default function createSweepStatus(onError, EPS) {
     for (i = 0; i < lower.length; ++i) {
       removeSegment(lower[i], sweepLinePos);
     }
+
     for (i = 0; i < interior.length; ++i) {
       removeSegment(interior[i], sweepLinePos);
     }
+
     useBelow = false;
 
     if (status._size !== prevCount - interior.length - lower.length) {
@@ -422,6 +444,7 @@ export default function createSweepStatus(onError, EPS) {
       } else {
         // They will get an error :(
       }
+
       lastPointY = sweepLinePos.y;
       lastPointX = sweepLinePos.x;
     }
